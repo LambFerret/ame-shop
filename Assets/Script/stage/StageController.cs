@@ -5,6 +5,7 @@ using Script.player;
 using Script.ui;
 using UnityEngine;
 using DG.Tweening;
+using Script.skewer;
 
 namespace Script.stage
 {
@@ -14,6 +15,7 @@ namespace Script.stage
         public GameObject userInterfaces;
         public GameObject cashierScene;
         public GameObject machineScene;
+        public SkewerController skewerController;
 
         public float stageTimer;
         public Timer timerObject;
@@ -68,6 +70,7 @@ namespace Script.stage
         public void GoToMachine()
         {
             machineScene.transform.DOMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutBounce);
+            skewerController.CreateNewSkewer();
         }
 
         private void Update()
