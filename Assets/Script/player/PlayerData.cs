@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Script.player
 {
+    [CreateAssetMenu(fileName = "PlayerData", menuName = "Scriptable Objects/Player/PlayerData")]
     public class PlayerData :ScriptableObject
     {
         public string playerName;
