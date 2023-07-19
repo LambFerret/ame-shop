@@ -14,7 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TableCollectionName: L18nTable
   m_TableCollectionNameGuidString: a788aca2e9d2443be9e9e5750b97ece2
-  m_Entries: []
+  m_Entries:
+  - m_Id: 26053959680
+    m_Key: Customer-Boy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 681275547648
+    m_Key: UI-Money
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

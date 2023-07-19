@@ -16,10 +16,9 @@ MonoBehaviour:
   customerName: 
   hasSpecialEvent: 0
   lines: []
-  patience: 0
-  satisfactionSpeed: 0
-  maxMoney: 0
-  minMoney: 0
-  firstIngredients: 
-  secondIngredients: 
-  thirdIngredients: 
+  patience: 100
+  maxMoney: 5
+  minMoney: 4
+  firstIngredients: 02000000
+  secondIngredients: 00000000
+  thirdIngredients: 01000000

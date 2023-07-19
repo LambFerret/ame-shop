@@ -8,6 +8,7 @@ namespace Script.player
         public string playerName;
         public int playerLevel;
         public int money;
+        public int popularity;
         public List<string> equipment;
     }
 }

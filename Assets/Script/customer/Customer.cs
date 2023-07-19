@@ -13,7 +13,8 @@ namespace Script.customer
         public bool hasSpecialEvent;
         public List<string> lines;
         public int patience;
-        public int satisfactionSpeed;
+        public int maxPopularity;
+        public int minPopularity;
         public int maxMoney;
         public int minMoney;
         public List<FirstIngredient> firstIngredients;
@@ -25,7 +26,8 @@ namespace Script.customer
             string id,
             bool hasSpecialEvent,
             int patience,
-            int satisfactionSpeed,
+            int maxPopularity,
+            int minPopularity,
             int maxMoney,
             int minMoney,
             List<FirstIngredient> firstIngredients,
@@ -39,7 +41,8 @@ namespace Script.customer
             // lines = info.lines;
             this.hasSpecialEvent = hasSpecialEvent;
             this.patience = patience;
-            this.satisfactionSpeed = satisfactionSpeed;
+            this.maxPopularity = minPopularity;
+            this.minPopularity = minPopularity;
             this.maxMoney = maxMoney;
             this.minMoney = minMoney;
             this.firstIngredients = firstIngredients;
