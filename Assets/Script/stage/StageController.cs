@@ -5,30 +5,27 @@ using Script.player;
 using Script.ui;
 using UnityEngine;
 using DG.Tweening;
-using Script.skewer;
 
 namespace Script.stage
 {
     public class StageController : MonoBehaviour
     {
-
         public GameObject userInterfaces;
         public GameObject cashierScene;
         public GameObject machineScene;
-        public SkewerController skewerController;
+        public GameManager gameManager;
 
         public float stageTimer;
         public Timer timerObject;
         public GameObject[] waitCustomerObjectList = new GameObject[3];
         public Customer[] customerList = new Customer[3];
 
-        private GameManager _gameManager;
-        [SerializeField] private bool[] _waitLineOccupied = new bool[3];
+        private readonly bool[] _waitLineOccupied = new bool[3];
         private const float CustomerTimer = 30f;
+        private bool _isGameStarted;
 
         private void Start()
         {
-            _gameManager = GameManager.Instance;
             stageTimer = 0;
             StartCoroutine(AddCustomer());
         }
@@ -45,7 +42,7 @@ namespace Script.stage
                     _waitLineOccupied[availableLine] = true;
 
                     // Customer 객체 랜덤 생성
-                    Customer pickedCustomer = _gameManager.GetRandomCustomer();
+                    Customer pickedCustomer = gameManager.GetRandomCustomer();
                     customerList[availableLine] = pickedCustomer;
 
                     // 빈 슬롯 정보 가져오기
@@ -70,7 +67,19 @@ namespace Script.stage
         public void GoToMachine()
         {
             machineScene.transform.DOMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutBounce);
-            skewerController.CreateNewSkewer();
+            gameManager.CreateSkewer();
+        }
+
+        public void GotToMachineStep(int step)
+        {
+            if (step is < 0 or > 2) return;
+            Debug.Log("step : " + step);
+            machineScene.transform.DOMove(new Vector3(2560 * -step, 0, 0), 1F).SetEase(Ease.OutBack);
+        }
+
+        public void OpenStore()
+        {
+            _isGameStarted = true;
         }
 
         private void Update()

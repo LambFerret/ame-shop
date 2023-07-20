@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Script.machine;
 using UnityEngine;
 
@@ -52,30 +53,23 @@ namespace Script.skewer
 
         public List<FirstIngredient> GetFirstIngredients()
         {
-            foreach (FirstIngredient ingredient in _firstIngredients)
-            {
-                Debug.Log(ingredient.ToString());
-            }
-
+            string listString = string.Join(" - ", _firstIngredients.Select(i => i.ToString()));
+            Debug.Log($"[{listString}]");
             return _firstIngredients;
         }
 
         public List<SecondIngredient> GetSecondIngredients()
         {
-            foreach (SecondIngredient ingredient in _secondIngredients)
-            {
-                Debug.Log(ingredient.ToString());
-            }
+            string listString = string.Join(" - ", _secondIngredients.Select(i => i.ToString()));
+            Debug.Log($"[{listString}]");
 
             return _secondIngredients;
         }
 
         public List<ThirdIngredient> GetThirdIngredients()
         {
-            foreach (ThirdIngredient ingredient in _thirdIngredients)
-            {
-                Debug.Log(ingredient.ToString());
-            }
+            string listString = string.Join(" - ", _thirdIngredients.Select(i => i.ToString()));
+            Debug.Log($"[{listString}]");
 
             return _thirdIngredients;
         }

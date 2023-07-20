@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Script.customer;
+using Script.skewer;
+using Script.stage;
 using UnityEngine;
 
 namespace Script.player
@@ -8,6 +10,10 @@ namespace Script.player
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
+
+        public StageController stageController;
+        public SkewerController skewerController;
+
         public GameObject gamePausedPanel;
         public List<Customer> customers;
 
@@ -23,8 +29,10 @@ namespace Script.player
                 Destroy(gameObject);
             }
 
-            Time.timeScale = 0;
-            gamePausedPanel.SetActive(true);
+            stageController = transform.Find("StageController").GetComponent<StageController>();
+            skewerController = transform.Find("SkewerController").GetComponent<SkewerController>();
+            stageController.gameManager = this;
+            skewerController.gameManager = this;
         }
 
         private void Update()
@@ -82,6 +90,11 @@ namespace Script.player
             Customer customer = customers[index];
             customers.RemoveAt(index);
             return customer;
+        }
+
+        public void CreateSkewer()
+        {
+            skewerController.CreateNewSkewer();
         }
     }
 }

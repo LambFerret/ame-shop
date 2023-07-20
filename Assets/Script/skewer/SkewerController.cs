@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Script.machine;
+using Script.player;
 using UnityEngine;
 
 namespace Script.skewer
@@ -13,6 +14,9 @@ namespace Script.skewer
         private bool _isSkewerCreated;
         private Skewer _currentSkewer;
         private GameObject _currentSkewerGameObject;
+        private int _currentStep;
+
+        public GameManager gameManager;
 
         public void CreateNewSkewer()
         {
@@ -31,11 +35,16 @@ namespace Script.skewer
 
         public void AddFirstIngredient(FirstIngredient type)
         {
-            if (_currentSkewer.GetFirstIngredients().Count > 2) return;
+            if (_currentStep != 0) return;
             // switch (type)
             // {
             // case FirstIngredient.Banana:
+            Debug.Log("twice??");
             _currentSkewer.AddFirstIngredient(type);
+            if (_currentSkewer.GetFirstIngredients().Count > 2)
+            {
+                NextStep();
+            }
 
             // _currentSkewerGameObject
 
@@ -45,6 +54,12 @@ namespace Script.skewer
             // case FirstIngredient.GreenGrape:
             // break;
             // }
+        }
+
+        private void NextStep()
+        {
+            _currentStep++;
+            gameManager.stageController.GotToMachineStep(_currentStep);
         }
     }
 }
