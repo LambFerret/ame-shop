@@ -14,9 +14,19 @@ namespace Script.skewer
         private bool _isSkewerCreated;
         private Skewer _currentSkewer;
         private GameObject _currentSkewerGameObject;
-        private int _currentStep;
+
+        private bool _stepChange;
+        private Step _currentStep;
 
         public GameManager gameManager;
+
+        public enum Step
+        {
+            First,
+            Second,
+            Third,
+            Close
+        }
 
         public void CreateNewSkewer()
         {
@@ -24,6 +34,7 @@ namespace Script.skewer
             _isSkewerCreated = true;
             _currentSkewer = new Skewer();
             _currentSkewerGameObject = Instantiate(skewerPrefab, skewerPlaceHolder.transform);
+            _currentSkewerGameObject.GetComponent<SkewerBehavior>().SetSkewerFocused(true);
         }
 
         public void DestroySkewer()
@@ -31,19 +42,17 @@ namespace Script.skewer
             _isSkewerCreated = false;
             _currentSkewer = null;
             Destroy(_currentSkewerGameObject);
+            GoToStep(Step.First);
         }
 
         public void AddFirstIngredient(FirstIngredient type)
         {
+            if (_currentSkewer == null) return;
             if (_currentStep != 0) return;
-            // switch (type)
-            // {
-            // case FirstIngredient.Banana:
-            Debug.Log("twice??");
             _currentSkewer.AddFirstIngredient(type);
             if (_currentSkewer.GetFirstIngredients().Count > 2)
             {
-                NextStep();
+                GoToStep(Step.Second);
             }
 
             // _currentSkewerGameObject
@@ -56,10 +65,40 @@ namespace Script.skewer
             // }
         }
 
-        private void NextStep()
+        public void ReceiveSkewerFromBoiler(Skewer skewer, GameObject skewerGameObject)
         {
-            _currentStep++;
-            gameManager.stageController.GotToMachineStep(_currentStep);
+            if (_isSkewerCreated)
+            {
+                Debug.Log("A skewer is already in hand.");
+                return;
+            }
+
+            _currentSkewer = skewer;
+            _currentSkewerGameObject = skewerGameObject;
+            _isSkewerCreated = true;
+            _currentSkewerGameObject.GetComponent<SkewerBehavior>().SetSkewerFocused(true);
+
+            if (_currentSkewer.GetSecondDryTime() > 0) GoToStep(Step.Third);
+        }
+
+        public void GiveSkewerToBoiler(out Skewer skewer, out GameObject skewerGameObject)
+        {
+            if (!_isSkewerCreated)
+            {
+                skewer = null;
+                skewerGameObject = null;
+                Debug.Log("No skewer to give.");
+                return;
+            }
+
+            skewer = _currentSkewer;
+            skewerGameObject = _currentSkewerGameObject;
+            _isSkewerCreated = false;
+        }
+
+        private void GoToStep(Step step)
+        {
+            gameManager.stageController.GotToMachineStep((int)step);
         }
     }
 }

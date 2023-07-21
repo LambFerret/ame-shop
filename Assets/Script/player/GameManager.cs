@@ -91,10 +91,5 @@ namespace Script.player
             customers.RemoveAt(index);
             return customer;
         }
-
-        public void CreateSkewer()
-        {
-            skewerController.CreateNewSkewer();
-        }
     }
 }

@@ -9,6 +9,7 @@ namespace Script.skewer
     {
         private readonly List<FirstIngredient> _firstIngredients;
         private readonly List<SecondIngredient> _secondIngredients;
+        private int _dryTime;
         private readonly List<ThirdIngredient> _thirdIngredients;
 
         public Skewer()
@@ -30,6 +31,12 @@ namespace Script.skewer
             GetSecondIngredients();
         }
 
+        public void AddDryTime(int dryTime)
+        {
+            _dryTime = dryTime;
+            Debug.Log("Dry time: " + _dryTime + "s");
+        }
+
         public void AddThirdIngredient(ThirdIngredient thirdIngredient)
         {
             _thirdIngredients.Add(thirdIngredient);
@@ -43,6 +50,7 @@ namespace Script.skewer
 
         public void ClearSecondIngredient()
         {
+            _dryTime = 0;
             _secondIngredients.Clear();
         }
 
@@ -58,12 +66,22 @@ namespace Script.skewer
             return _firstIngredients;
         }
 
+        public string ReadFirstIngredients()
+        {
+            return string.Join(" - ", _firstIngredients.Select(i => i.ToString()));
+        }
+
         public List<SecondIngredient> GetSecondIngredients()
         {
             string listString = string.Join(" - ", _secondIngredients.Select(i => i.ToString()));
             Debug.Log($"[{listString}]");
 
             return _secondIngredients;
+        }
+
+        public int GetSecondDryTime()
+        {
+            return _dryTime;
         }
 
         public List<ThirdIngredient> GetThirdIngredients()

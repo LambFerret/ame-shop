@@ -27,7 +27,6 @@ namespace Script.stage
         private void Start()
         {
             stageTimer = 0;
-            StartCoroutine(AddCustomer());
         }
 
         private IEnumerator AddCustomer()
@@ -67,7 +66,6 @@ namespace Script.stage
         public void GoToMachine()
         {
             machineScene.transform.DOMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutBounce);
-            gameManager.CreateSkewer();
         }
 
         public void GotToMachineStep(int step)
@@ -79,7 +77,7 @@ namespace Script.stage
 
         public void OpenStore()
         {
-            _isGameStarted = true;
+            StartCoroutine(AddCustomer());
         }
 
         private void Update()
