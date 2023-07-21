@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Script.machine;
 using Script.player;
 using UnityEngine;
 
@@ -77,6 +76,7 @@ namespace Script.skewer
             _currentSkewerGameObject = skewerGameObject;
             _isSkewerCreated = true;
             _currentSkewerGameObject.GetComponent<SkewerBehavior>().SetSkewerFocused(true);
+            _currentSkewerGameObject.transform.SetParent(skewerPlaceHolder.transform);
 
             if (_currentSkewer.GetSecondDryTime() > 0) GoToStep(Step.Third);
         }
@@ -94,6 +94,20 @@ namespace Script.skewer
             skewer = _currentSkewer;
             skewerGameObject = _currentSkewerGameObject;
             _isSkewerCreated = false;
+        }
+
+        public void AddThirdIngredient(ThirdIngredient type)
+        {
+            if (_currentSkewer == null) return;
+            if (_currentStep == 0) return;
+            _currentSkewer.AddThirdIngredient(type);
+            GoToStep(Step.Close);
+        }
+
+        public void Blend()
+        {
+            _currentSkewer.AddBlendIngredient();
+            GoToStep(Step.First);
         }
 
         private void GoToStep(Step step)

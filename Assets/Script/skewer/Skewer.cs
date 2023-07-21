@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Script.machine;
 using UnityEngine;
 
 namespace Script.skewer
@@ -11,6 +10,10 @@ namespace Script.skewer
         private readonly List<SecondIngredient> _secondIngredients;
         private int _dryTime;
         private readonly List<ThirdIngredient> _thirdIngredients;
+        private bool _isThirdAddedFirst;
+
+        public bool IsAlreadyBlended;
+        public BlendedCandy BlendedCandy;
 
         public Skewer()
         {
@@ -43,6 +46,64 @@ namespace Script.skewer
             GetThirdIngredients();
         }
 
+        private BlendedCandy Blend()
+        {
+            if (IsAlreadyBlended)
+            {
+                BlendedCandy blendedCandy = BlendedCandy;
+                blendedCandy.FirstIngredients.AddRange(GetFirstIngredients());
+                blendedCandy.ThirdIngredients.AddRange(GetThirdIngredients());
+                foreach (SecondIngredient ingredient in GetSecondIngredients())
+                {
+                    switch (ingredient)
+                    {
+                        case SecondIngredient.NormalSugar:
+                            blendedCandy.SugarAmount += 10;
+                            break;
+                        case SecondIngredient.ExtraSugar:
+                            blendedCandy.SugarAmount += 20;
+                            break;
+                        case SecondIngredient.None:
+                            break;
+                    }
+                }
+                return blendedCandy;
+            }
+            else
+            {
+                BlendedCandy blendedCandy = new BlendedCandy();
+                blendedCandy.FirstIngredients = GetFirstIngredients();
+                blendedCandy.ThirdIngredients = GetThirdIngredients();
+                foreach (SecondIngredient ingredient in GetSecondIngredients())
+                {
+                    switch (ingredient)
+                    {
+                        case SecondIngredient.NormalSugar:
+                            blendedCandy.SugarAmount += 10;
+                            break;
+                        case SecondIngredient.ExtraSugar:
+                            blendedCandy.SugarAmount += 20;
+                            break;
+                        case SecondIngredient.None:
+                            break;
+                    }
+                }
+                return blendedCandy;
+            }
+        }
+
+        public void AddBlendIngredient()
+        {
+            BlendedCandy = Blend();
+            _firstIngredients.Clear();
+            _secondIngredients.Clear();
+            _thirdIngredients.Clear();
+            _dryTime = 0;
+            _isThirdAddedFirst = false;
+            IsAlreadyBlended = true;
+            _firstIngredients.Add(FirstIngredient.BlendedCandy);
+        }
+
         public void ClearFirstIngredient()
         {
             _firstIngredients.Clear();
@@ -57,6 +118,16 @@ namespace Script.skewer
         public void ClearThirdIngredient()
         {
             _thirdIngredients.Clear();
+        }
+
+        public void SetThirdAddedFirst()
+        {
+            _isThirdAddedFirst = true;
+        }
+
+        public bool IsThirdAddedFirst()
+        {
+            return _isThirdAddedFirst;
         }
 
         public List<FirstIngredient> GetFirstIngredients()

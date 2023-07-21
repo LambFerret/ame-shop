@@ -15,6 +15,7 @@ namespace Script.skewer
 
         public void SetSkewerFocused(bool isFocused)
         {
+            Debug.Log("is this in your hand? : " + isFocused);
             // gameObject.SetActive(isFocused);
             _isSkewerFocused = isFocused;
         }

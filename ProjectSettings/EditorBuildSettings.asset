@@ -5,10 +5,14 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+  - enabled: 0
+    path: Assets/Honeti/FlatCleanGUI/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/CashierScene.unity
+    guid: 3fc8acdd13e6c734bafef6554d6fdbcd
   m_configObjects:
-    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 437e722ee3f7843fd91cc7cca895c38e, type: 2}
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 0b19983691425452ebd9cd348889ab21, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: a0b370adb44c349d28550682120079c7, type: 2}
     com.unity.addressableassets: {fileID: 11400000, guid: 404024def58cd482aae1aaa340049017, type: 2}
     com.unity.localization.settings: {fileID: 11400000, guid: 3362ae5a356d24196bdbba46b493549c, type: 2}
