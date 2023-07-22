@@ -6,20 +6,18 @@ namespace Script.skewer
 {
     public class SkewerController : MonoBehaviour
     {
-        public List<GameObject> FirstIngredientPrefabs;
+        public List<GameObject> firstIngredientPrefabs;
         public GameObject skewerPrefab;
         public GameObject skewerPlaceHolder;
+        public GameObject pickUpDesk;
 
         private bool _isSkewerCreated;
         private Skewer _currentSkewer;
         private GameObject _currentSkewerGameObject;
 
-        private bool _stepChange;
-        private Step _currentStep;
-
         public GameManager gameManager;
 
-        public enum Step
+        private enum Step
         {
             First,
             Second,
@@ -47,21 +45,22 @@ namespace Script.skewer
         public void AddFirstIngredient(FirstIngredient type)
         {
             if (_currentSkewer == null) return;
-            if (_currentStep != 0) return;
+            if (_currentSkewer.GetFirstIngredients().Count > 3) return;
             _currentSkewer.AddFirstIngredient(type);
+            foreach (var prefab in firstIngredientPrefabs)
+            {
+                var nameStr = prefab.GetComponent<IngredientBehavior>().GetName();
+                Debug.Log(nameStr);
+                if (nameStr.Equals(type.ToString()))
+                {
+                    Debug.Log(nameStr + " is added to the skewer.");
+                    _currentSkewerGameObject.GetComponent<SkewerBehavior>().AddFirstIngredient(prefab);
+                }
+            }
             if (_currentSkewer.GetFirstIngredients().Count > 2)
             {
                 GoToStep(Step.Second);
             }
-
-            // _currentSkewerGameObject
-
-            // break;
-            // case FirstIngredient.Strawberry:
-            // break;
-            // case FirstIngredient.GreenGrape:
-            // break;
-            // }
         }
 
         public void ReceiveSkewerFromBoiler(Skewer skewer, GameObject skewerGameObject)
@@ -99,7 +98,7 @@ namespace Script.skewer
         public void AddThirdIngredient(ThirdIngredient type)
         {
             if (_currentSkewer == null) return;
-            if (_currentStep == 0) return;
+            if (_currentSkewer.GetFirstIngredients().Count == 0) return;
             _currentSkewer.AddThirdIngredient(type);
             GoToStep(Step.Close);
         }
@@ -108,6 +107,18 @@ namespace Script.skewer
         {
             _currentSkewer.AddBlendIngredient();
             GoToStep(Step.First);
+        }
+
+        public void PackUp()
+        {
+            if (_currentSkewer.GetFirstIngredients().Count == 0) return;
+            Debug.Log("working?");
+            SkewerBehavior behavior = _currentSkewerGameObject.GetComponent<SkewerBehavior>();
+            behavior.SetSkewerFocused(false);
+            behavior.SwitchToPackUp();
+            behavior.transform.SetParent(pickUpDesk.transform);
+
+            gameManager.stageController.SwitchCashierMachine(true);
         }
 
         private void GoToStep(Step step)

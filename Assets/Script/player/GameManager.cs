@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Script.customer;
 using Script.skewer;
 using Script.stage;
+using Script.ui;
 using UnityEngine;
 
 namespace Script.player

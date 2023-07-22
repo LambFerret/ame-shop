@@ -5,6 +5,7 @@ using Script.player;
 using Script.ui;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 namespace Script.stage
 {
@@ -14,6 +15,7 @@ namespace Script.stage
         public GameObject cashierScene;
         public GameObject machineScene;
         public GameManager gameManager;
+        public CanvasAutoScaler canvasAutoScaler;
 
         public float stageTimer;
         public Timer timerObject;
@@ -23,9 +25,11 @@ namespace Script.stage
         private readonly bool[] _waitLineOccupied = new bool[3];
         private const float CustomerTimer = 30f;
         private bool _isGameStarted;
+        private bool _isCashierScene;
 
         private void Start()
         {
+            _isCashierScene = true;
             stageTimer = 0;
         }
 
@@ -51,28 +55,30 @@ namespace Script.stage
                     CustomerBehavior customerGameObjectScript =
                         emptySlot.transform.Find("Customer").GetComponent<CustomerBehavior>();
                     customerGameObjectScript.SetScript(pickedCustomer);
-
-                    // newCustomer.GetComponent<Customer>().OnCustomerClicked += () =>
-                    // {
-                    //     _waitLineOccupied[availableLine] = false;
-                    //     Destroy(newCustomer);
-                    // };
                 }
 
                 yield return new WaitForSeconds(30);
             }
         }
 
-        public void GoToMachine()
+        public void SwitchCashierMachine(bool isCashierScene)
         {
-            machineScene.transform.DOMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutBounce);
+            _isCashierScene = isCashierScene;
+            if (isCashierScene)
+            {
+                machineScene.transform.DOMove(new Vector3(Screen.width, 0, 0), 1f).SetEase(Ease.InCirc);
+            }
+            else
+            {
+                machineScene.transform.DOMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutBounce);
+            }
         }
 
         public void GotToMachineStep(int step)
         {
             if (step is < 0 or > 2) return;
-            Debug.Log("step : " + step);
-            machineScene.transform.DOMove(new Vector3(2560 * -step, 0, 0), 1F).SetEase(Ease.OutBack);
+            Scrollbar sb = machineScene.transform.Find("Scrollbar").GetComponent<Scrollbar>();
+            DOTween.To(() => sb.value, x => sb.value = x, step * 0.5f, 1f).SetEase(Ease.OutBack);
         }
 
         public void OpenStore()
