@@ -50,10 +50,8 @@ namespace Script.skewer
             foreach (var prefab in firstIngredientPrefabs)
             {
                 var nameStr = prefab.GetComponent<IngredientBehavior>().GetName();
-                Debug.Log(nameStr);
                 if (nameStr.Equals(type.ToString()))
                 {
-                    Debug.Log(nameStr + " is added to the skewer.");
                     _currentSkewerGameObject.GetComponent<SkewerBehavior>().AddFirstIngredient(prefab);
                 }
             }
@@ -112,7 +110,6 @@ namespace Script.skewer
         public void PackUp()
         {
             if (_currentSkewer.GetFirstIngredients().Count == 0) return;
-            Debug.Log("working?");
             SkewerBehavior behavior = _currentSkewerGameObject.GetComponent<SkewerBehavior>();
             behavior.SetSkewerFocused(false);
             behavior.SwitchToPackUp();

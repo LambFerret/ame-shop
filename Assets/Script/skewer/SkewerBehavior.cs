@@ -1,13 +1,39 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Script.skewer
 {
-    public class SkewerBehavior : MonoBehaviour
+    public class SkewerBehavior : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        private Vector3 originalPosition;
+        private RectTransform rectTransform;
+
+        private void Awake()
+        {
+            rectTransform = GetComponent<RectTransform>();
+        }
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            originalPosition = rectTransform.anchoredPosition;
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            Vector2 scale = new Vector2( 2560f /Screen.width,  1440f/Screen.height );
+            rectTransform.anchoredPosition += new Vector2(eventData.delta.x * scale.x, eventData.delta.y * scale.y);
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            // If you want the object to return to its original position after being dragged
+            rectTransform.anchoredPosition = originalPosition;
+        }
+
         private RectTransform _rectTransform;
         private bool _isSkewerFocused;
         private bool _isDraggable;
-        private Vector3 _offset;
+
 
 
         private void Start()
@@ -15,18 +41,6 @@ namespace Script.skewer
             _rectTransform = GetComponent<RectTransform>();
         }
 
-        private void OnMouseDown()
-        {
-            _offset = gameObject.transform.position -
-                      Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-        }
-
-        private void OnMouseDrag()
-        {
-            if (!_isDraggable) return;
-            Vector3 newPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f);
-            transform.position = Camera.main.ScreenToWorldPoint(newPosition) + _offset;
-        }
 
         public void SetSkewerFocused(bool isFocused)
         {
@@ -37,7 +51,7 @@ namespace Script.skewer
         {
             const float offset = 2.0f;
 
-            var t = transform;
+            var t = transform.Find("Candy");
             int childCount = t.childCount;
             var ingredient = Instantiate(prefab, t);
             ingredient.transform.localPosition = new Vector3(childCount * offset, childCount * offset, 0);

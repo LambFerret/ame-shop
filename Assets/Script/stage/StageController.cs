@@ -66,7 +66,10 @@ namespace Script.stage
             _isCashierScene = isCashierScene;
             if (isCashierScene)
             {
-                machineScene.transform.DOMove(new Vector3(Screen.width, 0, 0), 1f).SetEase(Ease.InCirc);
+                Scrollbar sb = machineScene.transform.Find("Scrollbar").GetComponent<Scrollbar>();
+                DOTween.To(() => sb.value, x => sb.value = x, 0, 1f).SetEase(Ease.InCirc);
+
+                machineScene.transform.DOMove(new Vector3(Screen.width, 0, 0), 1f).SetEase(Ease.Linear);
             }
             else
             {
