@@ -30,6 +30,10 @@ namespace Script.skewer
             if (_currentSkewerOnHand == null) return;
             var prefab = gameManager.ingredientManager.GetFirstIngredientPrefab(type);
             _currentSkewerBehavior.AddFirstIngredient(prefab);
+            if (_currentSkewerBehavior.GetSkewer().GetFirstIngredients().Count > 2)
+            {
+                GoToStep(Step.Second);
+            }
         }
 
         public bool ReceiveSkewerFromBoiler(GameObject skewerGameObject)
@@ -42,6 +46,7 @@ namespace Script.skewer
 
             SetHand(skewerGameObject);
             _currentSkewerOnHand.transform.SetParent(skewerPlaceHolder.transform);
+            GoToStep(Step.Third);
             return true;
         }
 
@@ -68,6 +73,7 @@ namespace Script.skewer
         public void Blend()
         {
             _currentSkewerBehavior.Blend();
+            GoToStep(Step.First);
         }
 
         public void PackUp()
@@ -76,12 +82,15 @@ namespace Script.skewer
             _currentSkewerOnHand.transform.SetParent(pickUpDesk.transform);
             gameManager.stageController.SwitchCashierMachine(true);
             SetHand(null);
+            GoToStep(Step.Close);
         }
 
         public void Destroy()
         {
             Destroy(_currentSkewerOnHand);
             SetHand(null);
+            GoToStep(Step.First);
+
         }
 
         private void SetHand(GameObject skewerGameObject)

@@ -314,7 +314,9 @@ MonoBehaviour:
   - {fileID: 1662674257}
   - {fileID: 1595754248}
   customerList:
-  - {fileID: 11400000, guid: b9398a07afcd2487897881fba1ec6b2f, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &52262066
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,8 +692,6 @@ MonoBehaviour:
   skewerController: {fileID: 721914799}
   ingredientManager: {fileID: 1657681652}
   gamePausedPanel: {fileID: 1300052831}
-  customers:
-  - {fileID: 11400000, guid: b9398a07afcd2487897881fba1ec6b2f, type: 2}
 --- !u!1 &103013151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1420,7 +1420,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 791.38477, y: -200}
+  m_AnchoredPosition: {x: 234.5784, y: -293.96887}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &158366136
@@ -7899,8 +7899,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1100, y: 400}
+  m_AnchoredPosition: {x: -73, y: 342}
+  m_SizeDelta: {x: 675.0873, y: 740.4271}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &930422784
 MonoBehaviour:
@@ -8439,8 +8439,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1236.6152, y: -1}
-  m_SizeDelta: {x: 1082.7695, y: 400}
+  m_AnchoredPosition: {x: 1362, y: 342}
+  m_SizeDelta: {x: 469.1568, y: 387.9377}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &969114106
 MonoBehaviour:
@@ -8464,7 +8464,7 @@ MonoBehaviour:
   m_StartAxis: 0
   m_CellSize: {x: 300, y: 100}
   m_Spacing: {x: 200, y: 100}
-  m_Constraint: 1
+  m_Constraint: 2
   m_ConstraintCount: 2
 --- !u!1 &993446688
 GameObject:
@@ -8713,6 +8713,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1033463721}
+  - component: {fileID: 1033463722}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -8746,6 +8747,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!223 &1033463722
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033463720}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 100
+  m_TargetDisplay: 0
 --- !u!1 &1034690876
 GameObject:
   m_ObjectHideFlags: 0
@@ -8860,7 +8882,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 291.38477, y: -200}
+  m_AnchoredPosition: {x: 234.5784, y: -93.96886}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1036611439
@@ -10251,8 +10273,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 552.31104, y: 597.26855}
-  m_SizeDelta: {x: 899.3693, y: 249.4686}
+  m_AnchoredPosition: {x: 549, y: 597.27}
+  m_SizeDelta: {x: 457.7953, y: 249.4686}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1228927369
 MonoBehaviour:
@@ -10284,7 +10306,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -11423,8 +11445,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1100, y: 400}
+  m_AnchoredPosition: {x: -73, y: 342}
+  m_SizeDelta: {x: 675.0873, y: 740.4271}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1366280469
 MonoBehaviour:
@@ -12261,8 +12283,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d322b99a6db429694278409e46c4f12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
-  easyCustomer: []
+  gameManager: {fileID: 95568501}
+  easyCustomer:
+  - {fileID: 11400000, guid: b9398a07afcd2487897881fba1ec6b2f, type: 2}
   normalCustomer: []
   hardCustomer: []
 --- !u!4 &1529500438

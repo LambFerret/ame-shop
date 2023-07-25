@@ -38,6 +38,9 @@ namespace Script.stage
             stageTimer += Time.deltaTime;
             timerObject.SetTimer(stageTimer);
         }
+        public float baseInterval = 30f;  // base interval time when popularity is 0
+        public float minInterval = 5f;    // minimum possible interval time
+        public float popularity = 0f;     // player's popularity
 
         private IEnumerator AddCustomer()
         {
@@ -61,7 +64,10 @@ namespace Script.stage
                     emptySlot.GetComponent<CustomerBehavior>().SetScript(pickedCustomer);
                 }
 
-                yield return new WaitForSeconds(10);
+                float maxInterval = Mathf.Max(baseInterval - popularity, minInterval);  // maximum interval time
+                float interval = UnityEngine.Random.Range(minInterval, maxInterval);  // random interval time between minInterval and maxInterval
+
+                yield return new WaitForSeconds(interval);
             }
         }
 

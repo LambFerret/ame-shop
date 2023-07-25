@@ -4,6 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using Script.player;
 using Script.skewer;
+using Script.stage;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,7 @@ namespace Script.customer
     {
         [SerializeField] private Customer customer;
 
+        public StageController stageController;
         public BillBehavior billBehavior;
         public float animationDuration = 2f;
         public float idleAnimationScale = 1.03f;
@@ -126,6 +128,7 @@ namespace Script.customer
             _isAccept = true;
             SaveIntoBill();
             _conversation.SetActive(false);
+            stageController.SwitchCashierMachine(false);
         }
 
         public void Refuse()
@@ -141,6 +144,7 @@ namespace Script.customer
 
         private void ClearBill(bool isServed)
         {
+            if (_bill is null) return;
             if (isServed)
             {
                 _bill.transform.DOFlip();
@@ -163,7 +167,7 @@ namespace Script.customer
             ClearBill(false);
             SetQuote(Customer.QuoteLine.Bad);
             _player.AddPopularity(areYouSorry ? customer.minPopularity / 2 : customer.minPopularity);
-            EndCustomer();
+            _isStart = false;
         }
 
         private void SuccessToServe()
@@ -174,7 +178,8 @@ namespace Script.customer
             _moneyText.text = moneyCal.ToString();
             _player.AddMoney(moneyCal);
             _player.AddPopularity((int)(customer.maxPopularity * _timerImage.fillAmount));
-            EndCustomer();
+            _isStart = false;
+            MoneyAnimation();
         }
 
         public bool IsAccepted()
@@ -238,12 +243,6 @@ namespace Script.customer
         {
             value = Mathf.Clamp(value, 0f, 1f);
             _timerImage.fillAmount = value;
-        }
-
-        private void EndCustomer()
-        {
-            _isStart = false;
-            MoneyAnimation();
         }
 
         private void MoneyAnimation()
