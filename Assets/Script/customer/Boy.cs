@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Script.skewer;
+using Script.setting;
 using UnityEngine;
 
 namespace Script.customer
@@ -8,17 +8,17 @@ namespace Script.customer
     public class Boy : Customer
     {
         public Boy() : base(
-            id: "Boy",
-            hasSpecialEvent: false,
-            patience: 100,
-            maxPopularity: 3,
-            minPopularity: -3,
-            scoreLimitation: 10,
-            maxMoney: 5,
-            minMoney: 4,
-            firstIngredients: new List<FirstIngredient>() { FirstIngredient.GreenGrape },
-            secondIngredients: new List<SecondIngredient>() { SecondIngredient.NormalSugar },
-            thirdIngredients: new List<ThirdIngredient>() { ThirdIngredient.None }
+            "Boy",
+            false,
+            100,
+            3,
+            -3,
+            10,
+            5,
+            4,
+            new List<IngredientManager.FirstIngredient> { IngredientManager.FirstIngredient.GreenGrape },
+            new List<IngredientManager.SecondIngredient> { IngredientManager.SecondIngredient.NormalSugar },
+            new List<IngredientManager.ThirdIngredient> { IngredientManager.ThirdIngredient.None }
         )
         {
         }

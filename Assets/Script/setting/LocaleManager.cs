@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 
 namespace Script.setting
@@ -26,7 +24,7 @@ namespace Script.setting
 
         public void GetLocalization()
         {
-            Locale currentLocale = LocalizationSettings.SelectedLocale;
+            var currentLocale = LocalizationSettings.SelectedLocale;
             var a = LocalizationSettings.StringDatabase.GetLocalizedString("L18nTable", "Customer-boy", currentLocale);
         }
     }

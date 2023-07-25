@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Script.ui
 {
-    public class Timer :MonoBehaviour
+    public class Timer : MonoBehaviour
     {
         public TextMeshProUGUI timerText;
 
@@ -11,6 +11,5 @@ namespace Script.ui
         {
             timerText.text = timer.ToString("F2");
         }
-
     }
 }

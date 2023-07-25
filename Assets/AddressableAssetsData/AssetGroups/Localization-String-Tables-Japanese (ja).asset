@@ -17,8 +17,20 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 1e9ffa5a776ff446686e7918468755a2
   m_SerializeEntries:
-  - m_GUID: 3b2c5750d9bd64ccbb91d54369f3356b
-    m_Address: L18nTable_ja
+  - m_GUID: ff84db94663184385a311fcabc3bd2fe
+    m_Address: Conversation_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    - Preload
+  - m_GUID: 1aaf776e67db94250b12326ddd422918
+    m_Address: UI_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    - Preload
+  - m_GUID: 8f82105de665f43d59be5d48003e6898
+    m_Address: Customer_ja
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ja

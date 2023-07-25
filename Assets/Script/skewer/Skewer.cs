@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
+using Script.setting;
 using UnityEngine;
 
 namespace Script.skewer
 {
     public class Skewer
     {
-        private readonly List<FirstIngredient> _firstIngredients;
-        private readonly List<SecondIngredient> _secondIngredients;
+        private readonly List<IngredientManager.FirstIngredient> _firstIngredients;
+        private readonly List<IngredientManager.SecondIngredient> _secondIngredients;
         private int _dryTime;
-        private readonly List<ThirdIngredient> _thirdIngredients;
+        private readonly List<IngredientManager.ThirdIngredient> _thirdIngredients;
         private bool _isThirdAddedFirst;
 
         public bool IsAlreadyBlended;
@@ -17,18 +18,18 @@ namespace Script.skewer
 
         public Skewer()
         {
-            _firstIngredients = new List<FirstIngredient>();
-            _secondIngredients = new List<SecondIngredient>();
-            _thirdIngredients = new List<ThirdIngredient>();
+            _firstIngredients = new List<IngredientManager.FirstIngredient>();
+            _secondIngredients = new List<IngredientManager.SecondIngredient>();
+            _thirdIngredients = new List<IngredientManager.ThirdIngredient>();
         }
 
-        public void AddFirstIngredient(FirstIngredient firstIngredient)
+        public void AddFirstIngredient(IngredientManager.FirstIngredient firstIngredient)
         {
             _firstIngredients.Add(firstIngredient);
             GetFirstIngredients();
         }
 
-        public void AddSecondIngredient(SecondIngredient secondIngredient)
+        public void AddSecondIngredient(IngredientManager.SecondIngredient secondIngredient)
         {
             _secondIngredients.Add(secondIngredient);
             GetSecondIngredients();
@@ -40,7 +41,7 @@ namespace Script.skewer
             Debug.Log("Dry time: " + _dryTime + "s");
         }
 
-        public void AddThirdIngredient(ThirdIngredient thirdIngredient)
+        public void AddThirdIngredient(IngredientManager.ThirdIngredient thirdIngredient)
         {
             _thirdIngredients.Add(thirdIngredient);
             GetThirdIngredients();
@@ -53,17 +54,17 @@ namespace Script.skewer
                 BlendedCandy blendedCandy = BlendedCandy;
                 blendedCandy.FirstIngredients.AddRange(GetFirstIngredients());
                 blendedCandy.ThirdIngredients.AddRange(GetThirdIngredients());
-                foreach (SecondIngredient ingredient in GetSecondIngredients())
+                foreach (IngredientManager.SecondIngredient ingredient in GetSecondIngredients())
                 {
                     switch (ingredient)
                     {
-                        case SecondIngredient.NormalSugar:
+                        case IngredientManager.SecondIngredient.NormalSugar:
                             blendedCandy.SugarAmount += 10;
                             break;
-                        case SecondIngredient.ExtraSugar:
+                        case IngredientManager.SecondIngredient.ExtraSugar:
                             blendedCandy.SugarAmount += 20;
                             break;
-                        case SecondIngredient.None:
+                        case IngredientManager.SecondIngredient.None:
                             break;
                     }
                 }
@@ -74,17 +75,17 @@ namespace Script.skewer
                 BlendedCandy blendedCandy = new BlendedCandy();
                 blendedCandy.FirstIngredients = GetFirstIngredients();
                 blendedCandy.ThirdIngredients = GetThirdIngredients();
-                foreach (SecondIngredient ingredient in GetSecondIngredients())
+                foreach (IngredientManager.SecondIngredient ingredient in GetSecondIngredients())
                 {
                     switch (ingredient)
                     {
-                        case SecondIngredient.NormalSugar:
+                        case IngredientManager.SecondIngredient.NormalSugar:
                             blendedCandy.SugarAmount += 10;
                             break;
-                        case SecondIngredient.ExtraSugar:
+                        case IngredientManager.SecondIngredient.ExtraSugar:
                             blendedCandy.SugarAmount += 20;
                             break;
-                        case SecondIngredient.None:
+                        case IngredientManager.SecondIngredient.None:
                             break;
                     }
                 }
@@ -101,7 +102,7 @@ namespace Script.skewer
             _dryTime = 0;
             _isThirdAddedFirst = false;
             IsAlreadyBlended = true;
-            _firstIngredients.Add(FirstIngredient.BlendedCandy);
+            _firstIngredients.Add(IngredientManager.FirstIngredient.BlendedCandy);
         }
 
         public void ClearFirstIngredient()
@@ -130,7 +131,7 @@ namespace Script.skewer
             return _isThirdAddedFirst;
         }
 
-        public List<FirstIngredient> GetFirstIngredients()
+        public List<IngredientManager.FirstIngredient> GetFirstIngredients()
         {
             string listString = string.Join(" - ", _firstIngredients.Select(i => i.ToString()));
             Debug.Log($"[{listString}]");
@@ -142,7 +143,7 @@ namespace Script.skewer
             return string.Join(" - ", _firstIngredients.Select(i => i.ToString()));
         }
 
-        public List<SecondIngredient> GetSecondIngredients()
+        public List<IngredientManager.SecondIngredient> GetSecondIngredients()
         {
             string listString = string.Join(" - ", _secondIngredients.Select(i => i.ToString()));
             Debug.Log($"[{listString}]");
@@ -155,7 +156,7 @@ namespace Script.skewer
             return _dryTime;
         }
 
-        public List<ThirdIngredient> GetThirdIngredients()
+        public List<IngredientManager.ThirdIngredient> GetThirdIngredients()
         {
             string listString = string.Join(" - ", _thirdIngredients.Select(i => i.ToString()));
             Debug.Log($"[{listString}]");

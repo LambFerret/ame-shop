@@ -1,7 +1,7 @@
 using System.Collections;
 using DG.Tweening;
+using Script.setting;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,14 +9,16 @@ namespace Script.skewer
 {
     public class BoilerBehavior : MonoBehaviour
     {
-        private Skewer _currentSkewer;
-        private GameObject _currentSkewerGameObject;
+        public enum BoilerState
+        {
+            Nothing,
+            BeforeStart,
+            Drying,
+            Done
+        }
 
         public TextMeshProUGUI minuteText;
         public TextMeshProUGUI secondText;
-
-        private RectTransform _minuteRectTransform;
-        private RectTransform _secondRectTransform;
 
         public BoilerState currentState;
         public int minute;
@@ -28,14 +30,11 @@ namespace Script.skewer
         public TextMeshProUGUI text;
         public GameObject blockingScreen;
         public SkewerController skewerController;
+        private Skewer _currentSkewer;
+        private GameObject _currentSkewerGameObject;
 
-        public enum BoilerState
-        {
-            Nothing,
-            BeforeStart,
-            Drying,
-            Done
-        }
+        private RectTransform _minuteRectTransform;
+        private RectTransform _secondRectTransform;
 
         private void Start()
         {
@@ -89,13 +88,9 @@ namespace Script.skewer
             else
             {
                 if (minute is > 0 and < 10)
-                {
                     minute--;
-                }
                 else
-                {
                     minute = 0;
-                }
             }
 
             FlipNumber(true, minute);
@@ -111,13 +106,9 @@ namespace Script.skewer
             else
             {
                 if (second > 10)
-                {
                     second -= 10;
-                }
                 else
-                {
                     second = 0;
-                }
             }
 
             FlipNumber(false, second);
@@ -143,13 +134,13 @@ namespace Script.skewer
             switch (concentration)
             {
                 case < 30:
-                    _currentSkewer.AddSecondIngredient(SecondIngredient.None);
+                    _currentSkewer.AddSecondIngredient(IngredientManager.SecondIngredient.None);
                     break;
                 case >= 30 and < 100:
-                    _currentSkewer.AddSecondIngredient(SecondIngredient.NormalSugar);
+                    _currentSkewer.AddSecondIngredient(IngredientManager.SecondIngredient.NormalSugar);
                     break;
                 default:
-                    _currentSkewer.AddSecondIngredient(SecondIngredient.NormalSugar);
+                    _currentSkewer.AddSecondIngredient(IngredientManager.SecondIngredient.NormalSugar);
                     Debug.Log("too much sugar");
 
                     break;
@@ -160,7 +151,7 @@ namespace Script.skewer
 
         private IEnumerator TimerCoroutine()
         {
-            int dryTime = minute * 60 + second;
+            var dryTime = minute * 60 + second;
             while (true)
             {
                 yield return new WaitForSeconds(2);
@@ -187,20 +178,16 @@ namespace Script.skewer
 
         private void FlipNumber(bool isMinute, int value)
         {
-            float duration = 0.3f; // Set duration of your animation.
-            RectTransform rectTransform = isMinute ? _minuteRectTransform : _secondRectTransform;
+            var duration = 0.3f; // Set duration of your animation.
+            var rectTransform = isMinute ? _minuteRectTransform : _secondRectTransform;
 
             // Scale down
             rectTransform.DOScale(new Vector3(1, 0, 1), duration / 2).OnComplete(() =>
             {
                 if (isMinute)
-                {
                     minuteText.text = value.ToString("0");
-                }
                 else
-                {
                     secondText.text = value.ToString("00");
-                }
 
                 rectTransform.DOScale(new Vector3(1, 1, 1), duration / 2);
             });

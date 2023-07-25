@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,9 +6,8 @@ namespace Script.player
     [RequireComponent(typeof(CanvasScaler))]
     public class CanvasAutoScaler : MonoBehaviour
     {
+        public Vector2 referenceResolution = new(2560, 1440); // Target resolution
         private CanvasScaler canvasScaler;
-
-        public Vector2 referenceResolution = new Vector2(2560, 1440); // Target resolution
 
         private void Awake()
         {

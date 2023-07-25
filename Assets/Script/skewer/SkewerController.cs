@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Script.player;
+using Script.setting;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Script.skewer
 {
@@ -13,30 +12,24 @@ namespace Script.skewer
         public GameObject skewerPrefab;
         public GameObject skewerPlaceHolder;
         public GameObject pickUpDesk;
-        public List<GameObject> allSkewerIHave = new List<GameObject>();
-
-        private GameObject _currentSkewerOnHand;
+        public List<GameObject> allSkewerIHave = new();
         private SkewerBehavior _currentSkewerBehavior;
 
-        private enum Step
-        {
-            First,
-            Second,
-            Third,
-            Close
-        }
+        private GameObject _currentSkewerOnHand;
 
         public void CreateNewSkewer()
         {
             if (_currentSkewerOnHand != null) return;
-            GameObject skewer = Instantiate(skewerPrefab, skewerPlaceHolder.transform);
+            var skewer = Instantiate(skewerPrefab, skewerPlaceHolder.transform);
             allSkewerIHave.Add(skewer);
             SetHand(skewer);
         }
 
-        public void AddFirstIngredientToSkewerInHand(FirstIngredient type)
+        public void AddFirstIngredientToSkewerInHand(IngredientManager.FirstIngredient type)
         {
-            _currentSkewerBehavior.AddFirstIngredient(type);
+            if (_currentSkewerOnHand == null) return;
+            var prefab = gameManager.ingredientManager.GetFirstIngredientPrefab(type);
+            _currentSkewerBehavior.AddFirstIngredient(prefab);
         }
 
         public bool ReceiveSkewerFromBoiler(GameObject skewerGameObject)
@@ -65,8 +58,10 @@ namespace Script.skewer
             SetHand(null);
         }
 
-        public void AddThirdIngredient(ThirdIngredient type)
+        public void AddThirdIngredient(IngredientManager.ThirdIngredient type)
         {
+            if (_currentSkewerOnHand == null) return;
+
             _currentSkewerBehavior.AddThirdIngredient(type);
         }
 
@@ -83,15 +78,18 @@ namespace Script.skewer
             SetHand(null);
         }
 
+        public void Destroy()
+        {
+            Destroy(_currentSkewerOnHand);
+            SetHand(null);
+        }
+
         private void SetHand(GameObject skewerGameObject)
         {
             // If the skewerGameObject is null, unset the current skewer
             if (skewerGameObject == null)
             {
-                if (_currentSkewerBehavior != null)
-                {
-                    _currentSkewerBehavior.SetSkewerFocused(false);
-                }
+                if (_currentSkewerBehavior != null) _currentSkewerBehavior.SetSkewerFocused(false);
                 _currentSkewerOnHand = null;
                 _currentSkewerBehavior = null;
             }
@@ -107,6 +105,14 @@ namespace Script.skewer
         private void GoToStep(Step step)
         {
             gameManager.stageController.GotToMachineStep((int)step);
+        }
+
+        private enum Step
+        {
+            First,
+            Second,
+            Third,
+            Close
         }
     }
 }

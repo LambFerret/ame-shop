@@ -17,12 +17,16 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 28bc852c42d75485d8fc1a410af9effc
   m_SerializeEntries:
-  - m_GUID: a788aca2e9d2443be9e9e5750b97ece2
-    m_Address: Assets/_Locale/L18nTable Shared Data.asset
+  - m_GUID: 2835b41282b2a4f2d85c070a48869883
+    m_Address: Assets/_Locale/Customer/Customer Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
-  - m_GUID: dac9e072de57245d1b76bd2e798492a5
-    m_Address: Assets/_Locale/ScriptableObjectTest Shared Data.asset
+  - m_GUID: 075ca59312107450bb13cecf2eee412c
+    m_Address: Assets/_Locale/Conversation/Conversation Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+  - m_GUID: de40662675892454f91000044cb6f063
+    m_Address: Assets/_Locale/UI/UI Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
   m_ReadOnly: 1

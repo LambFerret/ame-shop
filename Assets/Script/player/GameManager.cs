@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Script.customer;
+using Script.setting;
 using Script.skewer;
 using Script.stage;
-using Script.ui;
 using UnityEngine;
 
 namespace Script.player
@@ -13,10 +12,11 @@ namespace Script.player
         public static GameManager Instance;
 
         public StageController stageController;
+        public CustomerManager customerManager;
         public SkewerController skewerController;
+        public IngredientManager ingredientManager;
 
         public GameObject gamePausedPanel;
-        public List<Customer> customers;
 
         private void Awake()
         {
@@ -31,9 +31,13 @@ namespace Script.player
             }
 
             stageController = transform.Find("StageController").GetComponent<StageController>();
+            customerManager = transform.Find("CustomerManager").GetComponent<CustomerManager>();
             skewerController = transform.Find("SkewerController").GetComponent<SkewerController>();
+            ingredientManager = transform.Find("IngredientManager").GetComponent<IngredientManager>();
             stageController.gameManager = this;
+            customerManager.gameManager = this;
             skewerController.gameManager = this;
+            ingredientManager.gameManager = this;
         }
 
         private void Update()
@@ -51,46 +55,6 @@ namespace Script.player
                     Time.timeScale = 0;
                 }
             }
-        }
-
-        public Customer GetCustomer(string id)
-        {
-            foreach (Customer customer in customers)
-            {
-                if (customer.id == id)
-                {
-                    return customer;
-                }
-            }
-
-            return null;
-        }
-
-        public Customer GetRandomCustomer()
-        {
-            return customers[UnityEngine.Random.Range(0, customers.Count)];
-        }
-
-        public Customer PopCustomer(string id)
-        {
-            foreach (Customer customer in customers)
-            {
-                if (customer.id == id)
-                {
-                    customers.Remove(customer);
-                    return customer;
-                }
-            }
-
-            return null;
-        }
-
-        public Customer PopRandomCustomer()
-        {
-            int index = UnityEngine.Random.Range(0, customers.Count);
-            Customer customer = customers[index];
-            customers.RemoveAt(index);
-            return customer;
         }
     }
 }

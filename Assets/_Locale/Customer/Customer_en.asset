@@ -17,7 +17,28 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 2835b41282b2a4f2d85c070a48869883, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 9868140544
+    m_Localized: boy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 326865248256
+    m_Localized: 'give me {o} with extra sugar please!
+
+      give me {o} with extra
+      sugar!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261816960671744
+    m_Localized: 'Thanks!
+
+      Thanks a lot!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261909495406592
+    m_Localized: Did I order this?
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

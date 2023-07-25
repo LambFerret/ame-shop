@@ -13,8 +13,24 @@ MonoBehaviour:
   m_Name: Customer Shared Data
   m_EditorClassIdentifier: 
   m_TableCollectionName: Customer
-  m_TableCollectionNameGuidString: 00000000000000000000000000000000
-  m_Entries: []
+  m_TableCollectionNameGuidString: 2835b41282b2a4f2d85c070a48869883
+  m_Entries:
+  - m_Id: 9868140544
+    m_Key: BoyName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 326865248256
+    m_Key: BoyEnter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261816960671744
+    m_Key: BoyGood
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261909495406592
+    m_Key: BoyBad
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

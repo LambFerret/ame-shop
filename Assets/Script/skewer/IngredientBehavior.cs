@@ -1,3 +1,4 @@
+using Script.setting;
 using UnityEngine;
 
 namespace Script.skewer
@@ -12,13 +13,13 @@ namespace Script.skewer
         }
 
         public Ingredient ingredientType;
-        public FirstIngredient f;
-        public SecondIngredient s;
-        public ThirdIngredient t;
+        public IngredientManager.FirstIngredient f;
+        public IngredientManager.SecondIngredient s;
+        public IngredientManager.ThirdIngredient t;
 
         public string GetName()
         {
-            return (ingredientType) switch
+            return ingredientType switch
             {
                 Ingredient.First => f.ToString(),
                 Ingredient.Second => s.ToString(),

@@ -1,4 +1,4 @@
-using System;
+using Script.setting;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,8 +8,8 @@ namespace Script.skewer
     public class ThirdIngredientButtonListener : MonoBehaviour
     {
         public SkewerController skewer;
-        public ThirdIngredient selectedIngredient;
         public TextMeshProUGUI text;
+        public IngredientManager.ThirdIngredient selectedIngredient;
 
         private void Start()
         {

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Script.skewer;
+using Script.setting;
 using UnityEngine;
-using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -11,19 +10,26 @@ namespace Script.customer
     [Serializable]
     public abstract class Customer : ScriptableObject
     {
+        public enum QuoteLine
+        {
+            Enter,
+            Good,
+            Bad
+        }
+
         public string id;
         public string customerName;
         public bool hasSpecialEvent;
-        public Dictionary<QuoteLine, List<string>> QuoteLines = new Dictionary<QuoteLine, List<string>>();
         public int patience;
         public int maxPopularity;
         public int minPopularity;
         public int scoreLimitation;
         public int maxMoney;
         public int minMoney;
-        public List<FirstIngredient> firstIngredients;
-        public List<SecondIngredient> secondIngredients;
-        public List<ThirdIngredient> thirdIngredients;
+        public List<IngredientManager.FirstIngredient> firstIngredients;
+        public Dictionary<QuoteLine, List<string>> QuoteLines = new();
+        public List<IngredientManager.SecondIngredient> secondIngredients;
+        public List<IngredientManager.ThirdIngredient> thirdIngredients;
 
         protected Customer(
             string id,
@@ -34,9 +40,9 @@ namespace Script.customer
             int scoreLimitation,
             int maxMoney,
             int minMoney,
-            List<FirstIngredient> firstIngredients,
-            List<SecondIngredient> secondIngredients,
-            List<ThirdIngredient> thirdIngredients
+            List<IngredientManager.FirstIngredient> firstIngredients,
+            List<IngredientManager.SecondIngredient> secondIngredients,
+            List<IngredientManager.ThirdIngredient> thirdIngredients
         )
         {
             this.id = id;
@@ -54,51 +60,21 @@ namespace Script.customer
 
         private async void OnEnable()
         {
-
             var locale = LocalizationSettings.SelectedLocale;
-            // var stringTableOp
-            //     = LocalizationSettings.StringDatabase.GetTableAsync("Customer", locale);
-            // var stringTable = await stringTableOp.Task;
-            Debug.Log(id + "Name");
-
+            var stringTableOp
+                = LocalizationSettings.StringDatabase.GetTableAsync("Customer", locale);
+            var stringTable = await stringTableOp.Task;
             var nameStr = stringTable[id + "Name"].GetLocalizedString();
             customerName = nameStr;
-
-
-            var stringTableOp = LocalizationSettings.StringDatabase.GetTableAsync("Customer", locale);
-
             stringTableOp.Completed += op =>
             {
                 if (op.Status == AsyncOperationStatus.Succeeded)
-                {
-                    var stringTable = op.Result;
-
-                    foreach (var entry in stringTable.)
+                    foreach (var line in Enum.GetValues(typeof(QuoteLine)))
                     {
-                        // Here, 'entry' is a KeyValuePair where 'entry.Key' is the key of the entry and 'entry.Value' is the LocalizedStringReference
-
-                        // Add your logic to populate QuoteLines here
-                        // For example:
-                        QuoteLine quoteLine = ParseQuoteLine(entry.Key);
-                        string localizedString = entry.Value.GetLocalizedString(locale).Result;
-
-                        if (QuoteLines.ContainsKey(quoteLine))
-                        {
-                            QuoteLines[quoteLine].Add(localizedString);
-                        }
-                        else
-                        {
-                            QuoteLines[quoteLine] = new List<string> { localizedString };
-                        }
+                        var lineStr = stringTable[id + line].GetLocalizedString();
+                        QuoteLines[(QuoteLine)line] = new List<string>(lineStr.Split('\n'));
                     }
-                }
             };
-
-        }
-
-        public enum QuoteLine
-        {
-            Enter, Good, Bad
         }
     }
 }

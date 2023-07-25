@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,8 +8,9 @@ namespace Script.player
         public static Player Instance;
 
         public PlayerData playerData;
-        private List<IPlayerObserver> _observers;
         private GameManager _instance;
+        private List<IPlayerObserver> _observers;
+
         private void Awake()
         {
             if (Instance == null)
@@ -23,6 +23,7 @@ namespace Script.player
                 Destroy(gameObject);
             }
         }
+
         private void Start()
         {
             _instance = GameManager.Instance;
@@ -41,10 +42,7 @@ namespace Script.player
 
         public void NotifyObservers()
         {
-            foreach (var observer in _observers)
-            {
-                observer.UpdateData(playerData);
-            }
+            foreach (var observer in _observers) observer.UpdateData(playerData);
         }
 
         public void AddMoney(int money)

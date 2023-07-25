@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Script.player;
 using Script.skewer;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using DG.Tweening;
+using Random = UnityEngine.Random;
 
 namespace Script.customer
 {
@@ -15,21 +15,25 @@ namespace Script.customer
     {
         [SerializeField] private Customer customer;
 
-        public float textureIdleDuration = 2f;
-        public float textureIdleScale = 1.03f;
-
-        private Player _player;
+        public BillBehavior billBehavior;
+        public float animationDuration = 2f;
+        public float idleAnimationScale = 1.03f;
+        private GameObject _buttonGroup;
 
         private GameObject _conversation;
         private TextMeshProUGUI _conversationText;
-        private GameObject _buttonGroup;
 
         private GameObject _customer;
-        private Image _texture;
-        private Image _timerImage;
-        private TextMeshProUGUI _moneyText;
 
         private bool _isStart;
+        private bool _isAccept;
+        private TextMeshProUGUI _moneyText;
+
+        private Player _player;
+        private Image _texture;
+        private Image _timerImage;
+
+        private GameObject _bill;
 
         private void Awake()
         {
@@ -43,39 +47,110 @@ namespace Script.customer
             _texture = _customer.transform.Find("Texture").GetComponent<Image>();
             _timerImage = _customer.transform.Find("Timer").GetComponent<Image>();
             _moneyText = _customer.transform.Find("Money").GetComponent<TextMeshProUGUI>();
+
+            _moneyText.gameObject.SetActive(false);
+        }
+
+        private void Update()
+        {
+            if (_isStart && customer.patience > 0)
+            {
+                var decrementValue = Time.deltaTime / customer.patience;
+                SetTimer(_timerImage.fillAmount - decrementValue);
+            }
+
+            if (_timerImage.fillAmount <= 0) FailToServe();
         }
 
         public void SetScript(Customer script)
         {
             _isStart = true;
             customer = script;
+            SetIdleAnimation(idleAnimationScale, animationDuration);
+            SetRandomFavorites();
+            SetQuote(Customer.QuoteLine.Enter);
             _conversation.SetActive(false);
-            Debug.Log("currently calling this : " + customer.customerName);
+        }
 
+        private void SetRandomFavorites()
+        {
+            customer.firstIngredients.Clear();
+            customer.secondIngredients.Clear();
+            customer.thirdIngredients.Clear();
+
+            var a = GameManager.Instance.ingredientManager.GetRandomFirstIngredient();
+            customer.firstIngredients.Add(a);
+        }
+
+        private void SetIdleAnimation(float scale, float duration)
+        {
             var rectTransform = _texture.rectTransform;
 
-
-            // Create a sequence for the first action
-            Sequence sequence1 = DOTween.Sequence();
-            sequence1.Append(rectTransform.DOScale(new Vector3(textureIdleScale, 1 / textureIdleScale, 1),
-                textureIdleDuration / 2));
-
-            // Create a sequence for the second and third action
-            Sequence sequence2 = DOTween.Sequence();
-            sequence2.Append(rectTransform.DOScale(new Vector3(textureIdleScale, 1 / textureIdleScale, 1), 0));
-            sequence2.Append(rectTransform.DOScale(new Vector3(1 / textureIdleScale, textureIdleScale, 1),
-                textureIdleDuration));
-            sequence2.Append(rectTransform.DOScale(new Vector3(textureIdleScale, 1 / textureIdleScale, 1),
-                textureIdleDuration));
-            sequence2.SetLoops(-1); // infinite loop
-
-            // Start the second sequence after the first one completes
+            var sequence1 = DOTween.Sequence();
+            sequence1.Append(rectTransform.DOScale(new Vector3(scale, 1 / scale, 1), duration / 2));
+            var sequence2 = DOTween.Sequence();
+            sequence2.Append(rectTransform.DOScale(new Vector3(scale, 1 / scale, 1), 0));
+            sequence2.Append(rectTransform.DOScale(new Vector3(1 / scale, scale, 1), duration));
+            sequence2.Append(rectTransform.DOScale(new Vector3(scale, 1 / scale, 1), duration));
+            sequence2.SetLoops(-1);
             sequence1.OnComplete(() => sequence2.Play());
         }
 
         public void SwitchConversation()
         {
-            _conversation.SetActive(!_conversation.activeSelf);
+            SwitchConversation(!_conversation.activeSelf);
+        }
+
+        private void SwitchConversation(bool isActive)
+        {
+            if (_isAccept) return;
+            if (isActive)
+            {
+                _conversation.SetActive(true);
+                var canvas = gameObject.AddComponent<Canvas>();
+                canvas.overrideSorting = true;
+                canvas.sortingOrder = 10;
+                gameObject.AddComponent<GraphicRaycaster>();
+            }
+            else
+            {
+                _conversation.SetActive(false);
+                if (gameObject.TryGetComponent(out GraphicRaycaster raycaster)) Destroy(raycaster);
+                if (gameObject.TryGetComponent(out Canvas canvasComponent)) Destroy(canvasComponent);
+            }
+        }
+
+        public void Accept()
+        {
+            SwitchConversation(false);
+            _isAccept = true;
+            SaveIntoBill();
+            _conversation.SetActive(false);
+        }
+
+        public void Refuse()
+        {
+            _isAccept = true;
+            FailToServe(true);
+        }
+
+        private void SaveIntoBill()
+        {
+            _bill = billBehavior.MakeBill(customer, _conversationText.text);
+        }
+
+        private void ClearBill(bool isServed)
+        {
+            if (isServed)
+            {
+                _bill.transform.DOFlip();
+            }
+            else
+            {
+                _bill.transform.DOShakeRotation(0.5f, 10, 10);
+            }
+
+            Destroy(_bill);
         }
 
         public void SetTexture(Sprite sprite)
@@ -83,38 +158,58 @@ namespace Script.customer
             _texture.sprite = sprite;
         }
 
-
-        public void FailToServe()
+        private void FailToServe(bool areYouSorry = false)
         {
-            _player.AddPopularity(customer.minPopularity);
+            ClearBill(false);
+            SetQuote(Customer.QuoteLine.Bad);
+            _player.AddPopularity(areYouSorry ? customer.minPopularity / 2 : customer.minPopularity);
             EndCustomer();
         }
 
-        public void SuccessToServe()
+        private void SuccessToServe()
         {
-            int money = customer.maxMoney - customer.minMoney;
-            int moneyCal = (int)(money * _timerImage.fillAmount) + customer.minMoney;
+            ClearBill(true);
+            var money = customer.maxMoney - customer.minMoney;
+            var moneyCal = (int)(money * _timerImage.fillAmount) + customer.minMoney;
             _moneyText.text = moneyCal.ToString();
             _player.AddMoney(moneyCal);
-            _player.AddPopularity((int)((customer.maxPopularity - customer.minPopularity) * _timerImage.fillAmount));
+            _player.AddPopularity((int)(customer.maxPopularity * _timerImage.fillAmount));
             EndCustomer();
+        }
+
+        public bool IsAccepted()
+        {
+            return _isAccept;
         }
 
         public void CheckServedSkewer(Skewer skewer)
         {
-            int skewerScore = CalculateScore(skewer);
+            var skewerScore = CalculateScore(skewer);
             Debug.Log("score is : " + skewerScore);
+
+            if (skewerScore >= customer.scoreLimitation)
+            {
+                Debug.Log("score good");
+                SetQuote(Customer.QuoteLine.Good);
+            }
+            else
+            {
+                Debug.Log("score bad");
+                SetQuote(Customer.QuoteLine.Bad);
+            }
+
+            SuccessToServe();
         }
 
         private int CalculateScore(Skewer skewer)
         {
-            int scoreA = CountCommonElements(skewer.GetFirstIngredients(), customer.firstIngredients);
-            int scoreB = CountCommonElements(skewer.GetSecondIngredients(), customer.secondIngredients);
-            int scoreC = CountCommonElements(skewer.GetThirdIngredients(), customer.thirdIngredients);
+            var scoreA = CountCommonElements(skewer.GetFirstIngredients(), customer.firstIngredients);
+            var scoreB = CountCommonElements(skewer.GetSecondIngredients(), customer.secondIngredients);
+            var scoreC = CountCommonElements(skewer.GetThirdIngredients(), customer.thirdIngredients);
             return scoreA + scoreB + scoreC;
         }
 
-        public int CountCommonElements<T>(List<T> list1, List<T> list2)
+        private static int CountCommonElements<T>(IEnumerable<T> list1, IEnumerable<T> list2)
         {
             var counter1 = list1.GroupBy(x => x)
                 .ToDictionary(g => g.Key, g => g.Count());
@@ -122,19 +217,22 @@ namespace Script.customer
             var counter2 = list2.GroupBy(x => x)
                 .ToDictionary(g => g.Key, g => g.Count());
 
-            int commonCount = 0;
+            var commonCount = 0;
             foreach (var kvp in counter1)
             {
                 int countInList2;
-                if (counter2.TryGetValue(kvp.Key, out countInList2))
-                {
-                    commonCount += Math.Min(kvp.Value, countInList2);
-                }
+                if (counter2.TryGetValue(kvp.Key, out countInList2)) commonCount += Math.Min(kvp.Value, countInList2);
             }
 
             return commonCount;
         }
 
+        private void SetQuote(Customer.QuoteLine quoteLine)
+        {
+            var lines = customer.QuoteLines[quoteLine];
+            _conversationText.text = lines[Random.Range(0, lines.Count)]
+                .Replace("{o}", customer.firstIngredients[0].ToString());
+        }
 
         private void SetTimer(float value)
         {
@@ -145,11 +243,16 @@ namespace Script.customer
         private void EndCustomer()
         {
             _isStart = false;
+            MoneyAnimation();
+        }
 
+        private void MoneyAnimation()
+        {
+            _moneyText.gameObject.SetActive(true);
             const float moveDistance = 100;
             const float duration = 3f;
-            Sequence sequence = DOTween.Sequence();
-            sequence.Append(transform.DOMoveY(transform.position.y + moveDistance, duration));
+            var sequence = DOTween.Sequence();
+            sequence.Append(_moneyText.transform.DOMoveY(_moneyText.transform.position.y + moveDistance, duration));
             sequence.Join(_moneyText.DOColor(new Color(_moneyText.color.r, _moneyText.color.g, _moneyText.color.b, 0),
                 duration));
             sequence.OnComplete(() =>
@@ -157,20 +260,6 @@ namespace Script.customer
                 _moneyText.text = "";
                 gameObject.SetActive(false);
             });
-        }
-
-        private void Update()
-        {
-            if (_isStart && customer.patience > 0)
-            {
-                float decrementValue = Time.deltaTime / customer.patience;
-                SetTimer(_timerImage.fillAmount - decrementValue);
-            }
-
-            if (_timerImage.fillAmount <= 0)
-            {
-                FailToServe();
-            }
         }
     }
 }
