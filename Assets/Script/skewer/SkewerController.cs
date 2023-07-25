@@ -1,21 +1,22 @@
+using System;
 using System.Collections.Generic;
 using Script.player;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Script.skewer
 {
     public class SkewerController : MonoBehaviour
     {
-        public List<GameObject> firstIngredientPrefabs;
+        public GameManager gameManager;
+
         public GameObject skewerPrefab;
         public GameObject skewerPlaceHolder;
         public GameObject pickUpDesk;
+        public List<GameObject> allSkewerIHave = new List<GameObject>();
 
-        private bool _isSkewerCreated;
-        private Skewer _currentSkewer;
-        private GameObject _currentSkewerGameObject;
-
-        public GameManager gameManager;
+        private GameObject _currentSkewerOnHand;
+        private SkewerBehavior _currentSkewerBehavior;
 
         private enum Step
         {
@@ -27,95 +28,80 @@ namespace Script.skewer
 
         public void CreateNewSkewer()
         {
-            if (_isSkewerCreated) return;
-            _isSkewerCreated = true;
-            _currentSkewer = new Skewer();
-            _currentSkewerGameObject = Instantiate(skewerPrefab, skewerPlaceHolder.transform);
-            _currentSkewerGameObject.GetComponent<SkewerBehavior>().SetSkewerFocused(true);
+            if (_currentSkewerOnHand != null) return;
+            GameObject skewer = Instantiate(skewerPrefab, skewerPlaceHolder.transform);
+            allSkewerIHave.Add(skewer);
+            SetHand(skewer);
         }
 
-        public void DestroySkewer()
+        public void AddFirstIngredientToSkewerInHand(FirstIngredient type)
         {
-            _isSkewerCreated = false;
-            _currentSkewer = null;
-            Destroy(_currentSkewerGameObject);
-            GoToStep(Step.First);
+            _currentSkewerBehavior.AddFirstIngredient(type);
         }
 
-        public void AddFirstIngredient(FirstIngredient type)
+        public bool ReceiveSkewerFromBoiler(GameObject skewerGameObject)
         {
-            if (_currentSkewer == null) return;
-            if (_currentSkewer.GetFirstIngredients().Count > 3) return;
-            _currentSkewer.AddFirstIngredient(type);
-            foreach (var prefab in firstIngredientPrefabs)
+            if (_currentSkewerOnHand != null)
             {
-                var nameStr = prefab.GetComponent<IngredientBehavior>().GetName();
-                if (nameStr.Equals(type.ToString()))
-                {
-                    _currentSkewerGameObject.GetComponent<SkewerBehavior>().AddFirstIngredient(prefab);
-                }
-            }
-            if (_currentSkewer.GetFirstIngredients().Count > 2)
-            {
-                GoToStep(Step.Second);
-            }
-        }
-
-        public void ReceiveSkewerFromBoiler(Skewer skewer, GameObject skewerGameObject)
-        {
-            if (_isSkewerCreated)
-            {
-                Debug.Log("A skewer is already in hand.");
-                return;
+                Debug.Log("my hand is already full");
+                return false;
             }
 
-            _currentSkewer = skewer;
-            _currentSkewerGameObject = skewerGameObject;
-            _isSkewerCreated = true;
-            _currentSkewerGameObject.GetComponent<SkewerBehavior>().SetSkewerFocused(true);
-            _currentSkewerGameObject.transform.SetParent(skewerPlaceHolder.transform);
-
-            if (_currentSkewer.GetSecondDryTime() > 0) GoToStep(Step.Third);
+            SetHand(skewerGameObject);
+            _currentSkewerOnHand.transform.SetParent(skewerPlaceHolder.transform);
+            return true;
         }
 
-        public void GiveSkewerToBoiler(out Skewer skewer, out GameObject skewerGameObject)
+        public void GiveSkewerToBoiler(out GameObject skewerGameObject)
         {
-            if (!_isSkewerCreated)
+            if (_currentSkewerOnHand == null)
             {
-                skewer = null;
                 skewerGameObject = null;
                 Debug.Log("No skewer to give.");
                 return;
             }
 
-            skewer = _currentSkewer;
-            skewerGameObject = _currentSkewerGameObject;
-            _isSkewerCreated = false;
+            skewerGameObject = _currentSkewerOnHand;
+            SetHand(null);
         }
 
         public void AddThirdIngredient(ThirdIngredient type)
         {
-            if (_currentSkewer == null) return;
-            if (_currentSkewer.GetFirstIngredients().Count == 0) return;
-            _currentSkewer.AddThirdIngredient(type);
-            GoToStep(Step.Close);
+            _currentSkewerBehavior.AddThirdIngredient(type);
         }
 
         public void Blend()
         {
-            _currentSkewer.AddBlendIngredient();
-            GoToStep(Step.First);
+            _currentSkewerBehavior.Blend();
         }
 
         public void PackUp()
         {
-            if (_currentSkewer.GetFirstIngredients().Count == 0) return;
-            SkewerBehavior behavior = _currentSkewerGameObject.GetComponent<SkewerBehavior>();
-            behavior.SetSkewerFocused(false);
-            behavior.SwitchToPackUp();
-            behavior.transform.SetParent(pickUpDesk.transform);
-
+            _currentSkewerBehavior.SwitchToPackUp();
+            _currentSkewerOnHand.transform.SetParent(pickUpDesk.transform);
             gameManager.stageController.SwitchCashierMachine(true);
+            SetHand(null);
+        }
+
+        private void SetHand(GameObject skewerGameObject)
+        {
+            // If the skewerGameObject is null, unset the current skewer
+            if (skewerGameObject == null)
+            {
+                if (_currentSkewerBehavior != null)
+                {
+                    _currentSkewerBehavior.SetSkewerFocused(false);
+                }
+                _currentSkewerOnHand = null;
+                _currentSkewerBehavior = null;
+            }
+            else
+            {
+                // If a GameObject is provided, set it as the current skewer
+                _currentSkewerOnHand = skewerGameObject;
+                _currentSkewerBehavior = _currentSkewerOnHand.GetComponent<SkewerBehavior>();
+                _currentSkewerBehavior.SetSkewerFocused(true);
+            }
         }
 
         private void GoToStep(Step step)

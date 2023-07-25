@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Customer
   layers:
   - Default
   - TransparentFX
@@ -46,4 +47,7 @@ TagManager:
     locked: 0
   - name: GameComponent
     uniqueID: 425230571
+    locked: 0
+  - name: SuperiorUI
+    uniqueID: 3756510325
     locked: 0

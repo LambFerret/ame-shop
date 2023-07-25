@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -53,22 +54,29 @@ namespace Script.skewer
 
         public void ReceiveSkewerFromController()
         {
-            Skewer skewer;
             GameObject skewerGameObject;
 
-            skewerController.GiveSkewerToBoiler(out skewer, out skewerGameObject);
+            skewerController.GiveSkewerToBoiler(out skewerGameObject);
+            if (skewerGameObject == null) return;
 
-            if (skewer == null || skewerGameObject == null)
+            _currentSkewerGameObject = skewerGameObject;
+            _currentSkewer = skewerGameObject.GetComponent<SkewerBehavior>().GetSkewer();
+            _currentSkewerGameObject.transform.SetParent(transform);
+            currentState = BoilerState.BeforeStart;
+        }
+
+        public void GiveSkewerToController(SkewerController controller)
+        {
+            if (_currentSkewer == null || _currentSkewerGameObject == null)
             {
-                Debug.Log("No skewer to receive.");
+                Debug.Log("No skewer to give.");
                 return;
             }
 
-            _currentSkewer = skewer;
-            _currentSkewerGameObject = skewerGameObject;
-            _currentSkewerGameObject.transform.SetParent(transform);
-            _currentSkewerGameObject.GetComponent<SkewerBehavior>().SetSkewerFocused(false);
-            currentState = BoilerState.BeforeStart;
+            if (!controller.ReceiveSkewerFromBoiler(_currentSkewerGameObject)) return;
+            _currentSkewer = null;
+            _currentSkewerGameObject = null;
+            text.text = "EMPTY";
         }
 
         public void ClickMinute(bool isUp)
@@ -125,20 +133,6 @@ namespace Script.skewer
             currentState = BoilerState.Drying;
             blockingScreen.SetActive(true);
             StartCoroutine(TimerCoroutine());
-        }
-
-        public void GiveSkewerToController(SkewerController controller)
-        {
-            if (_currentSkewer == null || _currentSkewerGameObject == null)
-            {
-                Debug.Log("No skewer to give.");
-                return;
-            }
-
-            controller.ReceiveSkewerFromBoiler(_currentSkewer, _currentSkewerGameObject);
-            _currentSkewer = null;
-            _currentSkewerGameObject = null;
-            text.text = "EMPTY SLOT";
         }
 
         public void TimerEnded(int dryTime)

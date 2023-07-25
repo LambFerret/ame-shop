@@ -10,27 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: L18nTable Shared Data
+  m_Name: Customer Shared Data
   m_EditorClassIdentifier: 
-  m_TableCollectionName: L18nTable
-  m_TableCollectionNameGuidString: a788aca2e9d2443be9e9e5750b97ece2
-  m_Entries:
-  - m_Id: 26053959680
-    m_Key: Customer-Boy
-    m_Metadata:
-      m_Items: []
-  - m_Id: 681275547648
-    m_Key: UI-Money
-    m_Metadata:
-      m_Items: []
+  m_TableCollectionName: Customer
+  m_TableCollectionNameGuidString: 00000000000000000000000000000000
+  m_Entries: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    rid: 2089071412576780314
+    rid: 2089071538432638995
   references:
     version: 2
     RefIds:
-    - rid: 2089071412576780314
+    - rid: 2089071538432638995
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
-        m_CustomEpoch: 1689682969351
+        m_CustomEpoch: 1690192508203

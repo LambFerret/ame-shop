@@ -35,7 +35,7 @@ namespace Script.stage
 
         private IEnumerator AddCustomer()
         {
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(1);
             while (true)
             {
                 int availableLine = Array.IndexOf(_waitLineOccupied, false);
@@ -51,10 +51,7 @@ namespace Script.stage
                     // 빈 슬롯 정보 가져오기
                     var emptySlot = waitCustomerObjectList[availableLine];
                     emptySlot.SetActive(true);
-
-                    CustomerBehavior customerGameObjectScript =
-                        emptySlot.transform.Find("Customer").GetComponent<CustomerBehavior>();
-                    customerGameObjectScript.SetScript(pickedCustomer);
+                    emptySlot.GetComponent<CustomerBehavior>().SetScript(pickedCustomer);
                 }
 
                 yield return new WaitForSeconds(30);

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
-  m_Name: L18nTable
+  m_Name: UI
   m_EditorClassIdentifier: 
-  m_SharedTableData: {fileID: 11400000, guid: a788aca2e9d2443be9e9e5750b97ece2, type: 2}
+  m_SharedTableData: {fileID: 11400000, guid: de40662675892454f91000044cb6f063, type: 2}
   m_Tables:
-  - {fileID: 11400000, guid: 6eac6eb4399804e599c58eee51773c65, type: 2}
-  - {fileID: 11400000, guid: 3b2c5750d9bd64ccbb91d54369f3356b, type: 2}
-  - {fileID: 11400000, guid: e732e1e274eee4c48abdcba1f034629f, type: 2}
+  - {fileID: 11400000, guid: 1adc8e244b7844734a982eaf097a4914, type: 2}
+  - {fileID: 11400000, guid: 1aaf776e67db94250b12326ddd422918, type: 2}
+  - {fileID: 11400000, guid: e13c11975999842049ea52c93be9a836, type: 2}
   m_Extensions: []
   m_Group: String Table
   references:

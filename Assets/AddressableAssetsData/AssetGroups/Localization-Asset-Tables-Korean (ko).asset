@@ -10,24 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Localization-Assets-Shared
+  m_Name: Localization-Asset-Tables-Korean (ko)
   m_EditorClassIdentifier: 
-  m_GroupName: Localization-Assets-Shared
+  m_GroupName: Localization-Asset-Tables-Korean (ko)
   m_Data:
     m_SerializedData: []
-  m_GUID: 28bc852c42d75485d8fc1a410af9effc
+  m_GUID: d536fd0df892445849f5a3e37300a538
   m_SerializeEntries:
-  - m_GUID: a788aca2e9d2443be9e9e5750b97ece2
-    m_Address: Assets/_Locale/L18nTable Shared Data.asset
+  - m_GUID: a7bb55d028b8e4370b3c22f69f547154
+    m_Address: ScriptableObjectTest_ko
     m_ReadOnly: 1
-    m_SerializedLabels: []
-  - m_GUID: dac9e072de57245d1b76bd2e798492a5
-    m_Address: Assets/_Locale/ScriptableObjectTest Shared Data.asset
-    m_ReadOnly: 1
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: ec53097ec5f8a477c94c06af4a5fe42b, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: fbdc4aac6c4bf42c99d906b5bb6f62b8, type: 2}
-    - {fileID: 11400000, guid: e6edfe804d82147a5b0e46a09bda1074, type: 2}
+    - {fileID: 11400000, guid: fabfb7bf530f24c6a911d8f0f2c8f56f, type: 2}
+    - {fileID: 11400000, guid: 612b78b6946464bdf9be667f6d624ccf, type: 2}

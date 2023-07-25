@@ -10,22 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
-  m_Name: L18nTable_ko
+  m_Name: UI_ja
   m_EditorClassIdentifier: 
   m_LocaleId:
-    m_Code: ko
-  m_SharedData: {fileID: 11400000, guid: a788aca2e9d2443be9e9e5750b97ece2, type: 2}
+    m_Code: ja
+  m_SharedData: {fileID: 11400000, guid: de40662675892454f91000044cb6f063, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData:
-  - m_Id: 26053959680
-    m_Localized: "\uC18C\uB144"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 681275547648
-    m_Localized: "\uB3C8"
-    m_Metadata:
-      m_Items: []
+  m_TableData: []
   references:
     version: 2
     RefIds: []

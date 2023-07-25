@@ -13,6 +13,7 @@ namespace Script.customer
             patience: 100,
             maxPopularity: 3,
             minPopularity: -3,
+            scoreLimitation: 10,
             maxMoney: 5,
             minMoney: 4,
             firstIngredients: new List<FirstIngredient>() { FirstIngredient.GreenGrape },

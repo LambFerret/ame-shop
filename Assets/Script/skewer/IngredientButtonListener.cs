@@ -14,7 +14,7 @@ namespace Script.skewer
         private void Start()
         {
             text.text = selectedIngredient.ToString();
-            GetComponent<Button>().onClick.AddListener(() => skewer.AddFirstIngredient(selectedIngredient));
+            GetComponent<Button>().onClick.AddListener(() => skewer.AddFirstIngredientToSkewerInHand(selectedIngredient));
         }
     }
 }
