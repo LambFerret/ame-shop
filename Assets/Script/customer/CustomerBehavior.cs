@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using Script.events;
 using Script.player;
 using Script.skewer;
 using Script.stage;
@@ -31,7 +32,6 @@ namespace Script.customer
         private bool _isAccept;
         private TextMeshProUGUI _moneyText;
 
-        private Player _player;
         private Image _texture;
         private Image _timerImage;
 
@@ -39,7 +39,6 @@ namespace Script.customer
 
         private void Awake()
         {
-            _player = Player.Instance;
 
             _conversation = transform.Find("Conversation").gameObject;
             _conversationText = _conversation.transform.Find("text").GetComponent<TextMeshProUGUI>();
@@ -166,7 +165,7 @@ namespace Script.customer
         {
             ClearBill(false);
             SetQuote(Customer.QuoteLine.Bad);
-            _player.AddPopularity(areYouSorry ? customer.minPopularity / 2 : customer.minPopularity);
+            GameEventManager.Instance.PopularityChanged(areYouSorry ? customer.minPopularity / 2 : customer.minPopularity);
             _isStart = false;
         }
 
@@ -176,8 +175,8 @@ namespace Script.customer
             var money = customer.maxMoney - customer.minMoney;
             var moneyCal = (int)(money * _timerImage.fillAmount) + customer.minMoney;
             _moneyText.text = moneyCal.ToString();
-            _player.AddMoney(moneyCal);
-            _player.AddPopularity((int)(customer.maxPopularity * _timerImage.fillAmount));
+            GameEventManager.Instance.MoneyChanged(moneyCal);
+            GameEventManager.Instance.PopularityChanged((int)(customer.maxPopularity * _timerImage.fillAmount));
             _isStart = false;
             MoneyAnimation();
         }
