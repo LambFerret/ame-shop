@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -20,12 +21,27 @@ namespace Script.title
 
         private void Start()
         {
+            DataPersistenceManager.Instance.LoadGame();
             StartCoroutine(TitleCoroutine());
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                SceneManager.LoadScene("CashierScene");
+            } else if (Input.GetKeyDown(KeyCode.W))
+            {
+                SceneManager.LoadScene("ResultScene");
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                SceneManager.LoadScene("NewsScene");
+            }
         }
 
         public void GameStart()
         {
-            DataPersistenceManager.Instance.LoadGame();
             SceneManager.LoadSceneAsync("CashierScene");
         }
 
