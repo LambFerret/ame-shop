@@ -42,7 +42,7 @@ namespace Script.title
 
         public void GameStart()
         {
-            SceneManager.LoadSceneAsync("CashierScene");
+            SceneManager.LoadSceneAsync("NewsScene");
         }
 
 

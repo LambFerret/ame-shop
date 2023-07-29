@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Script.ingredient;
 using Script.player;
 using Script.skewer;
 using UnityEngine;
@@ -32,16 +33,16 @@ namespace Script.setting
         }
 
         public GameManager gameManager;
-        public List<GameObject> firstIngredientPrefab;
+
+        public List<Ingredient> firstIngredients;
 
         public GameObject GetFirstIngredientPrefab(FirstIngredient type)
         {
-            foreach (var prefab in firstIngredientPrefab)
+            foreach (var ingredient in firstIngredients)
             {
-                var nameStr = prefab.GetComponent<IngredientBehavior>().GetName();
-                if (nameStr.Equals(type.ToString()))
+                if (ingredient.ingredientName.Equals(type.ToString()))
                 {
-                    return prefab;
+                    return ingredient.prefab;
                 }
             }
 
@@ -50,7 +51,20 @@ namespace Script.setting
 
         public FirstIngredient GetRandomFirstIngredient()
         {
-            return (FirstIngredient) Random.Range(0, firstIngredientPrefab.Count);
+            return (FirstIngredient) Random.Range(0, firstIngredients.Count);
+        }
+
+        public Ingredient GetFirstIngredient(FirstIngredient type)
+        {
+            foreach (var ingredient in firstIngredients)
+            {
+                if (ingredient.ingredientName.Equals(type.ToString()))
+                {
+                    return ingredient;
+                }
+            }
+
+            return null;
         }
     }
 }

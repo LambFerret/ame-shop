@@ -103,11 +103,6 @@ namespace Script.persistence
             _dataHandler.Save(_gameData);
         }
 
-        private void OnApplicationQuit()
-        {
-            SaveGame();
-        }
-
         private static List<IDataPersistence> FindAllDataPersistenceObjects()
         {
             IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>()

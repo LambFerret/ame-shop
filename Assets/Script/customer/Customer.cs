@@ -13,8 +13,13 @@ namespace Script.customer
         public enum QuoteLine
         {
             Enter,
+            Refused,
+            TimeOut,
             Good,
-            Bad
+            BadMildTaste,
+            BadTooSweet,
+            BadTooWatery,
+            BadNotMyChoice,
         }
 
         public string id;
@@ -64,14 +69,16 @@ namespace Script.customer
             var stringTableOp
                 = LocalizationSettings.StringDatabase.GetTableAsync("Customer", locale);
             var stringTable = await stringTableOp.Task;
-            var nameStr = stringTable[id + "Name"].GetLocalizedString();
+            var nameStr = stringTable[id + " Name"].GetLocalizedString();
             customerName = nameStr;
             stringTableOp.Completed += op =>
             {
                 if (op.Status == AsyncOperationStatus.Succeeded)
                     foreach (var line in Enum.GetValues(typeof(QuoteLine)))
                     {
-                        var lineStr = stringTable[id + line].GetLocalizedString();
+                        // Debug.Log(id);
+                        // Debug.Log(line);
+                        var lineStr = stringTable[id + " " + line].GetLocalizedString();
                         QuoteLines[(QuoteLine)line] = new List<string>(lineStr.Split('\n'));
                     }
             };

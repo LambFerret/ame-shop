@@ -18,6 +18,7 @@ namespace Script.player
 
         public GameObject gamePausedPanel;
 
+        public GameObject warningMessagePrefab;
         private void Awake()
         {
             if (Instance == null)

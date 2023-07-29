@@ -16,19 +16,39 @@ MonoBehaviour:
   m_TableCollectionNameGuidString: 2835b41282b2a4f2d85c070a48869883
   m_Entries:
   - m_Id: 9868140544
-    m_Key: BoyName
+    m_Key: Boy Name
     m_Metadata:
       m_Items: []
   - m_Id: 326865248256
-    m_Key: BoyEnter
+    m_Key: Boy Enter
     m_Metadata:
       m_Items: []
   - m_Id: 261816960671744
-    m_Key: BoyGood
+    m_Key: Boy Refused
     m_Metadata:
       m_Items: []
   - m_Id: 261909495406592
-    m_Key: BoyBad
+    m_Key: Boy TimeOut
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1732908657139712
+    m_Key: Boy BadTooSweet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1732916865392640
+    m_Key: Boy BadMildTaste
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1732935769120768
+    m_Key: Boy BadTooWatery
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1732938025656320
+    m_Key: Boy BadNotMyChoice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1733204334600192
+    m_Key: Boy Good
     m_Metadata:
       m_Items: []
   m_Metadata:

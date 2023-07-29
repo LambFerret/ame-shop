@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Script.ingredient;
 using Script.setting;
 
 namespace Script.skewer
@@ -6,7 +7,7 @@ namespace Script.skewer
     public struct BlendedCandy
     {
         public int SugarAmount;
-        public List<IngredientManager.FirstIngredient> FirstIngredients;
+        public List<Ingredient> FirstIngredients;
         public List<IngredientManager.ThirdIngredient> ThirdIngredients;
     }
 }

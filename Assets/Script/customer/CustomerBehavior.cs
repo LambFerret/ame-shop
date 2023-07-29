@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -39,7 +40,6 @@ namespace Script.customer
 
         private void Awake()
         {
-
             _conversation = transform.Find("Conversation").gameObject;
             _conversationText = _conversation.transform.Find("text").GetComponent<TextMeshProUGUI>();
             _buttonGroup = _conversation.transform.Find("Buttons").gameObject;
@@ -60,7 +60,7 @@ namespace Script.customer
                 SetTimer(_timerImage.fillAmount - decrementValue);
             }
 
-            if (_timerImage.fillAmount <= 0) FailToServe();
+            if (_timerImage.fillAmount <= 0) Serve(Customer.QuoteLine.TimeOut);
         }
 
         public void SetScript(Customer script)
@@ -133,7 +133,7 @@ namespace Script.customer
         public void Refuse()
         {
             _isAccept = true;
-            FailToServe(true);
+            Serve(Customer.QuoteLine.Refused);
         }
 
         private void SaveIntoBill()
@@ -141,7 +141,7 @@ namespace Script.customer
             _bill = billBehavior.MakeBill(customer, _conversationText.text);
         }
 
-        private void ClearBill(bool isServed)
+        private void ClearBill(bool isServed = true)
         {
             if (_bill is null) return;
             if (isServed)
@@ -161,24 +161,60 @@ namespace Script.customer
             _texture.sprite = sprite;
         }
 
-        private void FailToServe(bool areYouSorry = false)
+        private void Serve(Customer.QuoteLine feeling)
         {
-            ClearBill(false);
-            SetQuote(Customer.QuoteLine.Bad);
-            GameEventManager.Instance.PopularityChanged(areYouSorry ? customer.minPopularity / 2 : customer.minPopularity);
+            if (feeling == Customer.QuoteLine.Enter) return;
+
+            ClearBill();
+            SetQuote(feeling);
+            _buttonGroup.SetActive(false);
             _isStart = false;
+
+            switch (feeling)
+            {
+                case Customer.QuoteLine.Refused:
+                    GameEventManager.Instance.PopularityChanged(customer.minPopularity / 4);
+
+                    break;
+                case Customer.QuoteLine.TimeOut:
+                    GameEventManager.Instance.PopularityChanged(customer.minPopularity);
+
+                    break;
+                case Customer.QuoteLine.BadMildTaste:
+                    GameEventManager.Instance.PopularityChanged(customer.minPopularity);
+
+                    break;
+                case Customer.QuoteLine.BadTooSweet:
+                    GameEventManager.Instance.PopularityChanged(customer.minPopularity);
+
+                    break;
+                case Customer.QuoteLine.BadTooWatery:
+                    GameEventManager.Instance.PopularityChanged(customer.minPopularity);
+
+                    break;
+                case Customer.QuoteLine.BadNotMyChoice:
+                    GameEventManager.Instance.PopularityChanged(customer.minPopularity);
+
+                    break;
+                case Customer.QuoteLine.Good:
+                    var money = customer.maxMoney - customer.minMoney;
+                    var moneyCal = (int)(money * _timerImage.fillAmount) + customer.minMoney;
+                    _moneyText.text = moneyCal.ToString();
+                    GameEventManager.Instance.MoneyChanged(moneyCal);
+                    GameEventManager.Instance.PopularityChanged((int)(customer.maxPopularity * _timerImage.fillAmount));
+                    MoneyAnimation();
+                    break;
+                default:
+                    return;
+
+            }
+            StartCoroutine(EndCustomer());
         }
 
-        private void SuccessToServe()
+        private IEnumerator EndCustomer()
         {
-            ClearBill(true);
-            var money = customer.maxMoney - customer.minMoney;
-            var moneyCal = (int)(money * _timerImage.fillAmount) + customer.minMoney;
-            _moneyText.text = moneyCal.ToString();
-            GameEventManager.Instance.MoneyChanged(moneyCal);
-            GameEventManager.Instance.PopularityChanged((int)(customer.maxPopularity * _timerImage.fillAmount));
-            _isStart = false;
-            MoneyAnimation();
+            yield return new WaitForSeconds(1f);
+            gameObject.SetActive(false);
         }
 
         public bool IsAccepted()
@@ -186,9 +222,9 @@ namespace Script.customer
             return _isAccept;
         }
 
-        public void CheckServedSkewer(Skewer skewer)
+        public void CheckServedSkewer(SkewerBehavior skewer)
         {
-            var skewerScore = CalculateScore(skewer);
+            var skewerScore = 10; //TODO CalculateScore(skewer);
             Debug.Log("score is : " + skewerScore);
 
             if (skewerScore >= customer.scoreLimitation)
@@ -199,19 +235,19 @@ namespace Script.customer
             else
             {
                 Debug.Log("score bad");
-                SetQuote(Customer.QuoteLine.Bad);
+                SetQuote(Customer.QuoteLine.BadMildTaste);
             }
 
-            SuccessToServe();
+            Serve(Customer.QuoteLine.Good);
         }
 
-        private int CalculateScore(Skewer skewer)
-        {
-            var scoreA = CountCommonElements(skewer.GetFirstIngredients(), customer.firstIngredients);
-            var scoreB = CountCommonElements(skewer.GetSecondIngredients(), customer.secondIngredients);
-            var scoreC = CountCommonElements(skewer.GetThirdIngredients(), customer.thirdIngredients);
-            return scoreA + scoreB + scoreC;
-        }
+        // private int CalculateScore(Skewer skewer)
+        // {
+            // var scoreA = CountCommonElements(skewer.GetFirstIngredients(), customer.firstIngredients);
+            // var scoreB = CountCommonElements(skewer.GetSecondIngredients(), customer.secondIngredients);
+            // var scoreC = CountCommonElements(skewer.GetThirdIngredients(), customer.thirdIngredients);
+            // return scoreA + scoreB + scoreC;
+        // }
 
         private static int CountCommonElements<T>(IEnumerable<T> list1, IEnumerable<T> list2)
         {

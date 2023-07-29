@@ -1,6 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Script.player;
 using Script.setting;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Script.skewer
@@ -12,74 +16,103 @@ namespace Script.skewer
         public GameObject skewerPrefab;
         public GameObject skewerPlaceHolder;
         public GameObject pickUpDesk;
-        public List<GameObject> allSkewerIHave = new();
-        private SkewerBehavior _currentSkewerBehavior;
 
-        private GameObject _currentSkewerOnHand;
+        private SkewerBehavior _currentSkewer;
+        private GameObject _currentSkewerObject;
 
-        public void CreateNewSkewer()
+        public void CreateNewSkewer(int size)
         {
-            if (_currentSkewerOnHand != null) return;
+            if (_currentSkewerObject != null) return;
             var skewer = Instantiate(skewerPrefab, skewerPlaceHolder.transform);
-            allSkewerIHave.Add(skewer);
+            skewer.GetComponent<SkewerBehavior>().SetSize(size);
             SetHand(skewer);
         }
 
-        public void AddFirstIngredientToSkewerInHand(IngredientManager.FirstIngredient type)
+        public bool AddFirstIngredientToSkewerInHand(IngredientManager.FirstIngredient type)
         {
-            if (_currentSkewerOnHand == null) return;
-            var prefab = gameManager.ingredientManager.GetFirstIngredientPrefab(type);
-            _currentSkewerBehavior.AddFirstIngredient(prefab);
-            if (_currentSkewerBehavior.GetSkewer().GetFirstIngredients().Count > 2)
+            if (_currentSkewerObject == null)
             {
-                GoToStep(Step.Second);
+                MakeWarningMessage("No skewer in hand");
+                return false;
             }
+            var prefab = gameManager.ingredientManager.GetFirstIngredient(type);
+            if (IsSkewerLengthMax(prefab.size))
+            {
+                MakeWarningMessage("Not enough space in skewer");
+                return false;
+            }
+
+            _currentSkewer.AddFirstIngredient(prefab);
+
+            return true;
+        }
+
+        private void MakeWarningMessage(string text)
+        {
+            var warningMessage = Instantiate(gameManager.warningMessagePrefab, skewerPlaceHolder.transform);
+            warningMessage.GetComponent<TextMeshProUGUI>().text = text;
+            warningMessage.transform.DOBlendableMoveBy(new Vector3(0, 200, 0), 1).OnComplete(() => Destroy(warningMessage));
+        }
+        public bool IsSkewerLengthMax(int size)
+        {
+            int currentSize = 0;
+            foreach (var element in _currentSkewer.GetFirstIngredients())
+            {
+                currentSize += element.size;
+            }
+
+            return currentSize + size > _currentSkewer.currentSkewerMaxLength;
         }
 
         public bool ReceiveSkewerFromBoiler(GameObject skewerGameObject)
         {
-            if (_currentSkewerOnHand != null)
+            if (_currentSkewerObject != null)
             {
                 Debug.Log("my hand is already full");
                 return false;
             }
 
             SetHand(skewerGameObject);
-            _currentSkewerOnHand.transform.SetParent(skewerPlaceHolder.transform);
+            _currentSkewerObject.transform.SetParent(skewerPlaceHolder.transform);
             GoToStep(Step.Third);
             return true;
         }
 
         public void GiveSkewerToBoiler(out GameObject skewerGameObject)
         {
-            if (_currentSkewerOnHand == null)
+            if (_currentSkewerObject == null)
             {
                 skewerGameObject = null;
                 Debug.Log("No skewer to give.");
                 return;
             }
 
-            skewerGameObject = _currentSkewerOnHand;
+            skewerGameObject = _currentSkewerObject;
             SetHand(null);
+        }
+
+        public void AddTemperature(int temperature, int concentration)
+        {
+            _currentSkewer.AddTemperature(temperature, concentration);
         }
 
         public void AddThirdIngredient(IngredientManager.ThirdIngredient type)
         {
-            if (_currentSkewerOnHand == null) return;
+            if (_currentSkewerObject == null) return;
 
-            _currentSkewerBehavior.AddThirdIngredient(type);
+            _currentSkewer.AddThirdIngredient(type);
         }
 
         public void Blend()
         {
-            _currentSkewerBehavior.Blend();
+            _currentSkewer.AddBlendIngredient();
             GoToStep(Step.First);
         }
 
         public void PackUp()
         {
-            _currentSkewerBehavior.SwitchToPackUp();
-            _currentSkewerOnHand.transform.SetParent(pickUpDesk.transform);
+            _currentSkewer.SwitchToPackUp();
+            _currentSkewerObject.transform.SetParent(pickUpDesk.transform);
             gameManager.stageController.SwitchCashierMachine(true);
             SetHand(null);
             GoToStep(Step.Close);
@@ -87,7 +120,7 @@ namespace Script.skewer
 
         public void Destroy()
         {
-            Destroy(_currentSkewerOnHand);
+            Destroy(_currentSkewerObject);
             SetHand(null);
             GoToStep(Step.First);
 
@@ -98,16 +131,16 @@ namespace Script.skewer
             // If the skewerGameObject is null, unset the current skewer
             if (skewerGameObject == null)
             {
-                if (_currentSkewerBehavior != null) _currentSkewerBehavior.SetSkewerFocused(false);
-                _currentSkewerOnHand = null;
-                _currentSkewerBehavior = null;
+                if (_currentSkewer != null) _currentSkewer.SetSkewerFocused(false);
+                _currentSkewerObject = null;
+                _currentSkewer = null;
             }
             else
             {
                 // If a GameObject is provided, set it as the current skewer
-                _currentSkewerOnHand = skewerGameObject;
-                _currentSkewerBehavior = _currentSkewerOnHand.GetComponent<SkewerBehavior>();
-                _currentSkewerBehavior.SetSkewerFocused(true);
+                _currentSkewerObject = skewerGameObject;
+                _currentSkewer = _currentSkewerObject.GetComponent<SkewerBehavior>();
+                _currentSkewer.SetSkewerFocused(true);
             }
         }
 
