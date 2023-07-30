@@ -36,7 +36,7 @@ namespace Script.ui
 
         private void OnPopularityChanged(int value)
         {
-            _popularity = value;
+            _popularity += value;
         }
 
         public void LoadData(GameData data)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -18,12 +19,80 @@ namespace Script.skewer
         public GameObject skewerPrefab;
         public GameObject skewerPlaceHolder;
         public GameObject pickUpDesk;
+        public GameObject weaponPlaceHolder;
+        public GameObject weapon;
 
-        private SkewerBehavior _currentSkewer;
-        private GameObject _currentSkewerObject;
+        [Header("Test Field")]
+        [SerializeField] public WhatsOnHand whatsOnHand;
+        [SerializeField] private SkewerBehavior _currentSkewer;
+        [SerializeField] private GameObject _currentSkewerObject;
+        [SerializeField] private bool _isWeaponOnHand;
+
+        public enum WhatsOnHand
+        {
+            None,
+            Skewer,
+            Weapon
+        }
+
+        private void Awake()
+        {
+            weapon = weaponPlaceHolder.transform.GetChild(0).gameObject;
+        }
+
+        private void Update()
+        {
+            if (_currentSkewer is not null)
+            {
+                whatsOnHand = WhatsOnHand.Skewer;
+            }
+            else if (_currentSkewer is null && _isWeaponOnHand)
+            {
+                whatsOnHand = WhatsOnHand.Weapon;
+            }
+            else
+            {
+                whatsOnHand = WhatsOnHand.None;
+            }
+
+            if (whatsOnHand == WhatsOnHand.Weapon)
+            {
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(weapon.transform.parent as RectTransform,
+                    Input.mousePosition, null, out Vector2 localPoint);
+                weapon.transform.localPosition = localPoint;
+            }
+        }
+
+        private void SetWeaponOnHand(bool toHand)
+        {
+            if (!toHand)
+            {
+                weapon.transform.DOLocalMove(Vector3.zero, 0.5f);
+                _isWeaponOnHand = false;
+                return;
+            }
+
+            switch (whatsOnHand)
+            {
+                case WhatsOnHand.None:
+                    _isWeaponOnHand = true;
+                    break;
+                case WhatsOnHand.Skewer:
+                    MakeWarningMessage("Cannot hold weapon with skewer");
+                    return;
+                case WhatsOnHand.Weapon:
+                    return;
+            }
+        }
+
+        public void EquipWeapon()
+        {
+            SetWeaponOnHand(!_isWeaponOnHand);
+        }
 
         public void CreateNewSkewer(int size)
         {
+            SetWeaponOnHand(false);
             if (_currentSkewerObject != null) return;
             var skewer = Instantiate(skewerPrefab, skewerPlaceHolder.transform);
             skewer.GetComponent<SkewerBehavior>().SetSize(size);
@@ -37,6 +106,7 @@ namespace Script.skewer
                 MakeWarningMessage("No skewer in hand");
                 return false;
             }
+
             var prefab = gameManager.ingredientManager.GetFirstIngredient(type);
             if (IsSkewerLengthMax(prefab.size))
             {
@@ -53,9 +123,11 @@ namespace Script.skewer
         {
             var warningMessage = Instantiate(gameManager.warningMessagePrefab, skewerPlaceHolder.transform);
             warningMessage.GetComponent<TextMeshProUGUI>().text = text;
-            warningMessage.transform.DOBlendableMoveBy(new Vector3(0, 200, 0), 1).OnComplete(() => Destroy(warningMessage));
+            warningMessage.transform.DOBlendableMoveBy(new Vector3(0, 200, 0), 1)
+                .OnComplete(() => Destroy(warningMessage));
         }
-        public bool IsSkewerLengthMax(int size)
+
+        private bool IsSkewerLengthMax(int size)
         {
             int currentSize = 0;
             foreach (var element in _currentSkewer.GetFirstIngredients())
@@ -125,7 +197,6 @@ namespace Script.skewer
             Destroy(_currentSkewerObject);
             SetHand(null);
             GoToStep(Step.First);
-
         }
 
         private void SetHand(GameObject skewerGameObject)

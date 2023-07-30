@@ -32,7 +32,7 @@ namespace Script.ui
 
         private void OnMoneyChanged(int value)
         {
-            _money = value;
+            _money += value;
         }
 
         public void LoadData(GameData data)

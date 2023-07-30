@@ -1,4 +1,5 @@
 using System;
+using Script.setting;
 using UnityEngine;
 
 namespace Script.events
@@ -22,20 +23,21 @@ namespace Script.events
 
         public void PopularityChanged(int value)
         {
-            if (OnPopularityChanged != null)
-            {
-                OnPopularityChanged(value);
-            }
+            OnPopularityChanged?.Invoke(value);
         }
 
         public event Action<int> OnMoneyChanged;
 
         public void MoneyChanged(int value)
         {
-            if (OnMoneyChanged != null)
-            {
-                OnMoneyChanged(value);
-            }
+            OnMoneyChanged?.Invoke(value);
+        }
+
+        public event Action<IngredientManager.FirstIngredient, int> OnIngredientChanged;
+
+        public void IngredientChanged(IngredientManager.FirstIngredient ingredient, int count)
+        {
+            OnIngredientChanged?.Invoke(ingredient, count);
         }
     }
 }

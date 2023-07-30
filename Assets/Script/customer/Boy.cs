@@ -16,9 +16,7 @@ namespace Script.customer
             10,
             5,
             4,
-            new List<IngredientManager.FirstIngredient> { IngredientManager.FirstIngredient.GreenGrape },
-            new List<IngredientManager.SecondIngredient> { IngredientManager.SecondIngredient.NormalSugar },
-            new List<IngredientManager.ThirdIngredient> { IngredientManager.ThirdIngredient.None }
+            new List<IngredientManager.FirstIngredient> { IngredientManager.FirstIngredient.GreenGrape }
         )
         {
         }

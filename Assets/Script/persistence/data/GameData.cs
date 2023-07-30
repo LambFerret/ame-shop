@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Script.setting;
 
 namespace Script.persistence.data
 {
@@ -18,12 +19,14 @@ namespace Script.persistence.data
         public int dayGasUsage;
         public int daySugarUsage;
 
-        public int strawberry;
-        public int banana;
-        public int greenGrape;
-        public int apple;
-        public int bigGrape;
-        public int coconut;
+        public SerializableDictionary<IngredientManager.FirstIngredient, int> Ingredients { get; set; }
+
+
+
+        public int language;
+        public float volume;
+
+        public bool isTutorialDone;
 
         public GameData()
         {
@@ -32,12 +35,15 @@ namespace Script.persistence.data
             money = 0;
             popularity = 0;
             equipment = new List<string>();
-            strawberry = 20;
-            banana = 5;
-            greenGrape = 20;
-            apple = 3;
-            bigGrape = 10;
-            coconut = 10;
+            Ingredients = new SerializableDictionary<IngredientManager.FirstIngredient, int>
+            {
+                { IngredientManager.FirstIngredient.Strawberry, 20 },
+                { IngredientManager.FirstIngredient.Banana, 5 },
+                { IngredientManager.FirstIngredient.GreenGrape, 20 },
+                { IngredientManager.FirstIngredient.Apple, 3 },
+                { IngredientManager.FirstIngredient.BigGrape, 10 },
+                { IngredientManager.FirstIngredient.Coconut, 10 },
+            };
         }
     }
 }

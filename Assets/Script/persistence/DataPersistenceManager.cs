@@ -64,6 +64,7 @@ namespace Script.persistence
 
         public void LoadGame()
         {
+            _dataPersistenceObjects = FindAllDataPersistenceObjects();
             // load any saved data from a file using the data handler
             _gameData = _dataHandler.Load();
 
@@ -100,6 +101,7 @@ namespace Script.persistence
                 dataPersistenceObj.SaveData(_gameData);
             }
 
+            Debug.Log("SAVE CALLED");
             _dataHandler.Save(_gameData);
         }
 

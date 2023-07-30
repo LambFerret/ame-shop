@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c695528885d4dcba9c2b92c566cd539, type: 3}
+  m_Name: Boy Slime
+  m_EditorClassIdentifier: 
+  id: BoySlime
+  customerName: 
+  hasSpecialEvent: 0
+  patience: 100
+  maxPopularity: 3
+  minPopularity: -3
+  scoreLimitation: 10
+  maxMoney: 5
+  minMoney: 4
+  firstIngredients: 03000000
+  isSlime: 1
+  slimeIngredient: 1
+  slimeIngredientCount: 20

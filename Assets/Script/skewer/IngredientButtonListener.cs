@@ -1,4 +1,4 @@
-using System;
+using Script.events;
 using Script.ingredient;
 using Script.persistence;
 using Script.persistence.data;
@@ -27,10 +27,16 @@ namespace Script.skewer
 
         private void Start()
         {
+            GameEventManager.Instance.OnIngredientChanged += OnIngredientChanged;
+
             _button.onClick.AddListener(() =>
             {
                 if (skewer.AddFirstIngredientToSkewerInHand(selectedIngredient)) amount--;
             });
+        }
+        private void OnDestroy()
+        {
+            GameEventManager.Instance.OnIngredientChanged -= OnIngredientChanged;
         }
 
         private void Update()
@@ -40,46 +46,23 @@ namespace Script.skewer
 
         }
 
+        private void OnIngredientChanged(IngredientManager.FirstIngredient f, int value)
+        {
+            if (f == selectedIngredient)
+            {
+                amount += value;
+            }
+        }
+
         public void LoadData(GameData data)
         {
-            amount = selectedIngredient switch
-            {
-                IngredientManager.FirstIngredient.Strawberry => data.strawberry,
-                IngredientManager.FirstIngredient.Banana => data.banana,
-                IngredientManager.FirstIngredient.GreenGrape => data.greenGrape,
-                IngredientManager.FirstIngredient.Apple => data.apple,
-                IngredientManager.FirstIngredient.BigGrape => data.bigGrape,
-                IngredientManager.FirstIngredient.Coconut => data.coconut,
-                _ => -1
-            };
+            amount = data.Ingredients[selectedIngredient];
         }
 
         public void SaveData(GameData data)
         {
-            switch (selectedIngredient)
-            {
-                case IngredientManager.FirstIngredient.Strawberry:
-                    data.strawberry = amount;
-                    break;
-                case IngredientManager.FirstIngredient.Banana:
-                    data.banana = amount;
-                    break;
-                case IngredientManager.FirstIngredient.GreenGrape:
-                    data.greenGrape = amount;
-                    break;
-                case IngredientManager.FirstIngredient.Apple:
-                    data.apple = amount;
-                    break;
-                case IngredientManager.FirstIngredient.BigGrape:
-                    data.bigGrape = amount;
-                    break;
-                case IngredientManager.FirstIngredient.Coconut:
-                    data.coconut = amount;
-                    break;
-                default:
-                    amount = -1;
-                    break;
-            }
+            data.Ingredients[selectedIngredient] = amount;
         }
+
     }
 }

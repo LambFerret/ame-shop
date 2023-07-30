@@ -51,6 +51,50 @@ MonoBehaviour:
     m_Key: Boy Good
     m_Metadata:
       m_Items: []
+  - m_Id: 2083494367846400
+    m_Key: Boy Poked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2083538353512448
+    m_Key: BoySlime Enter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2083544707883008
+    m_Key: BoySlime Refused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2083549082542080
+    m_Key: BoySlime TimeOut
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2083549984317440
+    m_Key: BoySlime BadTooSweet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2083550986756096
+    m_Key: BoySlime BadMildTaste
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2083552094052352
+    m_Key: BoySlime BadTooWatery
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2083554119901184
+    m_Key: BoySlime BadNotMyChoice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2083556313522176
+    m_Key: BoySlime Good
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2083558062546944
+    m_Key: BoySlime Poked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2087832544862208
+    m_Key: BoySlime Name
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

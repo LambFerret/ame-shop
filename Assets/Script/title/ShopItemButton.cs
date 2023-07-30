@@ -1,4 +1,5 @@
 using System;
+using Script.events;
 using Script.ingredient;
 using Script.persistence;
 using Script.persistence.data;
@@ -16,6 +17,8 @@ namespace Script.title
         public int cost;
         public int value;
 
+        private TextMeshProUGUI _text;
+
         private void Awake()
         {
             _ingredient = GameObject.Find("IngredientManager").GetComponent<IngredientManager>()
@@ -23,6 +26,26 @@ namespace Script.title
             cost = _ingredient.cost;
             transform.Find("cost").GetComponent<TextMeshProUGUI>().text = cost.ToString();
             transform.Find("each").GetComponent<TextMeshProUGUI>().text = "X " + _ingredient.piecePerEach;
+            _text = transform.Find("stock").GetComponent<TextMeshProUGUI>();
+        }
+
+        private void Start()
+        {
+            GameEventManager.Instance.OnIngredientChanged += OnIngredientChanged;
+        }
+
+        private void OnDestroy()
+        {
+            GameEventManager.Instance.OnIngredientChanged -= OnIngredientChanged;
+        }
+
+        private void OnIngredientChanged(IngredientManager.FirstIngredient f, int value)
+        {
+            if (f == ingredient)
+            {
+                this.value += value;
+                _text.text = "stock : " + this.value;
+            }
         }
 
         public void Confirm()
@@ -32,42 +55,12 @@ namespace Script.title
 
         public void LoadData(GameData data)
         {
-            value = ingredient switch
-            {
-                IngredientManager.FirstIngredient.Strawberry => data.strawberry,
-                IngredientManager.FirstIngredient.Banana => data.banana,
-                IngredientManager.FirstIngredient.GreenGrape => data.greenGrape,
-                IngredientManager.FirstIngredient.Apple => data.apple,
-                IngredientManager.FirstIngredient.BigGrape => data.bigGrape,
-                IngredientManager.FirstIngredient.Coconut => data.coconut,
-                _ => -1
-            };
-            transform.Find("stock").GetComponent<TextMeshProUGUI>().text = "stock : " + value;
+            value = data.Ingredients[ingredient];
         }
 
         public void SaveData(GameData data)
         {
-            switch (ingredient)
-            {
-                case IngredientManager.FirstIngredient.Strawberry:
-                    data.strawberry = value;
-                    break;
-                case IngredientManager.FirstIngredient.Banana:
-                    data.banana = value;
-                    break;
-                case IngredientManager.FirstIngredient.GreenGrape:
-                    data.greenGrape = value;
-                    break;
-                case IngredientManager.FirstIngredient.Apple:
-                    data.apple = value;
-                    break;
-                case IngredientManager.FirstIngredient.BigGrape:
-                    data.bigGrape = value;
-                    break;
-                case IngredientManager.FirstIngredient.Coconut:
-                    data.coconut = value;
-                    break;
-            }
+            data.Ingredients[ingredient] = value;
         }
     }
 }

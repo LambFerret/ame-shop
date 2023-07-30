@@ -3,34 +3,33 @@ using System.Collections;
 using DG.Tweening;
 using Script.customer;
 using Script.player;
-using Script.ui;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Timer = Script.ui.Timer;
 
 namespace Script.stage
 {
     public class StageController : MonoBehaviour
     {
-        private const float CustomerTimer = 30f;
-        public GameObject userInterfaces;
-        public GameObject cashierScene;
         public GameObject machineScene;
         public CustomerManager customerManager;
-        public CanvasAutoScaler canvasAutoScaler;
 
         public float stageTimer;
         public Timer timerObject;
         public GameObject[] waitCustomerObjectList = new GameObject[3];
         public Customer[] customerList = new Customer[3];
 
-        private readonly bool[] _waitLineOccupied = new bool[3];
-        private bool _isCashierScene;
+        [Header("Customer Interval")] public float baseInterval = 30f; // base interval time when popularity is 0
+        public float minInterval = 5f; // minimum possible interval time
+
+        [SerializeField] private bool[] _waitLineOccupied = new bool[3];
         private bool _isGameStarted;
 
         private void Start()
         {
             customerManager = GameObject.Find("CustomerManager").GetComponent<CustomerManager>();
-            _isCashierScene = true;
             stageTimer = 0;
         }
 
@@ -38,9 +37,11 @@ namespace Script.stage
         {
             stageTimer += Time.deltaTime;
             timerObject.SetTimer(stageTimer);
+            foreach (var o in waitCustomerObjectList)
+            {
+                _waitLineOccupied[Array.IndexOf(waitCustomerObjectList, o)] = o.activeSelf;
+            }
         }
-        public float baseInterval = 30f;  // base interval time when popularity is 0
-        public float minInterval = 5f;    // minimum possible interval time
 
         private IEnumerator AddCustomer()
         {
@@ -50,20 +51,22 @@ namespace Script.stage
                 var availableLine = Array.IndexOf(_waitLineOccupied, false);
                 if (availableLine != -1)
                 {
-                    // 빈 자리 여부
-                    _waitLineOccupied[availableLine] = true;
-
                     // Customer 객체 랜덤 생성
                     var pickedCustomer = customerManager.GetCustomerByDifficulty(CustomerManager.Difficulty.Easy);
                     customerList[availableLine] = pickedCustomer;
 
                     // 빈 슬롯 정보 가져오기
                     var emptySlot = waitCustomerObjectList[availableLine];
+
+                    // 빈 자리 여부
+                    _waitLineOccupied[availableLine] = true;
                     emptySlot.SetActive(true);
                     emptySlot.GetComponent<CustomerBehavior>().SetScript(pickedCustomer);
                 }
 
-                float interval = UnityEngine.Random.Range(minInterval, baseInterval);  // random interval time between minInterval and maxInterval
+                float interval =
+                    UnityEngine.Random.Range(minInterval,
+                        baseInterval); // random interval time between minInterval and maxInterval
 
                 yield return new WaitForSeconds(interval);
             }
@@ -71,7 +74,6 @@ namespace Script.stage
 
         public void SwitchCashierMachine(bool isCashierScene)
         {
-            _isCashierScene = isCashierScene;
             if (isCashierScene)
             {
                 var sb = machineScene.transform.Find("Scrollbar").GetComponent<Scrollbar>();
@@ -91,6 +93,7 @@ namespace Script.stage
             var sb = machineScene.transform.Find("Scrollbar").GetComponent<Scrollbar>();
             DOTween.To(() => sb.value, x => sb.value = x, step * 0.5f, 1f).SetEase(Ease.OutBack);
         }
+
 
         public void OpenStore()
         {

@@ -11,8 +11,7 @@ namespace Script.skewer
 {
     public class SkewerBehavior : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        [Header("Constant Value")]
-        public int currentSkewerMaxLength;
+        [Header("Constant Value")] public int currentSkewerMaxLength;
         public int perfectTemperature = 110;
 
         private bool _isDraggable;
@@ -42,6 +41,31 @@ namespace Script.skewer
             _firstIngredients = new List<Ingredient>();
             _thirdIngredients = new List<IngredientManager.ThirdIngredient>();
         }
+
+        public bool IsNotEnoughDry()
+        {
+            return _perfectDryTime > _currentDryTime;
+        }
+
+        public int CheckConcentration()
+        {
+            float tolerance = _perfectConcentration * 0.1f;
+
+            if (_currentConcentration >= _perfectConcentration - tolerance &&
+                _currentConcentration <= _perfectConcentration + tolerance)
+            {
+                return 0;
+            }
+
+            if (_currentConcentration > _perfectConcentration + tolerance) return 1;
+            return -1;
+        }
+
+        public bool CheckTemperature()
+        {
+            return !(_currentTemperature < perfectTemperature - 15 || _currentTemperature > perfectTemperature + 15);
+        }
+
 
         public void SetSize(int size)
         {
@@ -201,9 +225,8 @@ namespace Script.skewer
         {
             if (_isSkewerFocused)
             {
-                Vector2 localPoint;
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(_rectTransform.parent as RectTransform,
-                    Input.mousePosition, null, out localPoint);
+                    Input.mousePosition, null, out Vector2 localPoint);
                 _rectTransform.localPosition = localPoint;
             }
         }
@@ -215,7 +238,12 @@ namespace Script.skewer
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!_isDraggable) return;
+            if (!_isDraggable)
+            {
+                Debug.Log("you can");
+                return;
+            }
+
             var scale = new Vector2(2560f / Screen.width, 1440f / Screen.height);
             _rectTransform.anchoredPosition += new Vector2(eventData.delta.x * scale.x, eventData.delta.y * scale.y);
         }
@@ -236,11 +264,6 @@ namespace Script.skewer
                 {
                     _rectTransform.DOAnchorPos(_originalPosition, 0.5F).SetEase(Ease.OutCubic);
                 }
-            }
-            else
-            {
-                if (hitCollider != null && hitCollider.CompareTag("Customer"))
-                    Debug.Log("u poke customer with skewer.");
             }
         }
 

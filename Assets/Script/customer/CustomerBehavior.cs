@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Script.events;
+using Script.ingredient;
+using Script.persistence;
+using Script.persistence.data;
 using Script.player;
+using Script.setting;
 using Script.skewer;
 using Script.stage;
 using TMPro;
@@ -14,9 +18,9 @@ using Random = UnityEngine.Random;
 
 namespace Script.customer
 {
-    public class CustomerBehavior : MonoBehaviour
+    public class CustomerBehavior : MonoBehaviour, IDataPersistence
     {
-        [SerializeField] private Customer customer;
+        public Customer customer;
 
         public StageController stageController;
         public BillBehavior billBehavior;
@@ -37,6 +41,9 @@ namespace Script.customer
         private Image _timerImage;
 
         private GameObject _bill;
+        private GameData _data;
+
+        public int value;
 
         private void Awake()
         {
@@ -76,9 +83,6 @@ namespace Script.customer
         private void SetRandomFavorites()
         {
             customer.firstIngredients.Clear();
-            customer.secondIngredients.Clear();
-            customer.thirdIngredients.Clear();
-
             var a = GameManager.Instance.ingredientManager.GetRandomFirstIngredient();
             customer.firstIngredients.Add(a);
         }
@@ -161,7 +165,7 @@ namespace Script.customer
             _texture.sprite = sprite;
         }
 
-        private void Serve(Customer.QuoteLine feeling)
+        public void Serve(Customer.QuoteLine feeling)
         {
             if (feeling == Customer.QuoteLine.Enter) return;
 
@@ -178,6 +182,20 @@ namespace Script.customer
                     break;
                 case Customer.QuoteLine.TimeOut:
                     GameEventManager.Instance.PopularityChanged(customer.minPopularity);
+
+                    break;
+                case Customer.QuoteLine.Poked:
+                    if (!customer.isSlime)
+                    {
+                        Debug.Log("쨔잔 슬라임이 아니었습니다 ㅃ~");
+                        GameEventManager.Instance.PopularityChanged(customer.minPopularity * 2);
+                    }
+                    else
+                    {
+                        Debug.Log("쨔잔 슬라임");
+                        GameEventManager.Instance.IngredientChanged(customer.slimeIngredient,
+                            customer.slimeIngredientCount);
+                    }
 
                     break;
                 case Customer.QuoteLine.BadMildTaste:
@@ -206,15 +224,27 @@ namespace Script.customer
                     break;
                 default:
                     return;
-
             }
+
             StartCoroutine(EndCustomer());
         }
 
         private IEnumerator EndCustomer()
         {
             yield return new WaitForSeconds(1f);
+            _buttonGroup.SetActive(true);
             gameObject.SetActive(false);
+        }
+
+
+        public void LoadData(GameData data)
+        {
+            value = data.Ingredients[customer.slimeIngredient];
+        }
+
+        public void SaveData(GameData data)
+        {
+            data.Ingredients[customer.slimeIngredient] = value;
         }
 
         public bool IsAccepted()
@@ -224,29 +254,48 @@ namespace Script.customer
 
         public void CheckServedSkewer(SkewerBehavior skewer)
         {
-            var skewerScore = 10; //TODO CalculateScore(skewer);
-            Debug.Log("score is : " + skewerScore);
+            var a = FindDominantIngredient(skewer.GetFirstIngredients());
+            if (a == null) Serve(Customer.QuoteLine.BadNotMyChoice);
 
-            if (skewerScore >= customer.scoreLimitation)
+            if (skewer.IsNotEnoughDry() || !skewer.CheckTemperature()) Serve(Customer.QuoteLine.BadTooWatery);
+            if (skewer.CheckConcentration() < 0)
             {
-                Debug.Log("score good");
-                SetQuote(Customer.QuoteLine.Good);
+                Serve(Customer.QuoteLine.BadMildTaste);
             }
-            else
+            else if (skewer.CheckConcentration() > 0)
             {
-                Debug.Log("score bad");
-                SetQuote(Customer.QuoteLine.BadMildTaste);
+                Serve(Customer.QuoteLine.BadTooSweet);
             }
-
             Serve(Customer.QuoteLine.Good);
+        }
+
+        public Ingredient FindDominantIngredient(IEnumerable<Ingredient> ingredients)
+        {
+            // Group the ingredients by their name and calculate the total size for each group
+            var ingredientGroups = ingredients.GroupBy(i => i.ingredientName)
+                .Select(g => new
+                {
+                    Ingredient = g.First(),
+                    TotalSize = g.Sum(i => i.size)
+                })
+                .ToList();
+
+            // Calculate the total size of all ingredients
+            int totalSize = ingredientGroups.Sum(g => g.TotalSize);
+
+            // Find a group where the total size is 80% or more of the total size
+            var dominantGroup = ingredientGroups.FirstOrDefault(g => g.TotalSize >= totalSize * 0.8f);
+
+            // If such a group exists, return the ingredient, otherwise return null
+            return dominantGroup != null ? dominantGroup.Ingredient : null;
         }
 
         // private int CalculateScore(Skewer skewer)
         // {
-            // var scoreA = CountCommonElements(skewer.GetFirstIngredients(), customer.firstIngredients);
-            // var scoreB = CountCommonElements(skewer.GetSecondIngredients(), customer.secondIngredients);
-            // var scoreC = CountCommonElements(skewer.GetThirdIngredients(), customer.thirdIngredients);
-            // return scoreA + scoreB + scoreC;
+        // var scoreA = CountCommonElements(skewer.GetFirstIngredients(), customer.firstIngredients);
+        // var scoreB = CountCommonElements(skewer.GetSecondIngredients(), customer.secondIngredients);
+        // var scoreC = CountCommonElements(skewer.GetThirdIngredients(), customer.thirdIngredients);
+        // return scoreA + scoreB + scoreC;
         // }
 
         private static int CountCommonElements<T>(IEnumerable<T> list1, IEnumerable<T> list2)

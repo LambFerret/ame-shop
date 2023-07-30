@@ -20,6 +20,7 @@ namespace Script.customer
             BadTooSweet,
             BadTooWatery,
             BadNotMyChoice,
+            Poked
         }
 
         public string id;
@@ -31,10 +32,12 @@ namespace Script.customer
         public int scoreLimitation;
         public int maxMoney;
         public int minMoney;
-        public List<IngredientManager.FirstIngredient> firstIngredients;
         public Dictionary<QuoteLine, List<string>> QuoteLines = new();
-        public List<IngredientManager.SecondIngredient> secondIngredients;
-        public List<IngredientManager.ThirdIngredient> thirdIngredients;
+        public List<IngredientManager.FirstIngredient> firstIngredients;
+
+        public bool isSlime;
+        public IngredientManager.FirstIngredient slimeIngredient;
+        public int slimeIngredientCount;
 
         protected Customer(
             string id,
@@ -46,8 +49,9 @@ namespace Script.customer
             int maxMoney,
             int minMoney,
             List<IngredientManager.FirstIngredient> firstIngredients,
-            List<IngredientManager.SecondIngredient> secondIngredients,
-            List<IngredientManager.ThirdIngredient> thirdIngredients
+            bool isSlime = false,
+            IngredientManager.FirstIngredient slimeIngredient = IngredientManager.FirstIngredient.BlendedCandy,
+            int slimeIngredientCount = 0
         )
         {
             this.id = id;
@@ -59,8 +63,15 @@ namespace Script.customer
             this.maxMoney = maxMoney;
             this.minMoney = minMoney;
             this.firstIngredients = firstIngredients;
-            this.secondIngredients = secondIngredients;
-            this.thirdIngredients = thirdIngredients;
+            this.isSlime = isSlime;
+            if (isSlime && slimeIngredient is not IngredientManager.FirstIngredient.BlendedCandy && slimeIngredientCount > 0)
+            {
+                this.slimeIngredient = slimeIngredient;
+                this.slimeIngredientCount = slimeIngredientCount;
+            } else if (isSlime)
+            {
+                throw new Exception();
+            }
         }
 
         private async void OnEnable()
