@@ -1,20 +1,15 @@
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using Script.persistence;
-using UnityEngine.SceneManagement;
 
 namespace Script.title
 {
     public class TitleScene : MonoBehaviour
     {
-        public Image logo;
         public Image title;
-        public Image blackScreen;
-        public GameObject loading;
         public TextMeshProUGUI startText;
         public GameObject buttonGroup;
 
@@ -29,41 +24,25 @@ namespace Script.title
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                SceneManager.LoadScene("CashierScene");
+                LoadingScreen.Instance.LoadScene("CashierScene");
             } else if (Input.GetKeyDown(KeyCode.W))
             {
-                SceneManager.LoadScene("ResultScene");
+                LoadingScreen.Instance.LoadScene("ResultScene");
             }
             else if (Input.GetKeyDown(KeyCode.E))
             {
-                SceneManager.LoadScene("NewsScene");
+                LoadingScreen.Instance.LoadScene("NewsScene");
             }
         }
 
         public void GameStart()
         {
-            SceneManager.LoadSceneAsync("NewsScene");
+            LoadingScreen.Instance.LoadScene("NewsScene");
         }
 
 
         private IEnumerator TitleCoroutine()
         {
-            blackScreen.gameObject.SetActive(true);
-            loading.gameObject.SetActive(false);
-            logo.gameObject.SetActive(true);
-            yield return logo.DOFade(1, 2).WaitForCompletion();
-            yield return new WaitForSeconds(2);
-            yield return logo.DOFade(0, 2).WaitForCompletion();
-
-            loading.gameObject.SetActive(true);
-            yield return new WaitForSeconds(2);
-            loading.gameObject.SetActive(false);
-
-
-            logo.gameObject.SetActive(false);
-            yield return blackScreen.DOFade(0, 2).WaitForCompletion();
-            blackScreen.gameObject.SetActive(false);
-
             title.gameObject.SetActive(true);
             title.rectTransform.DOAnchorPosX(-1280, 2).SetEase(Ease.OutCubic);
             yield return new WaitForSeconds(1);

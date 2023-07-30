@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Script.player;
 using Script.setting;
+using Script.stage;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Script.skewer
     public class SkewerController : MonoBehaviour
     {
         public GameManager gameManager;
+        public StageController stageController;
 
         public GameObject skewerPrefab;
         public GameObject skewerPlaceHolder;
@@ -113,7 +115,7 @@ namespace Script.skewer
         {
             _currentSkewer.SwitchToPackUp();
             _currentSkewerObject.transform.SetParent(pickUpDesk.transform);
-            gameManager.stageController.SwitchCashierMachine(true);
+            stageController.SwitchCashierMachine(true);
             SetHand(null);
             GoToStep(Step.Close);
         }
@@ -146,7 +148,7 @@ namespace Script.skewer
 
         private void GoToStep(Step step)
         {
-            gameManager.stageController.GotToMachineStep((int)step);
+            stageController.GotToMachineStep((int)step);
         }
 
         private enum Step

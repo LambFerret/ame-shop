@@ -40,7 +40,7 @@ namespace Script.title
 
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
             yield return blackScreen.DOFade(1, 1).WaitForCompletion();
-            SceneManager.LoadScene("CashierScene");
+            LoadingScreen.Instance.LoadScene("CashierScene");
         }
 
         private IEnumerator BlinkingCoroutine()

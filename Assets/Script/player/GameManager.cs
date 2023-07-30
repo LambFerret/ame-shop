@@ -3,6 +3,7 @@ using Script.customer;
 using Script.setting;
 using Script.skewer;
 using Script.stage;
+using Script.title;
 using UnityEngine;
 
 namespace Script.player
@@ -11,9 +12,7 @@ namespace Script.player
     {
         public static GameManager Instance;
 
-        public StageController stageController;
         public CustomerManager customerManager;
-        public SkewerController skewerController;
         public IngredientManager ingredientManager;
 
         public GameObject gamePausedPanel;
@@ -31,13 +30,8 @@ namespace Script.player
                 Destroy(gameObject);
             }
 
-            stageController = transform.Find("StageController").GetComponent<StageController>();
             customerManager = transform.Find("CustomerManager").GetComponent<CustomerManager>();
-            skewerController = transform.Find("SkewerController").GetComponent<SkewerController>();
             ingredientManager = transform.Find("IngredientManager").GetComponent<IngredientManager>();
-            stageController.gameManager = this;
-            customerManager.gameManager = this;
-            skewerController.gameManager = this;
             ingredientManager.gameManager = this;
         }
 
@@ -55,6 +49,17 @@ namespace Script.player
                     gamePausedPanel.SetActive(true);
                     Time.timeScale = 0;
                 }
+            }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                LoadingScreen.Instance.LoadScene("CashierScene");
+            } else if (Input.GetKeyDown(KeyCode.W))
+            {
+                LoadingScreen.Instance.LoadScene("ResultScene");
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                LoadingScreen.Instance.LoadScene("NewsScene");
             }
         }
     }

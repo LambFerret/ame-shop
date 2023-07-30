@@ -14,6 +14,7 @@ namespace Script.events
                 Debug.LogError("Found more than one Game Events Manager in the scene.");
             }
 
+
             Instance = this;
         }
 

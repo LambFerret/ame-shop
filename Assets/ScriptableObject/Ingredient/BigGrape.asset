@@ -17,3 +17,4 @@ MonoBehaviour:
   cost: 10
   moisture: 20
   size: 5
+  piecePerEach: 10

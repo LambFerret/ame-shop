@@ -13,8 +13,6 @@ namespace Script.customer
             Hard
         }
 
-        public GameManager gameManager;
-
         public List<Customer> easyCustomer;
         public List<Customer> normalCustomer;
         public List<Customer> hardCustomer;

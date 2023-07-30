@@ -15,7 +15,7 @@ namespace Script.stage
         public GameObject userInterfaces;
         public GameObject cashierScene;
         public GameObject machineScene;
-        public GameManager gameManager;
+        public CustomerManager customerManager;
         public CanvasAutoScaler canvasAutoScaler;
 
         public float stageTimer;
@@ -29,6 +29,7 @@ namespace Script.stage
 
         private void Start()
         {
+            customerManager = GameObject.Find("CustomerManager").GetComponent<CustomerManager>();
             _isCashierScene = true;
             stageTimer = 0;
         }
@@ -53,8 +54,7 @@ namespace Script.stage
                     _waitLineOccupied[availableLine] = true;
 
                     // Customer 객체 랜덤 생성
-                    var pickedCustomer =
-                        gameManager.customerManager.GetCustomerByDifficulty(CustomerManager.Difficulty.Easy);
+                    var pickedCustomer = customerManager.GetCustomerByDifficulty(CustomerManager.Difficulty.Easy);
                     customerList[availableLine] = pickedCustomer;
 
                     // 빈 슬롯 정보 가져오기
