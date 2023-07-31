@@ -56,12 +56,12 @@ namespace Script.skewer
 
         public void LoadData(GameData data)
         {
-            amount = data.Ingredients[selectedIngredient];
+            amount = data.ingredients[selectedIngredient];
         }
 
         public void SaveData(GameData data)
         {
-            data.Ingredients[selectedIngredient] = amount;
+            data.ingredients[selectedIngredient] = amount;
         }
 
     }

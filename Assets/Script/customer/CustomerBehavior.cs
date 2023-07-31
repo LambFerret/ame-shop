@@ -239,12 +239,12 @@ namespace Script.customer
 
         public void LoadData(GameData data)
         {
-            value = data.Ingredients[customer.slimeIngredient];
+            value = data.ingredients[customer.slimeIngredient];
         }
 
         public void SaveData(GameData data)
         {
-            data.Ingredients[customer.slimeIngredient] = value;
+            data.ingredients[customer.slimeIngredient] = value;
         }
 
         public bool IsAccepted()

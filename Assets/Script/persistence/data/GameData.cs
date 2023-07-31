@@ -19,8 +19,7 @@ namespace Script.persistence.data
         public int dayGasUsage;
         public int daySugarUsage;
 
-        public SerializableDictionary<IngredientManager.FirstIngredient, int> Ingredients { get; set; }
-
+        public SerializableDictionary<IngredientManager.FirstIngredient, int> ingredients;
 
 
         public int language;
@@ -35,9 +34,10 @@ namespace Script.persistence.data
             money = 0;
             popularity = 0;
             equipment = new List<string>();
-            Ingredients = new SerializableDictionary<IngredientManager.FirstIngredient, int>
+            ingredients = new SerializableDictionary<IngredientManager.FirstIngredient, int>
             {
                 { IngredientManager.FirstIngredient.Strawberry, 20 },
+                { IngredientManager.FirstIngredient.BlendedCandy, 0 },
                 { IngredientManager.FirstIngredient.Banana, 5 },
                 { IngredientManager.FirstIngredient.GreenGrape, 20 },
                 { IngredientManager.FirstIngredient.Apple, 3 },

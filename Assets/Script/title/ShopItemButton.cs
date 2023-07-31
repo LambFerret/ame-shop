@@ -55,12 +55,12 @@ namespace Script.title
 
         public void LoadData(GameData data)
         {
-            value = data.Ingredients[ingredient];
+            value = data.ingredients[ingredient];
         }
 
         public void SaveData(GameData data)
         {
-            data.Ingredients[ingredient] = value;
+            data.ingredients[ingredient] = value;
         }
     }
 }
