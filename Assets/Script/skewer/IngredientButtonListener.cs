@@ -34,6 +34,7 @@ namespace Script.skewer
                 if (skewer.AddFirstIngredientToSkewerInHand(selectedIngredient)) amount--;
             });
         }
+
         private void OnDestroy()
         {
             GameEventManager.Instance.OnIngredientChanged -= OnIngredientChanged;
@@ -42,8 +43,7 @@ namespace Script.skewer
         private void Update()
         {
             text.text = selectedIngredient.ToString() + amount;
-            if (amount <= 0) _button.interactable = false;
-
+            _button.interactable = amount > 0;
         }
 
         private void OnIngredientChanged(IngredientManager.FirstIngredient f, int value)
@@ -63,6 +63,5 @@ namespace Script.skewer
         {
             data.ingredients[selectedIngredient] = amount;
         }
-
     }
 }

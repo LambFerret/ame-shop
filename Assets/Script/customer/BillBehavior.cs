@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using Script.player;
 using TMPro;
@@ -8,21 +9,23 @@ namespace Script.customer
 {
     public class BillBehavior : MonoBehaviour
     {
-        public GameObject billPrefab;
 
-        public GameObject MakeBill(Customer customer, string quote)
+        private TextMeshProUGUI _text;
+        private Image _image;
+
+        private void Awake()
         {
-            var a = Instantiate(billPrefab, transform);
-            // var image = a.transform.Find("icon").GetComponent<Image>();
-            var line = a.transform.Find("text").GetComponent<TextMeshProUGUI>();
-            Vector3 origin = a.transform.position;
-            a.transform.DOMove(origin + new Vector3(Screen.width, 0, 0), 0);
-            a.transform.DOMove(origin, 0.5f).SetEase(Ease.InCubic);
+            _text = gameObject.transform.Find("text").GetComponent<TextMeshProUGUI>();
+            _image = gameObject.transform.Find("icon").GetComponent<Image>();
+        }
 
-
-            line.text = quote;
-
-            return a;
+        public void MakeBill(Customer customer, string quote)
+        {
+            Transform t = transform;
+            Vector3 origin = t.position;
+            t.DOMove(origin + new Vector3(Screen.width, 0, 0), 0);
+            t.DOMove(origin, 0.5f).SetEase(Ease.InCubic);
+            _text.text = quote;
         }
     }
 }

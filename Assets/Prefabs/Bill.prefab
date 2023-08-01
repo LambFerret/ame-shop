@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4667766828369164816}
   - component: {fileID: 9183272649335066156}
   - component: {fileID: 846880529503633381}
+  - component: {fileID: 6477395200531916435}
   m_Layer: 0
   m_Name: Bill
   m_TagString: Untagged
@@ -78,6 +79,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6477395200531916435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335098676343057249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94484ea57bdf4db6859c2007c9820035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  billPrefab: {fileID: 0}
 --- !u!1 &1919010409326252848
 GameObject:
   m_ObjectHideFlags: 0

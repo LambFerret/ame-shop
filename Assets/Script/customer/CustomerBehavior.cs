@@ -23,7 +23,7 @@ namespace Script.customer
         public Customer customer;
 
         public StageController stageController;
-        public BillBehavior billBehavior;
+        public GameObject billPrefab;
         public float animationDuration = 2f;
         public float idleAnimationScale = 1.03f;
         private GameObject _buttonGroup;
@@ -32,6 +32,8 @@ namespace Script.customer
         private TextMeshProUGUI _conversationText;
 
         private GameObject _customer;
+        private GameObject _bill;
+        public GameObject billPlaceHolder;
 
         private bool _isStart;
         private bool _isAccept;
@@ -40,7 +42,6 @@ namespace Script.customer
         private Image _texture;
         private Image _timerImage;
 
-        private GameObject _bill;
         private GameData _data;
 
         public int value;
@@ -76,6 +77,7 @@ namespace Script.customer
             customer = script;
             SetIdleAnimation(idleAnimationScale, animationDuration);
             SetRandomFavorites();
+            SetTimer(1);
             SetQuote(Customer.QuoteLine.Enter);
             _conversation.SetActive(false);
         }
@@ -142,21 +144,13 @@ namespace Script.customer
 
         private void SaveIntoBill()
         {
-            _bill = billBehavior.MakeBill(customer, _conversationText.text);
+            _bill = Instantiate(billPrefab, billPlaceHolder.transform);
+            _bill.GetComponent<BillBehavior>().MakeBill(customer, _conversationText.text);
         }
 
-        private void ClearBill(bool isServed = true)
+        private void ClearBill()
         {
             if (_bill is null) return;
-            if (isServed)
-            {
-                _bill.transform.DOFlip();
-            }
-            else
-            {
-                _bill.transform.DOShakeRotation(0.5f, 10, 10);
-            }
-
             Destroy(_bill);
         }
 
@@ -227,8 +221,22 @@ namespace Script.customer
 
         private IEnumerator EndCustomer()
         {
+            if (!gameObject.TryGetComponent(out Canvas canvasComponentBefore))
+            {
+                var canvas = gameObject.AddComponent<Canvas>();
+                canvas.overrideSorting = true;
+                canvas.sortingOrder = 10;
+            }
+            _conversation.SetActive(true);
+            var blurScreen = _conversation.transform.GetChild(0).gameObject;
+            blurScreen.SetActive(false);
             yield return new WaitForSeconds(1f);
             _buttonGroup.SetActive(true);
+            blurScreen.SetActive(true);
+            if (gameObject.TryGetComponent(out Canvas canvasComponent)) Destroy(canvasComponent);
+
+
+
             gameObject.SetActive(false);
         }
 
