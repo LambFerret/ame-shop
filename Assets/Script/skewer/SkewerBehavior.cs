@@ -76,7 +76,6 @@ namespace Script.skewer
         {
             _currentTemperature = temperature;
             _currentConcentration = concentration;
-            Debug.Log("THIS temp : " + _currentTemperature + " concen : " + _currentConcentration);
         }
 
         public void AddDryTime(int dryTime)
@@ -186,10 +185,15 @@ namespace Script.skewer
             return _firstIngredients;
         }
 
-        public string DebugReadFirstIngredients()
+        private void DebugReadFirstIngredients()
         {
             string listString = string.Join(" - ", _firstIngredients.Select(i => i.ingredientName));
             Debug.Log($"[{listString}]");
+        }
+
+        public string GetFirstIngredientText()
+        {
+            string listString = string.Join(" - ", _firstIngredients.Select(i => i.ingredientName));
             return listString;
         }
 

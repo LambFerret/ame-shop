@@ -48,7 +48,7 @@ namespace Script.skewer
         private void Update()
         {
             if (_currentSkewer is null) return;
-            text.text = _currentSkewer.DebugReadFirstIngredients();
+            text.text = _currentSkewer.GetFirstIngredientText();
         }
 
         private void ReceiveSkewerFromController()

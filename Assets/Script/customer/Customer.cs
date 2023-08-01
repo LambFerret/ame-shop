@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Script.setting;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Script.customer
 {
@@ -32,7 +30,6 @@ namespace Script.customer
         public int scoreLimitation;
         public int maxMoney;
         public int minMoney;
-        public Dictionary<QuoteLine, List<string>> QuoteLines = new();
         public List<IngredientManager.FirstIngredient> firstIngredients;
 
         public bool isSlime;
@@ -72,27 +69,6 @@ namespace Script.customer
             {
                 throw new Exception();
             }
-        }
-
-        private async void OnEnable()
-        {
-            var locale = LocalizationSettings.SelectedLocale;
-            var stringTableOp
-                = LocalizationSettings.StringDatabase.GetTableAsync("Customer", locale);
-            var stringTable = await stringTableOp.Task;
-            var nameStr = stringTable[id + " Name"].GetLocalizedString();
-            customerName = nameStr;
-            stringTableOp.Completed += op =>
-            {
-                if (op.Status == AsyncOperationStatus.Succeeded)
-                    foreach (var line in Enum.GetValues(typeof(QuoteLine)))
-                    {
-                        // Debug.Log(id);
-                        // Debug.Log(line);
-                        var lineStr = stringTable[id + " " + line].GetLocalizedString();
-                        QuoteLines[(QuoteLine)line] = new List<string>(lineStr.Split('\n'));
-                    }
-            };
         }
     }
 }

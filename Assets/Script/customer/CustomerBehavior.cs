@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DG.Tweening;
 using Script.events;
 using Script.ingredient;
@@ -13,6 +14,8 @@ using Script.skewer;
 using Script.stage;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -21,6 +24,7 @@ namespace Script.customer
     public class CustomerBehavior : MonoBehaviour, IDataPersistence
     {
         public Customer customer;
+        public Dictionary<Customer.QuoteLine, List<string>> QuoteLines = new();
 
         public StageController stageController;
         public GameObject billPrefab;
@@ -227,6 +231,7 @@ namespace Script.customer
                 canvas.overrideSorting = true;
                 canvas.sortingOrder = 10;
             }
+
             _conversation.SetActive(true);
             var blurScreen = _conversation.transform.GetChild(0).gameObject;
             blurScreen.SetActive(false);
@@ -234,7 +239,6 @@ namespace Script.customer
             _buttonGroup.SetActive(true);
             blurScreen.SetActive(true);
             if (gameObject.TryGetComponent(out Canvas canvasComponent)) Destroy(canvasComponent);
-
 
 
             gameObject.SetActive(false);
@@ -270,6 +274,7 @@ namespace Script.customer
             {
                 Serve(Customer.QuoteLine.BadTooSweet);
             }
+
             Serve(Customer.QuoteLine.Good);
         }
 
@@ -320,12 +325,32 @@ namespace Script.customer
             return commonCount;
         }
 
-        private void SetQuote(Customer.QuoteLine quoteLine)
+        private async Task SetQuote(Customer.QuoteLine quoteLine)
         {
-            var lines = customer.QuoteLines[quoteLine];
+            var locale = LocalizationSettings.SelectedLocale;
+            var stringTableOp = LocalizationSettings.StringDatabase.GetTableAsync("Customer", locale);
+
+            // Await the operation before accessing the stringTable
+            var stringTable = await stringTableOp.Task;
+
+            if (stringTableOp.Status != AsyncOperationStatus.Succeeded)
+            {
+                // Handle error here, e.g. log an error message
+                Debug.LogError("Failed to load string table.");
+                return;
+            }
+
+            foreach (var line in Enum.GetValues(typeof(Customer.QuoteLine)))
+            {
+                var lineStr = stringTable[customer.id + " " + line].GetLocalizedString();
+                QuoteLines[(Customer.QuoteLine)line] = new List<string>(lineStr.Split('\n'));
+            }
+
+            var lines = QuoteLines[quoteLine];
             _conversationText.text = lines[Random.Range(0, lines.Count)]
                 .Replace("{o}", customer.firstIngredients[0].ToString());
         }
+
 
         private void SetTimer(float value)
         {

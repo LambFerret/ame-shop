@@ -2,12 +2,10 @@ using System;
 using System.Collections;
 using DG.Tweening;
 using Script.customer;
-using Script.player;
-using TMPro;
-using Unity.VisualScripting;
+using Script.title;
+using Script.ui;
 using UnityEngine;
 using UnityEngine.UI;
-using Timer = Script.ui.Timer;
 
 namespace Script.stage
 {
@@ -16,27 +14,33 @@ namespace Script.stage
         public GameObject machineScene;
         public CustomerManager customerManager;
 
-        public float stageTimer;
-        public Timer timerObject;
+        public Timer timer;
         public GameObject[] waitCustomerObjectList = new GameObject[3];
         public Customer[] customerList = new Customer[3];
+        public GameObject customerAlarm;
 
-        [Header("Customer Interval")] public float baseInterval = 30f; // base interval time when popularity is 0
-        public float minInterval = 5f; // minimum possible interval time
+        [Header("Customer Interval")] public float baseInterval = 30f;
+        public float minInterval = 5f;
 
-        [SerializeField] private bool[] _waitLineOccupied = new bool[3];
-        private bool _isGameStarted;
+        private readonly bool[] _waitLineOccupied = new bool[3];
 
         private void Start()
         {
             customerManager = GameObject.Find("CustomerManager").GetComponent<CustomerManager>();
-            stageTimer = 0;
         }
 
         private void Update()
         {
-            stageTimer += Time.deltaTime;
-            timerObject.SetTimer(stageTimer);
+            if (timer.isEnded)
+            {
+                if (_waitLineOccupied[0] == false && _waitLineOccupied[1] == false && _waitLineOccupied[2] == false)
+                {
+                    timer.isStarted = false;
+                    timer.isEnded = false;
+                    StartCoroutine(EndDay());
+                }
+            }
+
             foreach (var o in waitCustomerObjectList)
             {
                 _waitLineOccupied[Array.IndexOf(waitCustomerObjectList, o)] = o.activeSelf;
@@ -46,7 +50,7 @@ namespace Script.stage
         private IEnumerator AddCustomer()
         {
             yield return new WaitForSeconds(1);
-            while (true)
+            while (timer.isStarted && !timer.isEnded)
             {
                 var availableLine = Array.IndexOf(_waitLineOccupied, false);
                 if (availableLine != -1)
@@ -62,6 +66,10 @@ namespace Script.stage
                     _waitLineOccupied[availableLine] = true;
                     emptySlot.SetActive(true);
                     emptySlot.GetComponent<CustomerBehavior>().SetScript(pickedCustomer);
+
+                    var alarm = customerAlarm.GetComponent<Image>();
+                    alarm.DOKill();
+                    alarm.DOFade(0, 0.5F).SetLoops(2 * 2, LoopType.Yoyo).SetEase(Ease.InOutSine);
                 }
 
                 float interval =
@@ -87,6 +95,12 @@ namespace Script.stage
             }
         }
 
+        private static IEnumerator EndDay()
+        {
+            yield return new WaitForSeconds(1);
+            LoadingScreen.Instance.LoadScene("ResultScene");
+        }
+
         public void GotToMachineStep(int step)
         {
             if (step is < 0 or > 2) return;
@@ -97,8 +111,8 @@ namespace Script.stage
 
         public void OpenStore()
         {
-            if (_isGameStarted) return;
-            _isGameStarted = true;
+            if (timer.isStarted) return;
+            timer.isStarted = true;
             StartCoroutine(AddCustomer());
         }
     }
