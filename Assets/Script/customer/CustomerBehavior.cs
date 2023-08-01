@@ -160,10 +160,6 @@ namespace Script.customer
             Destroy(_bill);
         }
 
-        public void SetTexture(Sprite sprite)
-        {
-            _texture.sprite = sprite;
-        }
 
         public void Serve(Customer.QuoteLine feeling)
         {
