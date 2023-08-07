@@ -108,6 +108,11 @@ namespace Script.skewer
             gasUsage++;
         }
 
+        public bool CheckHandIsSkewer()
+        {
+            return _hand.whatsOnHand == SkewerController.WhatsOnHand.Skewer;
+        }
+
         public void Complete()
         {
             _image.DOKill();

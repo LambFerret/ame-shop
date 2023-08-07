@@ -12,7 +12,7 @@ namespace Script.skewer
     public class SkewerBehavior : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("Constant Value")] public int currentSkewerMaxLength;
-        public int perfectTemperature = 110;
+        public int perfectTemperature = 145;
 
         private bool _isDraggable;
         private bool _isSkewerFocused;
@@ -63,7 +63,7 @@ namespace Script.skewer
 
         public bool CheckTemperature()
         {
-            return !(_currentTemperature < perfectTemperature - 15 || _currentTemperature > perfectTemperature + 15);
+            return !(_currentTemperature < perfectTemperature - 10 || _currentTemperature > perfectTemperature + 10);
         }
 
 

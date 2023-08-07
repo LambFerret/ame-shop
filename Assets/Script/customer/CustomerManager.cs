@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Script.player;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Script.customer
 {
@@ -17,6 +19,16 @@ namespace Script.customer
         public List<Customer> normalCustomer;
         public List<Customer> hardCustomer;
 
+        private List<Customer> _allCustomerList;
+
+        private void Awake()
+        {
+            _allCustomerList = new List<Customer>();
+            _allCustomerList.AddRange(easyCustomer);
+            _allCustomerList.AddRange(normalCustomer);
+            _allCustomerList.AddRange(hardCustomer);
+        }
+
         public Customer GetCustomerByDifficulty(Difficulty difficulty)
         {
             return (difficulty) switch
@@ -28,5 +40,19 @@ namespace Script.customer
             };
         }
 
+        public Customer GetByName(string customerName)
+        {
+            Customer customer = null;
+            foreach (var c in _allCustomerList)
+            {
+                if (c.id == customerName)
+                {
+                    customer = c;
+                    break;
+                }
+            }
+
+            return customer;
+        }
     }
 }

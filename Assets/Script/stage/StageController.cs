@@ -1,7 +1,12 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Script.customer;
+using Script.events;
+using Script.persistence;
+using Script.persistence.data;
 using Script.title;
 using Script.ui;
 using UnityEngine;
@@ -9,35 +14,64 @@ using UnityEngine.UI;
 
 namespace Script.stage
 {
-    public class StageController : MonoBehaviour
+    public class StageController : MonoBehaviour, IDataPersistence
     {
         public GameObject machineScene;
         public CustomerManager customerManager;
+        public StageStartButton stageStartButton;
 
         public Timer timer;
         public GameObject[] waitCustomerObjectList = new GameObject[3];
         public Customer[] customerList = new Customer[3];
         public GameObject customerAlarm;
 
-        [Header("Customer Interval")] public float baseInterval = 30f;
-        public float minInterval = 5f;
+        [Header("Customer Interval")] public float baseInterval = 15f;
+        public float minInterval = 10f;
 
-        private readonly bool[] _waitLineOccupied = new bool[3];
+        public bool[] _waitLineOccupied = new bool[3];
+        private bool _isSceneLoading;
+        private bool _isTutorialDone;
+        public bool isCustomerTutorialOngoing;
+        private bool _isSlimeTutorialOngoing;
+        private int _day;
+        public int playerPopularity;
+
+        public TutorialStep currentStepIfTutorial;
+
+        public enum TutorialStep
+        {
+            // 해야하는것 위주
+            AcceptCustomer,
+            GetSkewer,
+            SkewIngredients,
+            BoilerControl,
+            PutIntoSugar,
+            Dry,
+            DryOut,
+            Topping,
+            Pack,
+            GiveResult
+        }
+
+        [Header("Tutorial Objects")] public Mover weaponTutorialObject;
 
         private void Start()
         {
             customerManager = GameObject.Find("CustomerManager").GetComponent<CustomerManager>();
+            weaponTutorialObject.gameObject.SetActive(false);
+            Debug.Log("today is : " + _day);
         }
 
         private void Update()
         {
-            if (timer.isEnded)
+            if (!_isSceneLoading && timer.isEnded)
             {
                 if (_waitLineOccupied[0] == false && _waitLineOccupied[1] == false && _waitLineOccupied[2] == false)
                 {
                     timer.isStarted = false;
                     timer.isEnded = false;
-                    StartCoroutine(EndDay());
+                    LoadingScreen.Instance.LoadScene("ResultScene");
+                    _isSceneLoading = true;
                 }
             }
 
@@ -52,32 +86,95 @@ namespace Script.stage
             yield return new WaitForSeconds(1);
             while (timer.isStarted && !timer.isEnded)
             {
-                var availableLine = Array.IndexOf(_waitLineOccupied, false);
-                if (availableLine != -1)
-                {
-                    // Customer 객체 랜덤 생성
-                    var pickedCustomer = customerManager.GetCustomerByDifficulty(CustomerManager.Difficulty.Easy);
-                    customerList[availableLine] = pickedCustomer;
+                var availableLine = CheckAvailableLine();
+                if (availableLine == -1) continue;
 
-                    // 빈 슬롯 정보 가져오기
-                    var emptySlot = waitCustomerObjectList[availableLine];
+                // Customer 객체 랜덤 생성
+                var pickedCustomer = customerManager.GetCustomerByDifficulty(CustomerManager.Difficulty.Easy);
+                AddCustomer(pickedCustomer, availableLine);
 
-                    // 빈 자리 여부
-                    _waitLineOccupied[availableLine] = true;
-                    emptySlot.SetActive(true);
-                    emptySlot.GetComponent<CustomerBehavior>().SetScript(pickedCustomer);
-
-                    var alarm = customerAlarm.GetComponent<Image>();
-                    alarm.DOKill();
-                    alarm.DOFade(0, 0.5F).SetLoops(2 * 2, LoopType.Yoyo).SetEase(Ease.InOutSine);
-                }
-
-                float interval =
-                    UnityEngine.Random.Range(minInterval,
-                        baseInterval); // random interval time between minInterval and maxInterval
-
-                yield return new WaitForSeconds(interval);
+                //(10~15초)*{5000/(5000+평판)}
+                yield return new WaitForSeconds(UnityEngine.Random.Range(minInterval, baseInterval) *
+                                                (5000 / (float)(5000 * playerPopularity)));
             }
+        }
+
+        private IEnumerator TutorialStart()
+        {
+            if (!(timer.isStarted && !timer.isEnded)) yield break;
+            yield return new WaitForSeconds(2);
+            var availableLine = CheckAvailableLine();
+            if (availableLine == -1) throw new Exception("No available line In Tutorial?!");
+
+            // Customer 객체 랜덤 생성
+            var pickedCustomer = customerManager.GetByName("Boy");
+            AddCustomer(pickedCustomer, availableLine);
+
+            isCustomerTutorialOngoing = true;
+            while (_waitLineOccupied.Any(occupied => occupied))
+            {
+                yield return null;
+            }
+
+            isCustomerTutorialOngoing = false;
+
+            yield return new WaitForSeconds(5);
+
+            _isSlimeTutorialOngoing = true;
+
+            int slimeLine = CheckAvailableLine();
+            var pickedCustomerSlime = customerManager.GetByName("BoySlime");
+            AddCustomer(pickedCustomerSlime, slimeLine);
+            var obj = waitCustomerObjectList[slimeLine];
+            weaponTutorialObject.Activate(obj.transform.position);
+            while (_waitLineOccupied.Any(occupied => occupied))
+            {
+                yield return null;
+            }
+
+            weaponTutorialObject.gameObject.SetActive(false);
+
+            _isSlimeTutorialOngoing = false;
+        }
+
+        private int CheckAvailableLine()
+        {
+            List<int> availableIndices = new List<int>();
+
+            for (int i = 0; i < _waitLineOccupied.Length; i++)
+            {
+                if (!_waitLineOccupied[i])
+                {
+                    availableIndices.Add(i);
+                }
+            }
+
+            if (availableIndices.Count == 0)
+            {
+                return -1;
+            }
+
+            int randomIndex = UnityEngine.Random.Range(0, availableIndices.Count);
+            return availableIndices[randomIndex];
+        }
+
+
+        private void AddCustomer(Customer customer, int availableLine)
+        {
+            customerList[availableLine] = customer;
+
+            // 빈 슬롯 정보 가져오기
+            var emptySlot = waitCustomerObjectList[availableLine];
+
+            // 빈 자리 여부
+            _waitLineOccupied[availableLine] = true;
+            emptySlot.SetActive(true);
+            emptySlot.GetComponent<CustomerBehavior>().SetScript(customer);
+
+            // 알람 효과
+            var alarm = customerAlarm.GetComponent<Image>();
+            alarm.DOKill();
+            alarm.DOFade(0, 0.5F).SetLoops(2 * 2, LoopType.Yoyo).SetEase(Ease.InOutSine);
         }
 
         public void SwitchCashierMachine(bool isCashierScene)
@@ -98,7 +195,6 @@ namespace Script.stage
         private static IEnumerator EndDay()
         {
             yield return new WaitForSeconds(1);
-            LoadingScreen.Instance.LoadScene("ResultScene");
         }
 
         public void GotToMachineStep(int step)
@@ -108,12 +204,31 @@ namespace Script.stage
             DOTween.To(() => sb.value, x => sb.value = x, step * 0.5f, 1f).SetEase(Ease.OutBack);
         }
 
+        public void LoadData(GameData data)
+        {
+            _isTutorialDone = data.isTutorialDone;
+            _day = data.playerLevel;
+            playerPopularity = data.popularity;
+        }
 
-        public void OpenStore()
+        public void SaveData(GameData data)
+        {
+            data.isTutorialDone = _isTutorialDone;
+        }
+
+        public void OpenStore(int day)
         {
             if (timer.isStarted) return;
             timer.isStarted = true;
-            StartCoroutine(AddCustomer());
+            stageStartButton.SwitchAnimation(false);
+            if (day == 1)
+            {
+                StartCoroutine(TutorialStart());
+            }
+            else
+            {
+                StartCoroutine(AddCustomer());
+            }
         }
     }
 }

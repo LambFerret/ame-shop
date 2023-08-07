@@ -9,10 +9,19 @@ namespace Script.ui
     {
         private TextMeshProUGUI _timerText;
         private Image _timerImage;
+        private float _time;
 
-        public int timeMultiplier = 1200;
+        public int startHour = 12;
+        public int endHour = 18;
+        public int upgradeStartHour = 11;
+        public int upgradeEndHour = 20;
+        public int timeMultiplier = 600;
+
+        public bool isUpgraded;
+
         public bool isStarted;
         public bool isEnded;
+        public bool isPaused;
 
         private void Awake()
         {
@@ -22,19 +31,36 @@ namespace Script.ui
 
         private void Start()
         {
-            _timerText.text = "09:00";
+            int adjustedStartHour = isUpgraded ? upgradeStartHour : startHour;
+            _timerText.text = $"{adjustedStartHour:00}:00";
             _timerImage.fillAmount = 0;
+            _time = 0;
+            int rotationDegrees = (12 - adjustedStartHour) * 30;
+            _timerImage.rectTransform.Rotate(0, 0, rotationDegrees);
         }
 
         private void Update()
         {
-            if (isEnded) return;
-            var time = (int)Math.Floor(Time.time * timeMultiplier);
-            var hour = (time / 3600) + 9;
-            var minute = (time % 3600) / 60;
+            if (isEnded || isPaused) return;
+            _time += (Time.deltaTime * timeMultiplier);
+            var adjStartTime = isUpgraded ? upgradeStartHour : startHour;
+            var adjEndTime = isUpgraded ? upgradeEndHour : endHour;
+
+            var hour = (int)Math.Floor(_time / 3600) + adjStartTime;
+            var minute = (int)Math.Floor((_time % 3600) / 60);
+            minute = (int)Math.Floor(minute / 10.0) * 10;
             _timerText.text = $"{hour:00}:{minute:00}";
-            _timerImage.fillAmount = (float)time / (21 - 9) / 3600;
-            if (hour >= 21) isEnded = true;
+
+            float totalDegrees = (adjEndTime - adjStartTime) * 360f / 12f;
+            float elapsedDegrees = (_time / (3600f * (adjEndTime - adjStartTime))) * totalDegrees;
+            _timerImage.fillAmount = elapsedDegrees / 360f;
+
+            if (hour >= adjEndTime) isEnded = true;
+        }
+
+        public void Pause(bool pause)
+        {
+            isPaused = pause;
         }
     }
 }

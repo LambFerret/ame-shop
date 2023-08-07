@@ -238,6 +238,7 @@ namespace Script.customer
             yield return new WaitForSeconds(1f);
             _buttonGroup.SetActive(true);
             blurScreen.SetActive(true);
+            if (gameObject.TryGetComponent(out GraphicRaycaster raycaster)) Destroy(raycaster);
             if (gameObject.TryGetComponent(out Canvas canvasComponent)) Destroy(canvasComponent);
 
 
@@ -352,10 +353,10 @@ namespace Script.customer
         }
 
 
-        private void SetTimer(float value)
+        private void SetTimer(float time)
         {
-            value = Mathf.Clamp(value, 0f, 1f);
-            _timerImage.fillAmount = value;
+            time = Mathf.Clamp(time, 0f, 1f);
+            _timerImage.fillAmount = time;
         }
 
         private void MoneyAnimation()

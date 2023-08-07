@@ -14,6 +14,11 @@ namespace Script.skewer
 
         private void Update()
         {
+            if (!boiler.CheckHandIsSkewer())
+            {
+                progressBar.value = 0;
+                return;
+            }
             if (_isButtonPressed)
             {
                 _pressTime += Time.deltaTime;

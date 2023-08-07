@@ -94,8 +94,6 @@ namespace Script.setting
 
         public void SaveData(GameData data)
         {
-            // Save volume and language values to GameData
-            Debug.Log("ㅂㅗㄹ륨 " + volumeSlider.value + " 언어 " + languageDropdown.value);
             data.volume = volumeSlider.value;
             data.language = languageDropdown.value;
         }

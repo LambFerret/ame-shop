@@ -10,7 +10,7 @@ namespace Script.customer
         public BoySlime() : base(
             "BoySlime",
             false,
-            100,
+            120,
             3,
             -3,
             10,
