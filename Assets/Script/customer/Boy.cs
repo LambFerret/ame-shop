@@ -15,8 +15,7 @@ namespace Script.customer
             -3,
             10,
             5,
-            4,
-            new List<IngredientManager.FirstIngredient> { IngredientManager.FirstIngredient.GreenGrape }
+            4
         )
         {
         }

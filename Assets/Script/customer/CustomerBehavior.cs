@@ -72,7 +72,7 @@ namespace Script.customer
                 SetTimer(_timerImage.fillAmount - decrementValue);
             }
 
-            if (_timerImage.fillAmount <= 0) Serve(Customer.QuoteLine.TimeOut);
+            if (_timerImage.fillAmount <= 0) Serve(Customer.QuoteLine.TimeOut, 0);
         }
 
         public void SetScript(Customer script)
@@ -88,9 +88,7 @@ namespace Script.customer
 
         private void SetRandomFavorites()
         {
-            customer.firstIngredients.Clear();
-            var a = GameManager.Instance.ingredientManager.GetRandomFirstIngredient();
-            customer.firstIngredients.Add(a);
+            customer.firstIngredient = GameManager.Instance.ingredientManager.GetRandomFirstIngredient();
         }
 
         private void SetIdleAnimation(float scale, float duration)
@@ -143,7 +141,7 @@ namespace Script.customer
         public void Refuse()
         {
             _isAccept = true;
-            Serve(Customer.QuoteLine.Refused);
+            Serve(Customer.QuoteLine.Refused, 50);
         }
 
         private void SaveIntoBill()
@@ -158,8 +156,62 @@ namespace Script.customer
             Destroy(_bill);
         }
 
+        public void CheckServedSkewer(SkewerBehavior skewer)
+        {
+            int satisfaction = 100;
+            Customer.QuoteLine currentFeeling = Customer.QuoteLine.Good;
 
-        public void Serve(Customer.QuoteLine feeling)
+            // 기다린 시간 계산
+            satisfaction -= 30 - (int)((1 - _timerImage.fillAmount) * customer.patience);
+
+            // 농도가 안맞을 경우
+            int concentration = skewer.CheckConcentration();
+            if (concentration < 0)
+            {
+                satisfaction -= concentration * 2;
+                currentFeeling = Customer.QuoteLine.BadMildTaste;
+            }
+            else if (concentration > 0)
+            {
+                satisfaction -= concentration;
+                currentFeeling = Customer.QuoteLine.BadTooSweet;
+            }
+
+            // 덜굳음
+            if (skewer.IsNotEnoughDry() || !skewer.CheckTemperature())
+            {
+                satisfaction -= 30;
+                currentFeeling = Customer.QuoteLine.BadTooWatery;
+            }
+
+            // 재료가 안맞을 경우
+            if (!skewer.IsDominantIngredient(customer.firstIngredient))
+            {
+                satisfaction -= 50;
+                currentFeeling = Customer.QuoteLine.BadNotMyChoice;
+            }
+
+            if (satisfaction < 0) satisfaction = 0;
+
+            int money;
+
+            if (currentFeeling == Customer.QuoteLine.BadNotMyChoice)
+            {
+                money = 500;
+            }
+            else if (currentFeeling == Customer.QuoteLine.Good && satisfaction >= 90)
+            {
+                money = (int)(skewer.GetSkewerPrice() * 1.5F);
+            }
+            else
+            {
+                money = (int)(skewer.GetSkewerPrice() * 1.1F);
+            }
+
+            Serve(currentFeeling, satisfaction, money);
+        }
+
+        public void Serve(Customer.QuoteLine feeling, int satisfaction, int money = 0)
         {
             if (feeling == Customer.QuoteLine.Enter) return;
 
@@ -168,56 +220,61 @@ namespace Script.customer
             _buttonGroup.SetActive(false);
             _isStart = false;
 
+            float popularity = 0;
+            bool endImmediately = false;
+
             switch (feeling)
             {
                 case Customer.QuoteLine.Refused:
-                    GameEventManager.Instance.PopularityChanged(customer.minPopularity / 4);
-
+                    popularity = -3;
+                    endImmediately = true;
                     break;
                 case Customer.QuoteLine.TimeOut:
-                    GameEventManager.Instance.PopularityChanged(customer.minPopularity);
-
+                    popularity = -6;
+                    endImmediately = true;
                     break;
                 case Customer.QuoteLine.Poked:
                     if (!customer.isSlime)
                     {
-                        Debug.Log("쨔잔 슬라임이 아니었습니다 ㅃ~");
-                        GameEventManager.Instance.PopularityChanged(customer.minPopularity * 2);
+                        popularity = -6;
                     }
                     else
                     {
-                        Debug.Log("쨔잔 슬라임");
                         GameEventManager.Instance.IngredientChanged(customer.slimeIngredient,
                             customer.slimeIngredientCount);
                     }
 
+                    endImmediately = true;
                     break;
                 case Customer.QuoteLine.BadMildTaste:
-                    GameEventManager.Instance.PopularityChanged(customer.minPopularity);
-
+                    popularity = 1 + (float)satisfaction / 100;
                     break;
                 case Customer.QuoteLine.BadTooSweet:
-                    GameEventManager.Instance.PopularityChanged(customer.minPopularity);
+                    popularity = 1 + (float)satisfaction / 100;
 
                     break;
                 case Customer.QuoteLine.BadTooWatery:
-                    GameEventManager.Instance.PopularityChanged(customer.minPopularity);
+                    popularity = 1 + (float)satisfaction / 100;
 
                     break;
                 case Customer.QuoteLine.BadNotMyChoice:
-                    GameEventManager.Instance.PopularityChanged(customer.minPopularity);
+                    popularity = 1 + (float)satisfaction / 100;
 
                     break;
                 case Customer.QuoteLine.Good:
-                    var money = customer.maxMoney - customer.minMoney;
-                    var moneyCal = (int)(money * _timerImage.fillAmount) + customer.minMoney;
-                    _moneyText.text = moneyCal.ToString();
-                    GameEventManager.Instance.MoneyChanged(moneyCal);
-                    GameEventManager.Instance.PopularityChanged((int)(customer.maxPopularity * _timerImage.fillAmount));
-                    MoneyAnimation();
+                    popularity = 1 + (float)satisfaction / 100;
+
                     break;
                 default:
                     return;
+            }
+
+            GameEventManager.Instance.PopularityChanged(popularity);
+            if (!endImmediately)
+            {
+                _moneyText.text = money.ToString();
+                GameEventManager.Instance.MoneyChanged(money);
+                MoneyAnimation();
             }
 
             StartCoroutine(EndCustomer());
@@ -261,71 +318,6 @@ namespace Script.customer
             return _isAccept;
         }
 
-        public void CheckServedSkewer(SkewerBehavior skewer)
-        {
-            var a = FindDominantIngredient(skewer.GetFirstIngredients());
-            if (a == null) Serve(Customer.QuoteLine.BadNotMyChoice);
-
-            if (skewer.IsNotEnoughDry() || !skewer.CheckTemperature()) Serve(Customer.QuoteLine.BadTooWatery);
-            if (skewer.CheckConcentration() < 0)
-            {
-                Serve(Customer.QuoteLine.BadMildTaste);
-            }
-            else if (skewer.CheckConcentration() > 0)
-            {
-                Serve(Customer.QuoteLine.BadTooSweet);
-            }
-
-            Serve(Customer.QuoteLine.Good);
-        }
-
-        public Ingredient FindDominantIngredient(IEnumerable<Ingredient> ingredients)
-        {
-            // Group the ingredients by their name and calculate the total size for each group
-            var ingredientGroups = ingredients.GroupBy(i => i.ingredientName)
-                .Select(g => new
-                {
-                    Ingredient = g.First(),
-                    TotalSize = g.Sum(i => i.size)
-                })
-                .ToList();
-
-            // Calculate the total size of all ingredients
-            int totalSize = ingredientGroups.Sum(g => g.TotalSize);
-
-            // Find a group where the total size is 80% or more of the total size
-            var dominantGroup = ingredientGroups.FirstOrDefault(g => g.TotalSize >= totalSize * 0.8f);
-
-            // If such a group exists, return the ingredient, otherwise return null
-            return dominantGroup != null ? dominantGroup.Ingredient : null;
-        }
-
-        // private int CalculateScore(Skewer skewer)
-        // {
-        // var scoreA = CountCommonElements(skewer.GetFirstIngredients(), customer.firstIngredients);
-        // var scoreB = CountCommonElements(skewer.GetSecondIngredients(), customer.secondIngredients);
-        // var scoreC = CountCommonElements(skewer.GetThirdIngredients(), customer.thirdIngredients);
-        // return scoreA + scoreB + scoreC;
-        // }
-
-        private static int CountCommonElements<T>(IEnumerable<T> list1, IEnumerable<T> list2)
-        {
-            var counter1 = list1.GroupBy(x => x)
-                .ToDictionary(g => g.Key, g => g.Count());
-
-            var counter2 = list2.GroupBy(x => x)
-                .ToDictionary(g => g.Key, g => g.Count());
-
-            var commonCount = 0;
-            foreach (var kvp in counter1)
-            {
-                int countInList2;
-                if (counter2.TryGetValue(kvp.Key, out countInList2)) commonCount += Math.Min(kvp.Value, countInList2);
-            }
-
-            return commonCount;
-        }
-
         private async Task SetQuote(Customer.QuoteLine quoteLine)
         {
             var locale = LocalizationSettings.SelectedLocale;
@@ -349,7 +341,7 @@ namespace Script.customer
 
             var lines = QuoteLines[quoteLine];
             _conversationText.text = lines[Random.Range(0, lines.Count)]
-                .Replace("{o}", customer.firstIngredients[0].ToString());
+                .Replace("{o}", customer.firstIngredient.ToString());
         }
 
 

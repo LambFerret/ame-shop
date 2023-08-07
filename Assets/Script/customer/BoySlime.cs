@@ -16,7 +16,6 @@ namespace Script.customer
             10,
             5,
             4,
-            new List<IngredientManager.FirstIngredient> { IngredientManager.FirstIngredient.GreenGrape },
             true,
             IngredientManager.FirstIngredient.Strawberry,
             20

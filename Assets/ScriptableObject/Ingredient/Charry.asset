@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46e96f12901b48a3af8a140c50596d07, type: 3}
-  m_Name: Banana
+  m_Name: Charry
   m_EditorClassIdentifier: 
-  ingredientName: Banana
-  prefab: {fileID: 709499191770144409, guid: 10dc8e137417e4cf3b131c16df543b54, type: 3}
-  cost: 50
-  moisture: 50
-  size: 30
-  piecePerEach: 1
+  ingredientId: Charry
+  prefab: {fileID: 709499191770144409, guid: 58a4f7428eb0b4477ac79a68eecfa2d2, type: 3}
+  size: 3
+  pricePerOne: 30
+  perfectConcentration: 68
+  costWhenResultShop: 330
+  piecePerEach: 7

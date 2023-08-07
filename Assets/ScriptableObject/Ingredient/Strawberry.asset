@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e96f12901b48a3af8a140c50596d07, type: 3}
   m_Name: Strawberry
   m_EditorClassIdentifier: 
-  ingredientName: Strawberry
+  ingredientId: Strawberry
   prefab: {fileID: 709499191770144409, guid: b55182f5b920d4fec9ac81930ad97801, type: 3}
-  cost: 50
-  moisture: 20
-  size: 8
-  piecePerEach: 5
+  size: 4
+  pricePerOne: 50
+  perfectConcentration: 78
+  costWhenResultShop: 300
+  piecePerEach: 4

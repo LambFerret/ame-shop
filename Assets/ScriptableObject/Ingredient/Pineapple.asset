@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46e96f12901b48a3af8a140c50596d07, type: 3}
-  m_Name: Coconut
+  m_Name: Pineapple
   m_EditorClassIdentifier: 
-  ingredientName: Coconut
-  prefab: {fileID: 709499191770144409, guid: 02258fff7de4543d28e6f04d7b76ab16, type: 3}
-  cost: 100
-  moisture: 100
-  size: 10
-  piecePerEach: 5
+  ingredientId: Pineapple
+  prefab: {fileID: 709499191770144409, guid: 10dc8e137417e4cf3b131c16df543b54, type: 3}
+  size: 7
+  pricePerOne: 80
+  perfectConcentration: 70
+  costWhenResultShop: 240
+  piecePerEach: 2

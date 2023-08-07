@@ -135,7 +135,7 @@ namespace Script.skewer
                 currentSize += element.size;
             }
 
-            return currentSize + size > _currentSkewer.currentSkewerMaxLength;
+            return currentSize + size > _currentSkewer.maxLength;
         }
 
         public bool ReceiveSkewerFromBoiler(GameObject skewerGameObject)

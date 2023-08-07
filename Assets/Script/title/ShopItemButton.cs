@@ -31,7 +31,7 @@ namespace Script.title
             _image = transform.Find("image").GetComponent<Image>();
             _ingredient = GameObject.Find("IngredientManager").GetComponent<IngredientManager>()
                 .GetFirstIngredient(ingredient);
-            cost = _ingredient.cost;
+            cost = _ingredient.costWhenResultShop;
             transform.Find("cost").GetComponent<TextMeshProUGUI>().text = cost.ToString();
             transform.Find("each").GetComponent<TextMeshProUGUI>().text = "X " + _ingredient.piecePerEach;
             _text = transform.Find("stock").GetComponent<TextMeshProUGUI>();

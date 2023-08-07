@@ -19,9 +19,9 @@ namespace Script.events
             Instance = this;
         }
 
-        public event Action<int> OnPopularityChanged;
+        public event Action<float> OnPopularityChanged;
 
-        public void PopularityChanged(int value)
+        public void PopularityChanged(float value)
         {
             OnPopularityChanged?.Invoke(value);
         }

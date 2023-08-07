@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46e96f12901b48a3af8a140c50596d07, type: 3}
-  m_Name: BigGrape
+  m_Name: Mikan
   m_EditorClassIdentifier: 
-  ingredientName: BigGrape
-  prefab: {fileID: 709499191770144409, guid: 58a4f7428eb0b4477ac79a68eecfa2d2, type: 3}
-  cost: 10
-  moisture: 20
-  size: 5
-  piecePerEach: 10
+  ingredientId: Mikan
+  prefab: {fileID: 709499191770144409, guid: 02258fff7de4543d28e6f04d7b76ab16, type: 3}
+  size: 3
+  pricePerOne: 20
+  perfectConcentration: 82
+  costWhenResultShop: 250
+  piecePerEach: 8

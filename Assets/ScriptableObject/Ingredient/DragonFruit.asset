@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46e96f12901b48a3af8a140c50596d07, type: 3}
-  m_Name: Apple
+  m_Name: DragonFruit
   m_EditorClassIdentifier: 
-  ingredientName: Apple
+  ingredientId: DragonFruit
   prefab: {fileID: 709499191770144409, guid: bbd17f33ddb15498fa8deec747372b3e, type: 3}
-  cost: 90
-  moisture: 10
-  size: 20
-  piecePerEach: 1
+  size: 5
+  pricePerOne: 70
+  perfectConcentration: 66
+  costWhenResultShop: 300
+  piecePerEach: 3

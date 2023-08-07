@@ -11,8 +11,10 @@ namespace Script.skewer
 {
     public class SkewerBehavior : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        [Header("Constant Value")] public int currentSkewerMaxLength;
-        public int perfectTemperature = 145;
+        [Header("Constant Value")] public int maxLength;
+        public int perfectTemperatureFrom;
+        public int perfectTemperatureTo;
+        public int concentrationTolerance;
 
         private bool _isDraggable;
         private bool _isSkewerFocused;
@@ -47,29 +49,26 @@ namespace Script.skewer
             return _perfectDryTime > _currentDryTime;
         }
 
+        // 양수면 너무 달음 음수면 너무 밍밍
         public int CheckConcentration()
         {
-            float tolerance = _perfectConcentration * 0.1f;
-
-            if (_currentConcentration >= _perfectConcentration - tolerance &&
-                _currentConcentration <= _perfectConcentration + tolerance)
+            if (_currentConcentration >= _perfectConcentration - concentrationTolerance &&
+                _currentConcentration <= _perfectConcentration + concentrationTolerance)
             {
                 return 0;
             }
 
-            if (_currentConcentration > _perfectConcentration + tolerance) return 1;
-            return -1;
+            return _currentConcentration - _perfectConcentration;
         }
 
         public bool CheckTemperature()
         {
-            return !(_currentTemperature < perfectTemperature - 10 || _currentTemperature > perfectTemperature + 10);
+            return !(perfectTemperatureFrom > _currentTemperature || _currentTemperature > perfectTemperatureTo);
         }
-
 
         public void SetSize(int size)
         {
-            currentSkewerMaxLength = size;
+            maxLength = size;
         }
 
         public void AddTemperature(int temperature, int concentration)
@@ -90,19 +89,18 @@ namespace Script.skewer
 
             foreach (var ingredient in _firstIngredients)
             {
-                averageMoisture += ingredient.moisture;
+                averageMoisture += ingredient.perfectConcentration;
                 totalSize += ingredient.size;
             }
 
-            //TODO 여기 공식 제대로 알고 갑시다
-            averageMoisture /= _firstIngredients.Count;
-            _perfectConcentration = 100 - averageMoisture;
-            _perfectDryTime = totalSize * _perfectConcentration / 100;
+            _perfectConcentration = averageMoisture / _firstIngredients.Count;
+            _perfectDryTime = totalSize;
 
             Debug.Log(" what is perfect dry time : " + _perfectDryTime + " perfect concentration : " +
                       _perfectConcentration);
         }
 
+        //TODO : 가루 사탕도 드셔보시겠습니까?
         public void AddBlendIngredient()
         {
             BlendedCandy blendedCandy;
@@ -111,7 +109,6 @@ namespace Script.skewer
                 blendedCandy = BlendedCandy;
                 blendedCandy.FirstIngredients.AddRange(GetFirstIngredients());
                 blendedCandy.ThirdIngredients.AddRange(GetThirdIngredients());
-                //TODO
                 // foreach (IngredientManager.SecondIngredient ingredient in GetSecondIngredients())
                 // {
                 //     switch (ingredient)
@@ -185,16 +182,47 @@ namespace Script.skewer
             return _firstIngredients;
         }
 
+        public int GetSkewerPrice()
+        {
+            var ingredient = GetDominantIngredient(_firstIngredients);
+            return ingredient.pricePerOne * _firstIngredients.Count(i => i.ingredientId == ingredient.ingredientId);
+        }
+
+        public bool IsDominantIngredient(IngredientManager.FirstIngredient ingredient)
+        {
+            return GetDominantIngredient(_firstIngredients).ingredientId == ingredient.ToString();
+        }
+
+        public static Ingredient GetDominantIngredient(IEnumerable<Ingredient> ingredients)
+        {
+            // Group the ingredients by their name and calculate the total size for each group
+            var ingredientGroups = ingredients.GroupBy(i => i.ingredientId)
+                .Select(g => new
+                {
+                    Ingredient = g.First(),
+                    TotalSize = g.Sum(i => i.size)
+                })
+                .ToList();
+
+            // Calculate the total size of all ingredients
+            int totalSize = ingredientGroups.Sum(g => g.TotalSize);
+
+            // Find a group where the total size is 80% or more of the total size
+            var dominantGroup = ingredientGroups.FirstOrDefault(g => g.TotalSize >= totalSize * 0.8f);
+
+            // If such a group exists, return the ingredient, otherwise return null
+            return dominantGroup?.Ingredient;
+        }
+
         private void DebugReadFirstIngredients()
         {
-            string listString = string.Join(" - ", _firstIngredients.Select(i => i.ingredientName));
+            string listString = string.Join(" - ", _firstIngredients.Select(i => i.ingredientId));
             Debug.Log($"[{listString}]");
         }
 
         public string GetFirstIngredientText()
         {
-            string listString = string.Join(" - ", _firstIngredients.Select(i => i.ingredientName));
-            return listString;
+            return string.Join(" - ", _firstIngredients.Select(i => i.ingredientId));
         }
 
         // TODO setting third ingredient

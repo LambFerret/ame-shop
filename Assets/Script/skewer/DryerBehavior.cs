@@ -17,30 +17,23 @@ namespace Script.skewer
             Done
         }
 
-        public TextMeshProUGUI minuteText;
-        public TextMeshProUGUI secondText;
-
-        public BoilerState currentState;
+        [Header("Info")] public BoilerState currentState;
         public int minute;
-        public int second;
-        public int concentration;
 
-        public Button putButton;
+        [Header("Game Objects")] public Button putButton;
         public Button getButton;
         public TextMeshProUGUI text;
         public GameObject blockingScreen;
         public SkewerController skewerController;
+        public TextMeshProUGUI minuteText;
         private SkewerBehavior _currentSkewer;
         private GameObject _currentSkewerGameObject;
-
         private RectTransform _minuteRectTransform;
-        private RectTransform _secondRectTransform;
 
         private void Start()
         {
             currentState = BoilerState.Nothing;
             _minuteRectTransform = minuteText.GetComponent<RectTransform>();
-            _secondRectTransform = secondText.GetComponent<RectTransform>();
             putButton.onClick.AddListener(ReceiveSkewerFromController);
             getButton.onClick.AddListener(GiveSkewerToController);
         }
@@ -91,34 +84,14 @@ namespace Script.skewer
                     minute = 0;
             }
 
-            FlipNumber(true, minute);
-        }
-
-        public void ClickSecond(bool isUp)
-        {
-            if (currentState == BoilerState.Drying) return;
-            if (isUp)
-            {
-                second += 10;
-            }
-            else
-            {
-                if (second > 10)
-                    second -= 10;
-                else
-                    second = 0;
-            }
-
-            FlipNumber(false, second);
+            FlipNumber(minute);
         }
 
         public void StartTimer()
         {
             if (currentState != BoilerState.BeforeStart) return;
             minuteText.text = minute.ToString("0");
-            secondText.text = second.ToString("00");
-
-            if (minute is 0 && second is 0) return;
+            if (minute is 0) return;
             currentState = BoilerState.Drying;
             blockingScreen.SetActive(true);
             StartCoroutine(TimerCoroutine());
@@ -133,24 +106,16 @@ namespace Script.skewer
 
         private IEnumerator TimerCoroutine()
         {
-            var dryTime = minute * 60 + second;
+            var dryTime = minute;
             while (true)
             {
-                yield return new WaitForSeconds(2);
-                if (second == 0 && minute > 0)
+                yield return new WaitForSeconds(1F);
+                if (minute > 0)
                 {
-                    minute--;
-                    second = 50;
-                    FlipNumber(true, minute);
-                    FlipNumber(false, second);
-                }
-                else
-                {
-                    second -= 10;
-                    FlipNumber(false, second);
+                    FlipNumber(minute--);
                 }
 
-                if (minute == 0 && second == 0)
+                if (minute == 0)
                 {
                     TimerEnded(dryTime);
                     break;
@@ -158,20 +123,13 @@ namespace Script.skewer
             }
         }
 
-        private void FlipNumber(bool isMinute, int value)
+        private void FlipNumber(int value)
         {
             var duration = 0.3f; // Set duration of your animation.
-            var rectTransform = isMinute ? _minuteRectTransform : _secondRectTransform;
-
-            // Scale down
-            rectTransform.DOScale(new Vector3(1, 0, 1), duration / 2).OnComplete(() =>
+            _minuteRectTransform.DOScale(new Vector3(1, 0, 1), duration / 2).OnComplete(() =>
             {
-                if (isMinute)
-                    minuteText.text = value.ToString("0");
-                else
-                    secondText.text = value.ToString("00");
-
-                rectTransform.DOScale(new Vector3(1, 1, 1), duration / 2);
+                minuteText.text = value.ToString("0");
+                _minuteRectTransform.DOScale(new Vector3(1, 1, 1), duration / 2);
             });
         }
     }

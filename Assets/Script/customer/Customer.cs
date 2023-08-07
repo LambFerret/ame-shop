@@ -30,7 +30,7 @@ namespace Script.customer
         public int scoreLimitation;
         public int maxMoney;
         public int minMoney;
-        public List<IngredientManager.FirstIngredient> firstIngredients;
+        public IngredientManager.FirstIngredient firstIngredient;
 
         public bool isSlime;
         public IngredientManager.FirstIngredient slimeIngredient;
@@ -45,7 +45,6 @@ namespace Script.customer
             int scoreLimitation,
             int maxMoney,
             int minMoney,
-            List<IngredientManager.FirstIngredient> firstIngredients,
             bool isSlime = false,
             IngredientManager.FirstIngredient slimeIngredient = IngredientManager.FirstIngredient.BlendedCandy,
             int slimeIngredientCount = 0
@@ -59,7 +58,7 @@ namespace Script.customer
             this.scoreLimitation = scoreLimitation;
             this.maxMoney = maxMoney;
             this.minMoney = minMoney;
-            this.firstIngredients = firstIngredients;
+            firstIngredient = IngredientManager.FirstIngredient.BlendedCandy;
             this.isSlime = isSlime;
             if (isSlime && slimeIngredient is not IngredientManager.FirstIngredient.BlendedCandy && slimeIngredientCount > 0)
             {

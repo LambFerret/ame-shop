@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e96f12901b48a3af8a140c50596d07, type: 3}
   m_Name: GreenGrape
   m_EditorClassIdentifier: 
-  ingredientName: GreenGrape
+  ingredientId: GreenGrape
   prefab: {fileID: 709499191770144409, guid: 4f94d975acfd04ca1aee5300d32b4588, type: 3}
-  cost: 20
-  moisture: 20
   size: 3
-  piecePerEach: 15
+  pricePerOne: 40
+  perfectConcentration: 64
+  costWhenResultShop: 350
+  piecePerEach: 6

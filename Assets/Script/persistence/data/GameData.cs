@@ -11,7 +11,7 @@ namespace Script.persistence.data
         public string playerName;
         public int playerLevel;
         public int money;
-        public int popularity;
+        public float popularity;
         public List<string> equipment;
 
         public int dayMoneyEarned;
@@ -31,8 +31,8 @@ namespace Script.persistence.data
         {
             playerName = "Player";
             playerLevel = 1;
-            money = 0;
-            popularity = 0;
+            money = 2000;
+            popularity = 60;
             equipment = new List<string>();
             ingredients = new SerializableDictionary<IngredientManager.FirstIngredient, int>
             {

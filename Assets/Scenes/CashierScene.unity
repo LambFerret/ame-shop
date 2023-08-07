@@ -5942,17 +5942,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c5ccd73bc944aa94abb11d445c8088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minuteText: {fileID: 1752191713}
-  secondText: {fileID: 314995208}
   currentState: 0
   minute: 0
-  second: 0
-  concentration: 50
   putButton: {fileID: 202896755}
   getButton: {fileID: 1164485433}
   text: {fileID: 1278275292}
   blockingScreen: {fileID: 398341246}
   skewerController: {fileID: 721914799}
+  minuteText: {fileID: 1752191713}
 --- !u!1 &572626093
 GameObject:
   m_ObjectHideFlags: 0
@@ -6147,14 +6144,14 @@ MonoBehaviour:
   water: 0
   sugar: 0
   addFuelTemperature: 5
-  addLiquidPerClick: 20
+  addLiquidPerClick: 15
   temperature: 110
   maximumLiquidCapacity: 200
   minusWaterByTime: 5
   minusSugarPerOnce: 10
-  minusTemperatureByTime: 4
+  minusTemperatureByTime: 10
   minusTemperaturePerOnce: 3
-  time: 15
+  time: 30
   temperatureBar: {fileID: 771502302}
   concentrationBar: {fileID: 190302131}
 --- !u!1 &609291075
@@ -18783,17 +18780,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c5ccd73bc944aa94abb11d445c8088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minuteText: {fileID: 303210598}
-  secondText: {fileID: 509041567}
   currentState: 0
   minute: 0
-  second: 0
-  concentration: 50
   putButton: {fileID: 823343388}
   getButton: {fileID: 674000005}
   text: {fileID: 751647172}
   blockingScreen: {fileID: 1034690876}
   skewerController: {fileID: 721914799}
+  minuteText: {fileID: 303210598}
 --- !u!1 &1847390493
 GameObject:
   m_ObjectHideFlags: 0
@@ -20573,17 +20567,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c5ccd73bc944aa94abb11d445c8088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minuteText: {fileID: 631292794}
-  secondText: {fileID: 1176438804}
   currentState: 0
   minute: 0
-  second: 0
-  concentration: 50
   putButton: {fileID: 1765343106}
   getButton: {fileID: 1031203176}
   text: {fileID: 54151354}
   blockingScreen: {fileID: 381842686}
   skewerController: {fileID: 721914799}
+  minuteText: {fileID: 631292794}
 --- !u!1 &2058683714
 GameObject:
   m_ObjectHideFlags: 0

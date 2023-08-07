@@ -12,7 +12,7 @@ namespace Script.ui
     {
         public TextMeshProUGUI text;
 
-        private int _popularity;
+        private float _popularity;
 
         private void Awake()
         {
@@ -31,10 +31,10 @@ namespace Script.ui
 
         private void Update()
         {
-            text.text = _popularity.ToString();
+            text.text = _popularity.ToString("F1");
         }
 
-        private void OnPopularityChanged(int value)
+        private void OnPopularityChanged(float value)
         {
             _popularity += value;
         }

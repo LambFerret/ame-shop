@@ -22,7 +22,7 @@ namespace Script.skewer
                 CustomerBehavior customer = hitCollider.transform.parent.GetComponent<CustomerBehavior>();
                 if (customer.IsAccepted()) return;
                 Debug.Log("u poke customer with skewer.");
-                customer.Serve(Customer.QuoteLine.Poked);
+                customer.Serve(Customer.QuoteLine.Poked, 0);
             }
         }
     }

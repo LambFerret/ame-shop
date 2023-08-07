@@ -51,14 +51,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc91827a02d47c2b622b4e7064c9fbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstIngredientPrefabs:
-  - {fileID: 709499191770144409, guid: bbd17f33ddb15498fa8deec747372b3e, type: 3}
-  - {fileID: 709499191770144409, guid: 10dc8e137417e4cf3b131c16df543b54, type: 3}
-  - {fileID: 709499191770144409, guid: 58a4f7428eb0b4477ac79a68eecfa2d2, type: 3}
-  - {fileID: 709499191770144409, guid: 48505e3ae82f1452db455f71b1cf388d, type: 3}
-  - {fileID: 709499191770144409, guid: 02258fff7de4543d28e6f04d7b76ab16, type: 3}
-  - {fileID: 709499191770144409, guid: 4f94d975acfd04ca1aee5300d32b4588, type: 3}
-  - {fileID: 709499191770144409, guid: b55182f5b920d4fec9ac81930ad97801, type: 3}
+  maxLength: 30
+  perfectTemperatureFrom: 130
+  perfectTemperatureTo: 160
+  concentrationTolerance: 10
+  IsAlreadyBlended: 0
 --- !u!1 &1537001406718785042
 GameObject:
   m_ObjectHideFlags: 0

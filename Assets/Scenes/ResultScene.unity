@@ -6237,11 +6237,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f9240967208440d99e016044f0570b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rentCost: 200
-  taxCost: 400
-  electricityCostMultiplier: 1
-  gasCostMultiplier: 1
-  sugarCostMultiplier: 1
+  rentCost: 20
+  taxCost: 2000
+  electricityCostMultiplier: 500
+  gasCostMultiplier: 10
+  sugarCostMultiplier: 15
   itemToggles:
   - {fileID: 284816505}
   - {fileID: 507370948}

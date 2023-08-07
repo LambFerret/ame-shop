@@ -40,7 +40,7 @@ namespace Script.setting
         {
             foreach (var ingredient in firstIngredients)
             {
-                if (ingredient.ingredientName.Equals(type.ToString()))
+                if (ingredient.ingredientId.Equals(type.ToString()))
                 {
                     return ingredient.prefab;
                 }
@@ -58,7 +58,7 @@ namespace Script.setting
         {
             foreach (var ingredient in firstIngredients)
             {
-                if (ingredient.ingredientName.Equals(type.ToString()))
+                if (ingredient.ingredientId.Equals(type.ToString()))
                 {
                     return ingredient;
                 }

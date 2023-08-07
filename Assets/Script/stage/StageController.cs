@@ -34,7 +34,7 @@ namespace Script.stage
         public bool isCustomerTutorialOngoing;
         private bool _isSlimeTutorialOngoing;
         private int _day;
-        public int playerPopularity;
+        public float playerPopularity;
 
         public TutorialStep currentStepIfTutorial;
 
