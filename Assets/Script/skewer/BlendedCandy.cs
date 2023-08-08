@@ -7,7 +7,7 @@ namespace Script.skewer
     public struct BlendedCandy
     {
         public int SugarAmount;
-        public List<Ingredient> FirstIngredients;
+        public List<Ingredient> Ingredients;
         public List<IngredientManager.ThirdIngredient> ThirdIngredients;
     }
 }

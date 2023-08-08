@@ -21,7 +21,7 @@ namespace Script.skewer
         private Vector3 _originalPosition;
         private RectTransform _rectTransform;
 
-        private List<Ingredient> _firstIngredients;
+        private List<Ingredient> _Ingredients;
 
         private int _currentTemperature;
 
@@ -40,7 +40,7 @@ namespace Script.skewer
         private void Start()
         {
             _rectTransform = GetComponent<RectTransform>();
-            _firstIngredients = new List<Ingredient>();
+            _Ingredients = new List<Ingredient>();
             _thirdIngredients = new List<IngredientManager.ThirdIngredient>();
         }
 
@@ -87,13 +87,13 @@ namespace Script.skewer
             int averageMoisture = 0;
             int totalSize = 0;
 
-            foreach (var ingredient in _firstIngredients)
+            foreach (var ingredient in _Ingredients)
             {
                 averageMoisture += ingredient.perfectConcentration;
                 totalSize += ingredient.size;
             }
 
-            _perfectConcentration = averageMoisture / _firstIngredients.Count;
+            _perfectConcentration = averageMoisture / _Ingredients.Count;
             _perfectDryTime = totalSize;
 
             Debug.Log(" what is perfect dry time : " + _perfectDryTime + " perfect concentration : " +
@@ -107,7 +107,7 @@ namespace Script.skewer
             if (IsAlreadyBlended)
             {
                 blendedCandy = BlendedCandy;
-                blendedCandy.FirstIngredients.AddRange(GetFirstIngredients());
+                blendedCandy.Ingredients.AddRange(GetIngredients());
                 blendedCandy.ThirdIngredients.AddRange(GetThirdIngredients());
                 // foreach (IngredientManager.SecondIngredient ingredient in GetSecondIngredients())
                 // {
@@ -127,7 +127,7 @@ namespace Script.skewer
             else
             {
                 blendedCandy = new BlendedCandy();
-                blendedCandy.FirstIngredients = GetFirstIngredients();
+                blendedCandy.Ingredients = GetIngredients();
                 blendedCandy.ThirdIngredients = GetThirdIngredients();
                 // TODO
                 // foreach (IngredientManager.SecondIngredient ingredient in GetSecondIngredients())
@@ -146,24 +146,24 @@ namespace Script.skewer
                 // }
             }
 
-            _firstIngredients.Clear();
+            _Ingredients.Clear();
             // TODO
             // _secondIngredients.Clear();
             _thirdIngredients.Clear();
             // _dryTime = 0;
             _isFirstThirdSecond = false;
             IsAlreadyBlended = true;
-            // _firstIngredients.Add(IngredientManager.FirstIngredient.BlendedCandy);
+            // _Ingredients.Add(Ingredient.BlendedCandy);
         }
 
         // Setting base Ingredients
-        public void AddFirstIngredient(Ingredient ingredient)
+        public void AddIngredient(Ingredient ingredient)
         {
-            _firstIngredients.Add(ingredient);
+            _Ingredients.Add(ingredient);
             SkewIngredients(ingredient);
 
             CalculatePerfect();
-            DebugReadFirstIngredients();
+            DebugReadIngredients();
         }
 
         private void SkewIngredients(Ingredient ingredient)
@@ -176,21 +176,21 @@ namespace Script.skewer
             prefab.transform.localPosition = new Vector3(childCount * offset, childCount * offset, 0);
         }
 
-        public List<Ingredient> GetFirstIngredients()
+        public List<Ingredient> GetIngredients()
         {
-            DebugReadFirstIngredients();
-            return _firstIngredients;
+            DebugReadIngredients();
+            return _Ingredients;
         }
 
         public int GetSkewerPrice()
         {
-            var ingredient = GetDominantIngredient(_firstIngredients);
-            return ingredient.pricePerOne * _firstIngredients.Count(i => i.ingredientId == ingredient.ingredientId);
+            var ingredient = GetDominantIngredient(_Ingredients);
+            return ingredient.pricePerOne * _Ingredients.Count(i => i.ingredientId == ingredient.ingredientId);
         }
 
-        public bool IsDominantIngredient(IngredientManager.FirstIngredient ingredient)
+        public bool IsDominantIngredient(Ingredient ingredient)
         {
-            return GetDominantIngredient(_firstIngredients).ingredientId == ingredient.ToString();
+            return GetDominantIngredient(_Ingredients)?.ingredientId == ingredient.ToString();
         }
 
         public static Ingredient GetDominantIngredient(IEnumerable<Ingredient> ingredients)
@@ -214,15 +214,15 @@ namespace Script.skewer
             return dominantGroup?.Ingredient;
         }
 
-        private void DebugReadFirstIngredients()
+        private void DebugReadIngredients()
         {
-            string listString = string.Join(" - ", _firstIngredients.Select(i => i.ingredientId));
+            string listString = string.Join(" - ", _Ingredients.Select(i => i.ingredientId));
             Debug.Log($"[{listString}]");
         }
 
-        public string GetFirstIngredientText()
+        public string GetIngredientText()
         {
-            return string.Join(" - ", _firstIngredients.Select(i => i.ingredientId));
+            return string.Join(" - ", _Ingredients.Select(i => i.ingredientId));
         }
 
         // TODO setting third ingredient
@@ -239,7 +239,7 @@ namespace Script.skewer
             _thirdIngredients.Add(type);
             GetThirdIngredients();
 
-            // foreach (var prefab in firstIngredientPrefabs)
+            // foreach (var prefab in IngredientPrefabs)
             // {
             //     var nameStr = prefab.GetComponent<IngredientBehavior>().GetName();
             //     if (nameStr.Equals(type.ToString()))

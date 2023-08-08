@@ -5,25 +5,25 @@ namespace Script.skewer
 {
     public class IngredientBehavior : MonoBehaviour
     {
-        public enum Ingredient
+        public enum IngredientStep
         {
             First,
             Second,
             Third
         }
 
-        public Ingredient ingredientType;
-        public IngredientManager.FirstIngredient f;
+        public IngredientStep ingredientStepType;
+        public IngredientStep f;
         public IngredientManager.SecondIngredient s;
         public IngredientManager.ThirdIngredient t;
 
         public string GetName()
         {
-            return ingredientType switch
+            return ingredientStepType switch
             {
-                Ingredient.First => f.ToString(),
-                Ingredient.Second => s.ToString(),
-                Ingredient.Third => t.ToString(),
+                IngredientStep.First => f.ToString(),
+                IngredientStep.Second => s.ToString(),
+                IngredientStep.Third => t.ToString(),
                 _ => ""
             };
         }

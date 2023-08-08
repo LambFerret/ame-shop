@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e96f12901b48a3af8a140c50596d07, type: 3}
   m_Name: BlendedCandy
   m_EditorClassIdentifier: 
-  ingredientName: BlendedCandy
+  ingredientId: BlendedCandy
   prefab: {fileID: 709499191770144409, guid: 48505e3ae82f1452db455f71b1cf388d, type: 3}
-  cost: -1
-  moisture: -1
   size: -1
+  pricePerOne: 0
+  perfectConcentration: 0
+  costWhenResultShop: 0
+  piecePerEach: 0

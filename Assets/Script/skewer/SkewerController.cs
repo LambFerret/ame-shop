@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Script.ingredient;
 using Script.player;
 using Script.setting;
 using Script.stage;
@@ -99,7 +100,7 @@ namespace Script.skewer
             SetHand(skewer);
         }
 
-        public bool AddFirstIngredientToSkewerInHand(IngredientManager.FirstIngredient type)
+        public bool AddIngredientToSkewerInHand(Ingredient type)
         {
             if (_currentSkewerObject == null)
             {
@@ -107,14 +108,13 @@ namespace Script.skewer
                 return false;
             }
 
-            var prefab = gameManager.ingredientManager.GetFirstIngredient(type);
-            if (IsSkewerLengthMax(prefab.size))
+            if (IsSkewerLengthMax(type.size))
             {
                 MakeWarningMessage("Not enough space in skewer");
                 return false;
             }
 
-            _currentSkewer.AddFirstIngredient(prefab);
+            _currentSkewer.AddIngredient(type);
 
             return true;
         }
@@ -130,7 +130,7 @@ namespace Script.skewer
         private bool IsSkewerLengthMax(int size)
         {
             int currentSize = 0;
-            foreach (var element in _currentSkewer.GetFirstIngredients())
+            foreach (var element in _currentSkewer.GetIngredients())
             {
                 currentSize += element.size;
             }

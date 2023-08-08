@@ -12,8 +12,6 @@ namespace Script.title
 {
     public class ShopItemButton : MonoBehaviour, IDataPersistence
     {
-        public IngredientManager.FirstIngredient ingredient;
-
         private Ingredient _ingredient;
         public int cost;
         public int value;
@@ -29,12 +27,7 @@ namespace Script.title
         {
             _toggle = GetComponent<Toggle>();
             _image = transform.Find("image").GetComponent<Image>();
-            _ingredient = GameObject.Find("IngredientManager").GetComponent<IngredientManager>()
-                .GetFirstIngredient(ingredient);
-            cost = _ingredient.costWhenResultShop;
-            transform.Find("cost").GetComponent<TextMeshProUGUI>().text = cost.ToString();
-            transform.Find("each").GetComponent<TextMeshProUGUI>().text = "X " + _ingredient.piecePerEach;
-            _text = transform.Find("stock").GetComponent<TextMeshProUGUI>();
+           _text = transform.Find("stock").GetComponent<TextMeshProUGUI>();
         }
 
         private void Start()
@@ -42,6 +35,16 @@ namespace Script.title
             _image.color = _toggle.isOn ? onColor : offColor;
             _toggle.onValueChanged.AddListener(OnToggleValueChanged);
             GameEventManager.Instance.OnIngredientChanged += OnIngredientChanged;
+        }
+
+        public void SetIngredient(Ingredient ingredient)
+        {
+            _ingredient = ingredient;
+            _text.text = "stock : " + value;
+            cost = _ingredient.costWhenResultShop;
+            transform.Find("cost").GetComponent<TextMeshProUGUI>().text = cost.ToString();
+            transform.Find("each").GetComponent<TextMeshProUGUI>().text = "X " + _ingredient.piecePerEach;
+
         }
 
         private void OnDestroy()
@@ -54,9 +57,9 @@ namespace Script.title
             _image.color = isOn ? onColor : offColor;
         }
 
-        private void OnIngredientChanged(IngredientManager.FirstIngredient f, int value)
+        private void OnIngredientChanged(Ingredient f, int value)
         {
-            if (f == ingredient)
+            if (f == _ingredient)
             {
                 this.value += value;
                 _text.text = "stock : " + this.value;
@@ -70,12 +73,12 @@ namespace Script.title
 
         public void LoadData(GameData data)
         {
-            value = data.ingredients[ingredient];
+            value = data.ingredients[IngredientManager.Instance.GetIngredientIndex(_ingredient)];
         }
 
         public void SaveData(GameData data)
         {
-            data.ingredients[ingredient] = value;
+            data.ingredients[IngredientManager.Instance.GetIngredientIndex(_ingredient)] = value;
         }
     }
 }

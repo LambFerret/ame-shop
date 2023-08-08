@@ -17,7 +17,7 @@ namespace Script.customer
             5,
             4,
             true,
-            IngredientManager.FirstIngredient.Strawberry,
+            "Strawberry",
             20
         )
         {

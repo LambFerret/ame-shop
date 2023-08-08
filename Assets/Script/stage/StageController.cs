@@ -19,6 +19,7 @@ namespace Script.stage
         public GameObject machineScene;
         public CustomerManager customerManager;
         public StageStartButton stageStartButton;
+        public StageStartButton tutorialButton;
 
         public Timer timer;
         public GameObject[] waitCustomerObjectList = new GameObject[3];
@@ -59,14 +60,13 @@ namespace Script.stage
         {
             customerManager = GameObject.Find("CustomerManager").GetComponent<CustomerManager>();
             weaponTutorialObject.gameObject.SetActive(false);
-            Debug.Log("today is : " + _day);
         }
 
         private void Update()
         {
             if (!_isSceneLoading && timer.isEnded)
             {
-                if (_waitLineOccupied[0] == false && _waitLineOccupied[1] == false && _waitLineOccupied[2] == false)
+                if (GetAvailableLines().Count == 0)
                 {
                     timer.isStarted = false;
                     timer.isEnded = false;
@@ -75,9 +75,9 @@ namespace Script.stage
                 }
             }
 
-            foreach (var o in waitCustomerObjectList)
+            for (int i = 0; i < waitCustomerObjectList.Length; i++)
             {
-                _waitLineOccupied[Array.IndexOf(waitCustomerObjectList, o)] = o.activeSelf;
+                _waitLineOccupied[i] = waitCustomerObjectList[i].activeSelf;
             }
         }
 
@@ -86,16 +86,19 @@ namespace Script.stage
             yield return new WaitForSeconds(1);
             while (timer.isStarted && !timer.isEnded)
             {
-                var availableLine = CheckAvailableLine();
-                if (availableLine == -1) continue;
+                yield return new WaitForSeconds(4);
+                var availableLines = GetAvailableLines();
+
+                if (availableLines.Count == 0) continue;
 
                 // Customer 객체 랜덤 생성
                 var pickedCustomer = customerManager.GetCustomerByDifficulty(CustomerManager.Difficulty.Easy);
-                AddCustomer(pickedCustomer, availableLine);
+                AddCustomer(pickedCustomer, availableLines[UnityEngine.Random.Range(0, availableLines.Count)]);
 
+                int waitTimeMultiple = availableLines.Count == _waitLineOccupied.Length ? 2 : 1;
                 //(10~15초)*{5000/(5000+평판)}
                 yield return new WaitForSeconds(UnityEngine.Random.Range(minInterval, baseInterval) *
-                                                (5000 / (float)(5000 * playerPopularity)));
+                    (5000 / (5000 + playerPopularity)) / waitTimeMultiple);
             }
         }
 
@@ -103,8 +106,11 @@ namespace Script.stage
         {
             if (!(timer.isStarted && !timer.isEnded)) yield break;
             yield return new WaitForSeconds(2);
-            var availableLine = CheckAvailableLine();
-            if (availableLine == -1) throw new Exception("No available line In Tutorial?!");
+
+            var availableLines = GetAvailableLines();
+            if (availableLines.Count == 0) throw new Exception("No available line In Tutorial?!");
+
+            int availableLine = availableLines[UnityEngine.Random.Range(0, availableLines.Count)];
 
             // Customer 객체 랜덤 생성
             var pickedCustomer = customerManager.GetByName("Boy");
@@ -122,7 +128,8 @@ namespace Script.stage
 
             _isSlimeTutorialOngoing = true;
 
-            int slimeLine = CheckAvailableLine();
+            availableLines = GetAvailableLines();
+            int slimeLine = availableLines[UnityEngine.Random.Range(0, availableLines.Count)];
             var pickedCustomerSlime = customerManager.GetByName("BoySlime");
             AddCustomer(pickedCustomerSlime, slimeLine);
             var obj = waitCustomerObjectList[slimeLine];
@@ -137,7 +144,8 @@ namespace Script.stage
             _isSlimeTutorialOngoing = false;
         }
 
-        private int CheckAvailableLine()
+
+        private List<int> GetAvailableLines()
         {
             List<int> availableIndices = new List<int>();
 
@@ -149,15 +157,8 @@ namespace Script.stage
                 }
             }
 
-            if (availableIndices.Count == 0)
-            {
-                return -1;
-            }
-
-            int randomIndex = UnityEngine.Random.Range(0, availableIndices.Count);
-            return availableIndices[randomIndex];
+            return availableIndices;
         }
-
 
         private void AddCustomer(Customer customer, int availableLine)
         {
@@ -192,11 +193,6 @@ namespace Script.stage
             }
         }
 
-        private static IEnumerator EndDay()
-        {
-            yield return new WaitForSeconds(1);
-        }
-
         public void GotToMachineStep(int step)
         {
             if (step is < 0 or > 2) return;
@@ -221,6 +217,9 @@ namespace Script.stage
             if (timer.isStarted) return;
             timer.isStarted = true;
             stageStartButton.SwitchAnimation(false);
+            tutorialButton.SwitchAnimation(false);
+            stageStartButton.gameObject.SetActive(false);
+            tutorialButton.gameObject.SetActive(false);
             if (day == 1)
             {
                 StartCoroutine(TutorialStart());

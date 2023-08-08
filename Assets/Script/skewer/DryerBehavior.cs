@@ -41,7 +41,7 @@ namespace Script.skewer
         private void Update()
         {
             if (_currentSkewer is null) return;
-            text.text = _currentSkewer.GetFirstIngredientText();
+            text.text = _currentSkewer.GetIngredientText();
         }
 
         private void ReceiveSkewerFromController()
@@ -112,7 +112,7 @@ namespace Script.skewer
                 yield return new WaitForSeconds(1F);
                 if (minute > 0)
                 {
-                    FlipNumber(minute--);
+                    FlipNumber(--minute);
                 }
 
                 if (minute == 0)
@@ -125,7 +125,7 @@ namespace Script.skewer
 
         private void FlipNumber(int value)
         {
-            var duration = 0.3f; // Set duration of your animation.
+            var duration = 0.2f; // Set duration of your animation.
             _minuteRectTransform.DOScale(new Vector3(1, 0, 1), duration / 2).OnComplete(() =>
             {
                 minuteText.text = value.ToString("0");

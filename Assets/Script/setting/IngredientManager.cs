@@ -8,16 +8,6 @@ namespace Script.setting
 {
     public class IngredientManager : MonoBehaviour
     {
-        public enum FirstIngredient
-        {
-            BlendedCandy,
-            Strawberry,
-            Banana,
-            GreenGrape,
-            Apple,
-            BigGrape,
-            Coconut
-        }
 
         public enum SecondIngredient
         {
@@ -33,38 +23,26 @@ namespace Script.setting
         }
 
         public GameManager gameManager;
-
-        public List<Ingredient> firstIngredients;
-
-        public GameObject GetFirstIngredientPrefab(FirstIngredient type)
+        public static IngredientManager Instance { get; private set; }
+        private void Awake()
         {
-            foreach (var ingredient in firstIngredients)
+            if (Instance != null)
             {
-                if (ingredient.ingredientId.Equals(type.ToString()))
-                {
-                    return ingredient.prefab;
-                }
+                Destroy(this);
             }
 
-            return null;
+            Instance = this;
+        }
+        public List<Ingredient> Ingredients;
+
+        public Ingredient GetRandomIngredient()
+        {
+            return Ingredients[Random.Range(0, Ingredients.Count)];
         }
 
-        public FirstIngredient GetRandomFirstIngredient()
+        public int GetIngredientIndex(Ingredient type)
         {
-            return (FirstIngredient) Random.Range(0, firstIngredients.Count);
-        }
-
-        public Ingredient GetFirstIngredient(FirstIngredient type)
-        {
-            foreach (var ingredient in firstIngredients)
-            {
-                if (ingredient.ingredientId.Equals(type.ToString()))
-                {
-                    return ingredient;
-                }
-            }
-
-            return null;
+            return Ingredients.IndexOf(type);
         }
     }
 }

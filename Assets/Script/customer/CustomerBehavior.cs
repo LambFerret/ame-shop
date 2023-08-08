@@ -88,7 +88,7 @@ namespace Script.customer
 
         private void SetRandomFavorites()
         {
-            customer.firstIngredient = GameManager.Instance.ingredientManager.GetRandomFirstIngredient();
+            customer.ingredient = IngredientManager.Instance.GetRandomIngredient();
         }
 
         private void SetIdleAnimation(float scale, float duration)
@@ -185,7 +185,7 @@ namespace Script.customer
             }
 
             // 재료가 안맞을 경우
-            if (!skewer.IsDominantIngredient(customer.firstIngredient))
+            if (!skewer.IsDominantIngredient(customer.ingredient))
             {
                 satisfaction -= 50;
                 currentFeeling = Customer.QuoteLine.BadNotMyChoice;
@@ -240,7 +240,7 @@ namespace Script.customer
                     }
                     else
                     {
-                        GameEventManager.Instance.IngredientChanged(customer.slimeIngredient,
+                        GameEventManager.Instance.IngredientChanged(IngredientManager.Instance.GetRandomIngredient(),
                             customer.slimeIngredientCount);
                     }
 
@@ -298,19 +298,19 @@ namespace Script.customer
             if (gameObject.TryGetComponent(out GraphicRaycaster raycaster)) Destroy(raycaster);
             if (gameObject.TryGetComponent(out Canvas canvasComponent)) Destroy(canvasComponent);
 
-
+            _isAccept = false;
             gameObject.SetActive(false);
         }
 
 
         public void LoadData(GameData data)
         {
-            value = data.ingredients[customer.slimeIngredient];
+            // value = data.ingredients[IngredientManager.GetIngredientIndex(_ingredient)customer.slimeIngredient];
         }
 
         public void SaveData(GameData data)
         {
-            data.ingredients[customer.slimeIngredient] = value;
+            // data.ingredients[] = value;
         }
 
         public bool IsAccepted()
@@ -341,7 +341,7 @@ namespace Script.customer
 
             var lines = QuoteLines[quoteLine];
             _conversationText.text = lines[Random.Range(0, lines.Count)]
-                .Replace("{o}", customer.firstIngredient.ToString());
+                .Replace("{o}", customer.ingredient.ingredientId);
         }
 
 
@@ -363,7 +363,8 @@ namespace Script.customer
             sequence.OnComplete(() =>
             {
                 _moneyText.text = "";
-                gameObject.SetActive(false);
+                _moneyText.gameObject.SetActive(false);
+                // gameObject.SetActive(false);
             });
         }
     }

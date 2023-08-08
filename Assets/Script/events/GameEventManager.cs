@@ -1,4 +1,5 @@
 using System;
+using Script.ingredient;
 using Script.setting;
 using UnityEngine;
 
@@ -33,9 +34,9 @@ namespace Script.events
             OnMoneyChanged?.Invoke(value);
         }
 
-        public event Action<IngredientManager.FirstIngredient, int> OnIngredientChanged;
+        public event Action<Ingredient, int> OnIngredientChanged;
 
-        public void IngredientChanged(IngredientManager.FirstIngredient ingredient, int count)
+        public void IngredientChanged(Ingredient ingredient, int count)
         {
             OnIngredientChanged?.Invoke(ingredient, count);
         }

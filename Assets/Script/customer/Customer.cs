@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Script.ingredient;
 using Script.setting;
 using UnityEngine;
 
@@ -30,10 +31,10 @@ namespace Script.customer
         public int scoreLimitation;
         public int maxMoney;
         public int minMoney;
-        public IngredientManager.FirstIngredient firstIngredient;
+        public Ingredient ingredient;
 
         public bool isSlime;
-        public IngredientManager.FirstIngredient slimeIngredient;
+        public string slimeIngredient;
         public int slimeIngredientCount;
 
         protected Customer(
@@ -46,7 +47,7 @@ namespace Script.customer
             int maxMoney,
             int minMoney,
             bool isSlime = false,
-            IngredientManager.FirstIngredient slimeIngredient = IngredientManager.FirstIngredient.BlendedCandy,
+            string slimeIngredient = "BlendedCandy",
             int slimeIngredientCount = 0
         )
         {
@@ -58,9 +59,8 @@ namespace Script.customer
             this.scoreLimitation = scoreLimitation;
             this.maxMoney = maxMoney;
             this.minMoney = minMoney;
-            firstIngredient = IngredientManager.FirstIngredient.BlendedCandy;
             this.isSlime = isSlime;
-            if (isSlime && slimeIngredient is not IngredientManager.FirstIngredient.BlendedCandy && slimeIngredientCount > 0)
+            if (isSlime && slimeIngredient is not "BlendedCandy" && slimeIngredientCount > 0)
             {
                 this.slimeIngredient = slimeIngredient;
                 this.slimeIngredientCount = slimeIngredientCount;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Script.ingredient;
 using Script.setting;
 
 namespace Script.persistence.data
@@ -19,7 +20,7 @@ namespace Script.persistence.data
         public int dayGasUsage;
         public int daySugarUsage;
 
-        public SerializableDictionary<IngredientManager.FirstIngredient, int> ingredients;
+        public List<int> ingredients;
 
 
         public int language;
@@ -34,15 +35,15 @@ namespace Script.persistence.data
             money = 2000;
             popularity = 60;
             equipment = new List<string>();
-            ingredients = new SerializableDictionary<IngredientManager.FirstIngredient, int>
+            ingredients = new List<int>
             {
-                { IngredientManager.FirstIngredient.Strawberry, 20 },
-                { IngredientManager.FirstIngredient.BlendedCandy, 0 },
-                { IngredientManager.FirstIngredient.Banana, 5 },
-                { IngredientManager.FirstIngredient.GreenGrape, 20 },
-                { IngredientManager.FirstIngredient.Apple, 3 },
-                { IngredientManager.FirstIngredient.BigGrape, 10 },
-                { IngredientManager.FirstIngredient.Coconut, 10 },
+                0, //BlendedCandy
+                20, //Strawberry
+                5, //Banana
+                20, //GreenGrape
+                3, //Apple
+                10, //BigGrape
+                10, //Coconut
             };
         }
     }

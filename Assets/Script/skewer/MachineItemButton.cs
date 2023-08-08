@@ -9,11 +9,9 @@ using UnityEngine.UI;
 
 namespace Script.skewer
 {
-    public class IngredientButtonListener : MonoBehaviour, IDataPersistence
+    public class MachineItemButton : MonoBehaviour, IDataPersistence
     {
-        public SkewerController skewer;
         public TextMeshProUGUI text;
-        public IngredientManager.FirstIngredient selectedIngredient;
         public int amount;
 
         private Button _button;
@@ -22,17 +20,18 @@ namespace Script.skewer
 
         private void Awake()
         {
-            _button = GetComponent<Button>();
+            _button = transform.Find("Button").GetComponent<Button>();
         }
 
         private void Start()
         {
             GameEventManager.Instance.OnIngredientChanged += OnIngredientChanged;
+        }
 
-            _button.onClick.AddListener(() =>
-            {
-                if (skewer.AddFirstIngredientToSkewerInHand(selectedIngredient)) amount--;
-            });
+        public void SetIngredient(Ingredient ingredient)
+        {
+            _ingredient = ingredient;
+
         }
 
         private void OnDestroy()
@@ -42,13 +41,13 @@ namespace Script.skewer
 
         private void Update()
         {
-            text.text = selectedIngredient.ToString() + amount;
+            text.text = _ingredient.ingredientId + amount;
             _button.interactable = amount > 0;
         }
 
-        private void OnIngredientChanged(IngredientManager.FirstIngredient f, int value)
+        private void OnIngredientChanged(Ingredient f, int value)
         {
-            if (f == selectedIngredient)
+            if (f == _ingredient)
             {
                 amount += value;
             }
@@ -56,12 +55,13 @@ namespace Script.skewer
 
         public void LoadData(GameData data)
         {
-            amount = data.ingredients[selectedIngredient];
+
+            amount = data.ingredients[IngredientManager.Instance.GetIngredientIndex(_ingredient)];
         }
 
         public void SaveData(GameData data)
         {
-            data.ingredients[selectedIngredient] = amount;
+            data.ingredients[IngredientManager.Instance.GetIngredientIndex(_ingredient)] = amount;
         }
     }
 }

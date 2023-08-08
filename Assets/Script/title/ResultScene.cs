@@ -5,6 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using Script.persistence;
 using Script.persistence.data;
+using Script.setting;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -43,7 +44,8 @@ namespace Script.title
         private int _dataMoney;
         private int _savings;
 
-        public List<Toggle> itemToggles;
+        public GameObject togglePlaceHolder;
+        private List<Toggle> _itemToggles;
 
         private void Awake()
         {
@@ -57,25 +59,32 @@ namespace Script.title
             _netMoneyEarnedText = GameObject.Find("NetMoneyEarned").transform.Find("value").GetComponent<TextMeshProUGUI>();
             _savingMoneyText = GameObject.Find("SavingMoney").transform.Find("value").GetComponent<TextMeshProUGUI>();
             GameObject.Find("IngredientDetails").SetActive(false);
+
+
         }
 
         private void Start()
         {
             Calculate();
 
-            foreach (var toggle in itemToggles)
+            for (int i = 0; i < IngredientManager.Instance.Ingredients.Count; i++)
             {
+                var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/ShopItemButton"), togglePlaceHolder.transform);
+                Toggle toggle = ingredient.GetComponent<Toggle>();
+                ShopItemButton itemButton = ingredient.GetComponent<ShopItemButton>();
+                itemButton.SetIngredient(IngredientManager.Instance.Ingredients[i]);
                 toggle.onValueChanged.AddListener(arg0 =>
                 {
                     if (arg0)
                     {
-                        Buy(toggle.GetComponent<ShopItemButton>().cost);
+                        Buy(itemButton.cost);
                     }
                     else
                     {
-                        Buy(-toggle.GetComponent<ShopItemButton>().cost);
+                        Buy(-itemButton.cost);
                     }
                 });
+                _itemToggles.Add(toggle);
             }
         }
 
@@ -87,7 +96,7 @@ namespace Script.title
                 return;
             }
 
-            foreach (Toggle itemToggle in itemToggles)
+            foreach (Toggle itemToggle in _itemToggles)
             {
                 if (itemToggle.isOn)
                 {
