@@ -11,14 +11,7 @@ namespace Script.customer
             "BoySlime",
             false,
             120,
-            3,
-            -3,
-            10,
-            5,
-            4,
-            true,
-            "Strawberry",
-            20
+            true
         )
         {
         }

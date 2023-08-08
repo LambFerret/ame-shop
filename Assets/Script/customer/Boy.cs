@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Script.setting;
 using UnityEngine;
 
 namespace Script.customer
@@ -10,12 +8,7 @@ namespace Script.customer
         public Boy() : base(
             "Boy",
             false,
-            120,
-            3,
-            -3,
-            10,
-            5,
-            4
+            120
         )
         {
         }

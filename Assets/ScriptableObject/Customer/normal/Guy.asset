@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 013f9cc1aebd4b2684c41dfb4fa4b5bd, type: 3}
+  m_Name: Guy
+  m_EditorClassIdentifier: 
+  id: Guy
+  hasSpecialEvent: 0
+  patience: 120
+  emotions: 0000000001000000020000000300000004000000
+  sprites:
+  - {fileID: 21300000, guid: 16e7a11d1c37a498c9ffdfbb08846301, type: 3}
+  - {fileID: 21300000, guid: 369a929f017414e52961fe1ad8c0dc0d, type: 3}
+  - {fileID: 21300000, guid: 0763e6ac9543f4469bcdc0ddb90eab7f, type: 3}
+  - {fileID: 21300000, guid: ace3b69f718c44e39adc3ece9a687492, type: 3}
+  - {fileID: 21300000, guid: 4d77a4777e02f4479968159f1a70cb22, type: 3}
+  isSlime: 0
+  ingredient: {fileID: 0}

@@ -2979,7 +2979,7 @@ RectTransform:
   m_Children:
   - {fileID: 2114170872}
   m_Father: {fileID: 1527984478}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7577,7 +7577,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 02d1fce8e027c42079a52c62f1a83e29, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -7641,7 +7641,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &930422785
@@ -9477,7 +9477,7 @@ RectTransform:
   - {fileID: 1857120142}
   - {fileID: 1180927432}
   m_Father: {fileID: 1527984478}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -11817,10 +11817,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: "New Text \uD55C\uAE00"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 02d1fce8e027c42079a52c62f1a83e29, type: 2}
+  m_sharedMaterial: {fileID: -3896335951961720297, guid: 02d1fce8e027c42079a52c62f1a83e29, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12173,8 +12173,8 @@ RectTransform:
   - {fileID: 147904692}
   - {fileID: 1759045608}
   - {fileID: 1619769991}
-  - {fileID: 368060707}
   - {fileID: 1229602415}
+  - {fileID: 368060707}
   - {fileID: 539233590}
   m_Father: {fileID: 1407262398}
   m_RootOrder: 0
@@ -12214,8 +12214,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   easyCustomer:
+  - {fileID: 11400000, guid: 65ba754c4bf9148e595af0cb076c1135, type: 2}
+  - {fileID: 11400000, guid: 9a23f257bb4904714a39495601486fa7, type: 2}
+  - {fileID: 11400000, guid: cbd9e1a3339ff4414bee451f0c445588, type: 2}
+  - {fileID: 11400000, guid: 18245c82a31ce4c24819c3c1de495253, type: 2}
+  - {fileID: 11400000, guid: 1f8951fc423664f918bb72668e5187e6, type: 2}
+  - {fileID: 11400000, guid: 80204f40234834ed38fc8789c5e9781b, type: 2}
   - {fileID: 11400000, guid: b9398a07afcd2487897881fba1ec6b2f, type: 2}
-  - {fileID: 11400000, guid: ee6a8cd4db0eb4d64a87d90182e52d6a, type: 2}
+  - {fileID: 11400000, guid: 6e0b2e01cbc4145fab66a2280ceb7541, type: 2}
+  - {fileID: 11400000, guid: b4419f31a91744197b8fd1cdc8cc2d51, type: 2}
+  - {fileID: 11400000, guid: ef4371e24eb8a4bf0ac3de991f1b883e, type: 2}
+  - {fileID: 11400000, guid: f9ce4fd41e6434a08b6dbbf8a973d663, type: 2}
+  - {fileID: 11400000, guid: 279825a9850ea43f6bbd862915aca70e, type: 2}
   normalCustomer: []
   hardCustomer: []
 --- !u!4 &1529500438
@@ -13417,12 +13427,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 418563b5124845f3add6b9ec3c46125f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customer: {fileID: 0}
   stageController: {fileID: 33782419}
   billPrefab: {fileID: 1335098676343057249, guid: 9f0700902ea0b4ed0a1606b9dd606759, type: 3}
-  animationDuration: 2
-  idleAnimationScale: 1.03
   billPlaceHolder: {fileID: 1228927367}
+  imageHolder: {fileID: 436858637}
+  customer: {fileID: 0}
   value: 0
 --- !u!1 &1606284252
 GameObject:
@@ -14026,12 +14035,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 418563b5124845f3add6b9ec3c46125f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customer: {fileID: 0}
   stageController: {fileID: 33782419}
   billPrefab: {fileID: 1335098676343057249, guid: 9f0700902ea0b4ed0a1606b9dd606759, type: 3}
-  animationDuration: 2
-  idleAnimationScale: 1.03
   billPlaceHolder: {fileID: 1228927367}
+  imageHolder: {fileID: 383178423}
+  customer: {fileID: 0}
   value: 0
 --- !u!1 &1664670540
 GameObject:
@@ -14387,12 +14395,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 418563b5124845f3add6b9ec3c46125f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customer: {fileID: 0}
   stageController: {fileID: 33782419}
   billPrefab: {fileID: 1335098676343057249, guid: 9f0700902ea0b4ed0a1606b9dd606759, type: 3}
-  animationDuration: 2
-  idleAnimationScale: 1.03
   billPlaceHolder: {fileID: 1228927367}
+  imageHolder: {fileID: 350393231}
+  customer: {fileID: 0}
   value: 0
 --- !u!1 &1721711922
 GameObject:
@@ -14667,7 +14674,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 02d1fce8e027c42079a52c62f1a83e29, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -14731,7 +14738,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1729924734

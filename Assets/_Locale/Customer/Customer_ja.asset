@@ -18,87 +18,40 @@ MonoBehaviour:
   m_Metadata:
     m_Items: []
   m_TableData:
-  - m_Id: 9868140544
-    m_Localized: "\uC1FC\uB128"
-    m_Metadata:
-      m_Items: []
   - m_Id: 326865248256
-    m_Localized: 'give me {o} with extra sugar please!
-
-      give me {o} with extra
-      sugar!'
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 261816960671744
-    m_Localized: "\uC0C1\uD050\n\uB561\uD050\uC5B4\uB78F"
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 261909495406592
-    m_Localized: "\uB0B4\uAC00 \uC774\uAC78 \uC2DC\uCF30\uB098\uC694?"
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 1732908657139712
-    m_Localized: 1
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 1732916865392640
-    m_Localized: 2
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 1732935769120768
-    m_Localized: 3
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 1732938025656320
-    m_Localized: 4
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 1733204334600192
-    m_Localized: 5
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 2083494367846400
-    m_Localized: Boy Poked
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2083538353512448
-    m_Localized: BoySlime Enter
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2083544707883008
-    m_Localized: BoySlime Refused
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2083549082542080
-    m_Localized: BoySlime TimeOut
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2083549984317440
-    m_Localized: BoySlime BadTooSweet
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2083550986756096
-    m_Localized: BoySlime BadMildTaste
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2083552094052352
-    m_Localized: BoySlime BadTooWatery
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2083554119901184
-    m_Localized: BoySlime BadNotMyChoice
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2083556313522176
-    m_Localized: BoySlime Good
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2083558062546944
-    m_Localized: BoySlime Poked
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2087832544862208
-    m_Localized: "\uC2AC\uB77C\uC784\uC18C\uB144"
+    m_Localized: 
     m_Metadata:
       m_Items: []
   references:

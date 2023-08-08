@@ -23,22 +23,22 @@ namespace Script.customer
 {
     public class CustomerBehavior : MonoBehaviour, IDataPersistence
     {
-        public Customer customer;
-        public Dictionary<Customer.QuoteLine, List<string>> QuoteLines = new();
+        private readonly Dictionary<Customer.QuoteLine, List<string>> _quoteLines = new();
+        private const float AnimationDuration = 2f;
+        private const float IdleAnimationScale = 1.03f;
 
-        public StageController stageController;
+        [Header("Game Objects")] public StageController stageController;
         public GameObject billPrefab;
-        public float animationDuration = 2f;
-        public float idleAnimationScale = 1.03f;
-        private GameObject _buttonGroup;
+        public GameObject billPlaceHolder;
+        public Image imageHolder;
 
-        private GameObject _conversation;
-        private TextMeshProUGUI _conversationText;
-
+        [Header("Info")] public Customer customer;
         private GameObject _customer;
         private GameObject _bill;
-        public GameObject billPlaceHolder;
 
+        private GameObject _buttonGroup;
+        private GameObject _conversation;
+        private TextMeshProUGUI _conversationText;
         private bool _isStart;
         private bool _isAccept;
         private TextMeshProUGUI _moneyText;
@@ -49,6 +49,7 @@ namespace Script.customer
         private GameData _data;
 
         public int value;
+        private Sequence _conversationSequence;
 
         private void Awake()
         {
@@ -62,6 +63,18 @@ namespace Script.customer
             _moneyText = _customer.transform.Find("Money").GetComponent<TextMeshProUGUI>();
 
             _moneyText.gameObject.SetActive(false);
+            _conversationSequence = DOTween.Sequence();
+
+            _conversationSequence
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, -15), 0)) // Rotate to -15
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, -10),1f)) // Rotate to -10
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, -15),1f)) // Rotate back to -15
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, -10),1f)) // Rotate back to -10
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, 15), 0))// Rotate to 15
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, 10), 1f)) // Rotate to 10
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, 15), 1f)) // Rotate back to 15
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, 10), 1f)) // Rotate back to 10
+                .SetLoops(-1); // Repeat the sequence infinitely
         }
 
         private void Update()
@@ -79,11 +92,14 @@ namespace Script.customer
         {
             _isStart = true;
             customer = script;
-            SetIdleAnimation(idleAnimationScale, animationDuration);
+            imageHolder.sprite = customer.GetSprite(Customer.Emotion.Idle);
+            SetIdleAnimation(IdleAnimationScale, AnimationDuration);
             SetRandomFavorites();
             SetTimer(1);
             SetQuote(Customer.QuoteLine.Enter);
             _conversation.SetActive(false);
+            _conversationSequence.Pause();
+            imageHolder.transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
 
         private void SetRandomFavorites()
@@ -116,6 +132,7 @@ namespace Script.customer
             if (isActive)
             {
                 _conversation.SetActive(true);
+                _conversationSequence.Play();
                 var canvas = gameObject.AddComponent<Canvas>();
                 canvas.overrideSorting = true;
                 canvas.sortingOrder = 10;
@@ -123,6 +140,8 @@ namespace Script.customer
             }
             else
             {
+                _conversationSequence.Pause();
+                imageHolder.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 _conversation.SetActive(false);
                 if (gameObject.TryGetComponent(out GraphicRaycaster raycaster)) Destroy(raycaster);
                 if (gameObject.TryGetComponent(out Canvas canvasComponent)) Destroy(canvasComponent);
@@ -228,40 +247,56 @@ namespace Script.customer
                 case Customer.QuoteLine.Refused:
                     popularity = -3;
                     endImmediately = true;
+                    ChangeEmotion(Customer.Emotion.Sad);
                     break;
                 case Customer.QuoteLine.TimeOut:
                     popularity = -6;
                     endImmediately = true;
+                    ChangeEmotion(Customer.Emotion.Angry);
+
                     break;
                 case Customer.QuoteLine.Poked:
+                    ChangeEmotion(Customer.Emotion.Poked);
+
                     if (!customer.isSlime)
                     {
                         popularity = -6;
                     }
                     else
                     {
-                        GameEventManager.Instance.IngredientChanged(IngredientManager.Instance.GetRandomIngredient(),
-                            customer.slimeIngredientCount);
+                        // TODO random range of slime ingredient
+                        GameEventManager.Instance.IngredientChanged(
+                            IngredientManager.Instance.GetRandomIngredient(), Random.Range(1, 3));
                     }
 
                     endImmediately = true;
                     break;
                 case Customer.QuoteLine.BadMildTaste:
+                    ChangeEmotion(Customer.Emotion.Sad);
+
                     popularity = 1 + (float)satisfaction / 100;
                     break;
                 case Customer.QuoteLine.BadTooSweet:
+                    ChangeEmotion(Customer.Emotion.Sad);
+
                     popularity = 1 + (float)satisfaction / 100;
 
                     break;
                 case Customer.QuoteLine.BadTooWatery:
+                    ChangeEmotion(Customer.Emotion.Sad);
+
                     popularity = 1 + (float)satisfaction / 100;
 
                     break;
                 case Customer.QuoteLine.BadNotMyChoice:
+                    ChangeEmotion(Customer.Emotion.Sad);
+
                     popularity = 1 + (float)satisfaction / 100;
 
                     break;
                 case Customer.QuoteLine.Good:
+                    ChangeEmotion(Customer.Emotion.Happy);
+
                     popularity = 1 + (float)satisfaction / 100;
 
                     break;
@@ -302,6 +337,20 @@ namespace Script.customer
             gameObject.SetActive(false);
         }
 
+        private void ChangeEmotion(Customer.Emotion emotion)
+        {
+            var newSprite = customer.GetSprite(emotion);
+            imageHolder.rectTransform.DORotate(new Vector3(0, 90, 0), 0.1f)
+                .OnComplete(() =>
+                {
+                    imageHolder.sprite = newSprite; // Change the sprite
+                    imageHolder.rectTransform.DOScaleX(0, 0).OnComplete(() =>
+                    {
+                        imageHolder.rectTransform.DORotate(new Vector3(0, 0, 0), 0.1f);
+                    });
+                });
+        }
+
 
         public void LoadData(GameData data)
         {
@@ -336,10 +385,10 @@ namespace Script.customer
             foreach (var line in Enum.GetValues(typeof(Customer.QuoteLine)))
             {
                 var lineStr = stringTable[customer.id + " " + line].GetLocalizedString();
-                QuoteLines[(Customer.QuoteLine)line] = new List<string>(lineStr.Split('\n'));
+                _quoteLines[(Customer.QuoteLine)line] = new List<string>(lineStr.Split('\n'));
             }
 
-            var lines = QuoteLines[quoteLine];
+            var lines = _quoteLines[quoteLine];
             _conversationText.text = lines[Random.Range(0, lines.Count)]
                 .Replace("{o}", customer.ingredient.ingredientId);
         }
