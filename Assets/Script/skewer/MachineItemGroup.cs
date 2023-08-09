@@ -20,7 +20,7 @@ namespace Script.skewer
                     transform);
                 MachineItemButton button = itemButton.GetComponent<MachineItemButton>();
                 button.SetIngredient(i);
-                itemButton.transform.Find("Button").GetComponent<Button>().onClick.AddListener(() =>
+                itemButton.transform.GetComponentInChildren<Button>().onClick.AddListener(() =>
                 {
                     if (skewer.AddIngredientToSkewerInHand(i)) button.amount--;
                 });

@@ -190,7 +190,10 @@ namespace Script.skewer
 
         public bool IsDominantIngredient(Ingredient ingredient)
         {
-            return GetDominantIngredient(_Ingredients)?.ingredientId == ingredient.ToString();
+            var a = GetDominantIngredient(_Ingredients)?.ingredientId;
+            var b = ingredient.ingredientId;
+            Debug.Log("what is dominant of this skewer? : " + a + " and ordered " + b);
+            return a==b;
         }
 
         public static Ingredient GetDominantIngredient(IEnumerable<Ingredient> ingredients)

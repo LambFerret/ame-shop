@@ -390,8 +390,8 @@ MonoBehaviour:
 
     LOGO'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c65535bdd880941f1b7d11d2067e21f9, type: 2}
+  m_sharedMaterial: {fileID: -6138284496565886948, guid: c65535bdd880941f1b7d11d2067e21f9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -624,6 +624,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 973196174100475750, guid: a17a213cb8f6d4e708cdbf5953f8dbf4, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: c65535bdd880941f1b7d11d2067e21f9, type: 2}
+    - target: {fileID: 973196174100475750, guid: a17a213cb8f6d4e708cdbf5953f8dbf4, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -6138284496565886948, guid: c65535bdd880941f1b7d11d2067e21f9, type: 2}
     - target: {fileID: 6653192815387816980, guid: a17a213cb8f6d4e708cdbf5953f8dbf4, type: 3}
       propertyPath: m_Name
       value: Loading

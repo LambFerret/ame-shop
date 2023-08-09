@@ -67,10 +67,10 @@ namespace Script.customer
 
             _conversationSequence
                 .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, -15), 0)) // Rotate to -15
-                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, -10),1f)) // Rotate to -10
-                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, -15),1f)) // Rotate back to -15
-                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, -10),1f)) // Rotate back to -10
-                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, 15), 0))// Rotate to 15
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, -10), 1f)) // Rotate to -10
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, -15), 1f)) // Rotate back to -15
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, -10), 1f)) // Rotate back to -10
+                .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, 15), 0)) // Rotate to 15
                 .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, 10), 1f)) // Rotate to 10
                 .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, 15), 1f)) // Rotate back to 15
                 .Append(imageHolder.transform.DOLocalRotate(new Vector3(0, 0, 10), 1f)) // Rotate back to 10
@@ -384,13 +384,20 @@ namespace Script.customer
 
             foreach (var line in Enum.GetValues(typeof(Customer.QuoteLine)))
             {
-                var lineStr = stringTable[customer.id + " " + line].GetLocalizedString();
+                string customerName = customer.id.Replace("Slime","") + " " + line;
+                var lineStr = stringTable[customerName].GetLocalizedString();
                 _quoteLines[(Customer.QuoteLine)line] = new List<string>(lineStr.Split('\n'));
             }
 
+
             var lines = _quoteLines[quoteLine];
-            _conversationText.text = lines[Random.Range(0, lines.Count)]
-                .Replace("{o}", customer.ingredient.ingredientId);
+            var randomLine = lines[Random.Range(0, lines.Count)];
+            if (customer.isSlime)
+            {
+                randomLine += " ..." + stringTable["Slime End"].GetLocalizedString();
+            }
+
+            _conversationText.text = randomLine.Replace("{o}", customer.ingredient.ingredientId);
         }
 
 

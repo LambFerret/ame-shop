@@ -11,16 +11,17 @@ namespace Script.skewer
 {
     public class MachineItemButton : MonoBehaviour, IDataPersistence
     {
-        public TextMeshProUGUI text;
         public int amount;
 
         private Button _button;
-
+        private TextMeshProUGUI _text;
         private Ingredient _ingredient;
 
         private void Awake()
         {
+            // _text = transform.Find("butt").Find("text").GetComponent<TextMeshProUGUI>();
             _button = transform.Find("Button").GetComponent<Button>();
+            _text = _button.GetComponentInChildren<TextMeshProUGUI>();
         }
 
         private void Start()
@@ -31,7 +32,6 @@ namespace Script.skewer
         public void SetIngredient(Ingredient ingredient)
         {
             _ingredient = ingredient;
-
         }
 
         private void OnDestroy()
@@ -41,7 +41,7 @@ namespace Script.skewer
 
         private void Update()
         {
-            text.text = _ingredient.ingredientId + amount;
+            _text.text = _ingredient.ingredientId + amount;
             _button.interactable = amount > 0;
         }
 
@@ -55,7 +55,6 @@ namespace Script.skewer
 
         public void LoadData(GameData data)
         {
-
             amount = data.ingredients[IngredientManager.Instance.GetIngredientIndex(_ingredient)];
         }
 
