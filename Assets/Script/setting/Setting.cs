@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Script.persistence;
 using Script.persistence.data;
@@ -30,11 +29,35 @@ namespace Script.setting
             resetGameButton.onClick.AddListener(OnResetGameClicked);
         }
 
+        private void OnEnable()
+        {
+            DataPersistenceManager.Instance.LoadGame();
+        }
+
         private void OnDestroy()
         {
             volumeSlider.onValueChanged.RemoveListener(OnVolumeChanged);
             languageDropdown.onValueChanged.RemoveListener(ChangeLocale);
             resetGameButton.onClick.RemoveListener(OnResetGameClicked);
+        }
+
+        public void LoadData(GameData data)
+        {
+            // Assuming data.volume is a float that represents the volume
+            volumeSlider.value = data.volume;
+
+            // Assuming data.language is an int that represents the language index
+            languageDropdown.value = data.language;
+
+            // Update the AudioListener volume and selected locale
+            AudioListener.volume = data.volume;
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[data.language];
+        }
+
+        public void SaveData(GameData data)
+        {
+            data.volume = volumeSlider.value;
+            data.language = languageDropdown.value;
         }
 
         private static void OnVolumeChanged(float value)
@@ -63,11 +86,6 @@ namespace Script.setting
             _isChanging = false;
         }
 
-        private void OnEnable()
-        {
-            DataPersistenceManager.Instance.LoadGame();
-        }
-
         public void SaveAndConfirm()
         {
             DataPersistenceManager.Instance.SaveGame();
@@ -77,25 +95,6 @@ namespace Script.setting
         public void Close()
         {
             gameObject.SetActive(false);
-        }
-
-        public void LoadData(GameData data)
-        {
-            // Assuming data.volume is a float that represents the volume
-            volumeSlider.value = data.volume;
-
-            // Assuming data.language is an int that represents the language index
-            languageDropdown.value = data.language;
-
-            // Update the AudioListener volume and selected locale
-            AudioListener.volume = data.volume;
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[data.language];
-        }
-
-        public void SaveData(GameData data)
-        {
-            data.volume = volumeSlider.value;
-            data.language = languageDropdown.value;
         }
     }
 }

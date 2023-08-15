@@ -10,11 +10,10 @@ namespace Script.title
 {
     public class LoadingScreen : MonoBehaviour
     {
-        public static LoadingScreen Instance { get; private set; }
-
         public TextMeshProUGUI progressText;
         private Image _blackScreenImage; // Image component of your black screen
         private GameObject _icon;
+        public static LoadingScreen Instance { get; private set; }
 
         private void Awake()
         {

@@ -7,8 +7,8 @@ namespace Script.setting
     [Serializable]
     public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {
-        public List<TKey> keys = new List<TKey>();
-        public List<TValue> values = new List<TValue>();
+        public List<TKey> keys = new();
+        public List<TValue> values = new();
 
         public void OnBeforeSerialize()
         {
@@ -26,16 +26,11 @@ namespace Script.setting
             Clear();
 
             if (keys.Count != values.Count)
-            {
                 throw new Exception(string.Format(
                     $"there are {keys.Count} keys and {values.Count} values after deserialization. " +
-                    $"Make sure that both key and value types are serializable."));
-            }
+                    "Make sure that both key and value types are serializable."));
 
-            for (int i = 0; i < keys.Count; i++)
-            {
-                Add(keys[i], values[i]);
-            }
+            for (int i = 0; i < keys.Count; i++) Add(keys[i], values[i]);
         }
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Script.persistence.data;
 using UnityEngine;
@@ -8,10 +7,10 @@ namespace Script.persistence
 {
     public class FileDataHandler
     {
+        private const string EncryptionCodeWord = "{I.私.c.안.は.녕.h.ㅏ.エ.b.세.i.ン.n.I.요.ジ.n.ニ.g.ア.e.で.n.す.i.e.u.r}";
         private readonly string _dataDirPath;
         private readonly string _dataFileName;
         private readonly bool _useEncryption;
-        private const string EncryptionCodeWord = "{I.私.c.안.は.녕.h.ㅏ.エ.b.세.i.ン.n.I.요.ジ.n.ニ.g.ア.e.で.n.す.i.e.u.r}";
 
         public FileDataHandler(string dataDirPath, string dataFileName, bool useEncryption)
         {
@@ -25,7 +24,6 @@ namespace Script.persistence
             string fullPath = Path.Combine(_dataDirPath, _dataFileName);
             GameData loadedData = null;
             if (File.Exists(fullPath))
-            {
                 try
                 {
                     string dataToLoad = "";
@@ -36,6 +34,7 @@ namespace Script.persistence
                             dataToLoad = reader.ReadToEnd();
                         }
                     }
+
                     if (_useEncryption) dataToLoad = EncryptDecrypt(dataToLoad);
                     loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
                 }
@@ -43,7 +42,6 @@ namespace Script.persistence
                 {
                     Debug.LogError("Error occured when trying to load data from file: " + fullPath + "\n" + e);
                 }
-            }
 
             return loadedData;
         }
@@ -72,9 +70,7 @@ namespace Script.persistence
         {
             string modifiedData = "";
             for (int i = 0; i < data.Length; i++)
-            {
                 modifiedData += (char)(data[i] ^ EncryptionCodeWord[i % EncryptionCodeWord.Length]);
-            }
 
             return modifiedData;
         }

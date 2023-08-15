@@ -1,6 +1,5 @@
 using System;
 using Script.ingredient;
-using Script.setting;
 using UnityEngine;
 
 namespace Script.events
@@ -11,10 +10,7 @@ namespace Script.events
 
         private void Awake()
         {
-            if (Instance != null)
-            {
-                Debug.LogError("Found more than one Game Events Manager in the scene.");
-            }
+            if (Instance != null) Debug.LogError("Found more than one Game Events Manager in the scene.");
 
 
             Instance = this;

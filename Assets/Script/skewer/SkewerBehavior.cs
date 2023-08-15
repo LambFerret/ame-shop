@@ -15,26 +15,26 @@ namespace Script.skewer
         public int perfectTemperatureFrom;
         public int perfectTemperatureTo;
         public int concentrationTolerance;
-
-        private bool _isDraggable;
-        private bool _isSkewerFocused;
-        private Vector3 _originalPosition;
-        private RectTransform _rectTransform;
-
-        private List<Ingredient> _Ingredients;
+        public bool IsAlreadyBlended;
+        private int _currentConcentration;
+        private int _currentDryTime;
 
         private int _currentTemperature;
 
-        private int _perfectDryTime;
-        private int _currentDryTime;
+        private List<Ingredient> _Ingredients;
 
-        private int _perfectConcentration;
-        private int _currentConcentration;
-
-        private List<IngredientManager.ThirdIngredient> _thirdIngredients;
+        private bool _isDraggable;
 
         private bool _isFirstThirdSecond;
-        public bool IsAlreadyBlended;
+        private bool _isSkewerFocused;
+        private Vector3 _originalPosition;
+
+        private int _perfectConcentration;
+
+        private int _perfectDryTime;
+        private RectTransform _rectTransform;
+
+        private List<IngredientManager.ThirdIngredient> _thirdIngredients;
         public BlendedCandy BlendedCandy;
 
         private void Start()
@@ -42,6 +42,53 @@ namespace Script.skewer
             _rectTransform = GetComponent<RectTransform>();
             _Ingredients = new List<Ingredient>();
             _thirdIngredients = new List<IngredientManager.ThirdIngredient>();
+        }
+
+        // Behavior that the skewer is focused or not
+        private void Update()
+        {
+            if (_isSkewerFocused)
+            {
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(_rectTransform.parent as RectTransform,
+                    Input.mousePosition, null, out Vector2 localPoint);
+                _rectTransform.localPosition = localPoint;
+            }
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            _originalPosition = _rectTransform.anchoredPosition;
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (!_isDraggable)
+            {
+                Debug.Log("you can");
+                return;
+            }
+
+            var scale = new Vector2(2560f / Screen.width, 1440f / Screen.height);
+            _rectTransform.anchoredPosition += new Vector2(eventData.delta.x * scale.x, eventData.delta.y * scale.y);
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            var hitCollider = Physics2D.OverlapPoint(eventData.position);
+            if (_isDraggable)
+            {
+                if (hitCollider != null && hitCollider.CompareTag("Customer"))
+                {
+                    CustomerBehavior customer = hitCollider.transform.parent.GetComponent<CustomerBehavior>();
+                    if (!customer.IsAccepted()) return;
+                    customer.CheckServedSkewer(this);
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    _rectTransform.DOAnchorPos(_originalPosition, 0.5F).SetEase(Ease.OutCubic);
+                }
+            }
         }
 
         public bool IsNotEnoughDry()
@@ -54,9 +101,7 @@ namespace Script.skewer
         {
             if (_currentConcentration >= _perfectConcentration - concentrationTolerance &&
                 _currentConcentration <= _perfectConcentration + concentrationTolerance)
-            {
                 return 0;
-            }
 
             return _currentConcentration - _perfectConcentration;
         }
@@ -193,7 +238,7 @@ namespace Script.skewer
             var a = GetDominantIngredient(_Ingredients)?.ingredientId;
             var b = ingredient.ingredientId;
             Debug.Log("what is dominant of this skewer? : " + a + " and ordered " + b);
-            return a==b;
+            return a == b;
         }
 
         public static Ingredient GetDominantIngredient(IEnumerable<Ingredient> ingredients)
@@ -253,53 +298,6 @@ namespace Script.skewer
             //         ingredient.transform.localPosition = new Vector3(childCount * offset, childCount * offset, 0);
             //     }
             // }
-        }
-
-        // Behavior that the skewer is focused or not
-        private void Update()
-        {
-            if (_isSkewerFocused)
-            {
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(_rectTransform.parent as RectTransform,
-                    Input.mousePosition, null, out Vector2 localPoint);
-                _rectTransform.localPosition = localPoint;
-            }
-        }
-
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            _originalPosition = _rectTransform.anchoredPosition;
-        }
-
-        public void OnDrag(PointerEventData eventData)
-        {
-            if (!_isDraggable)
-            {
-                Debug.Log("you can");
-                return;
-            }
-
-            var scale = new Vector2(2560f / Screen.width, 1440f / Screen.height);
-            _rectTransform.anchoredPosition += new Vector2(eventData.delta.x * scale.x, eventData.delta.y * scale.y);
-        }
-
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            var hitCollider = Physics2D.OverlapPoint(eventData.position);
-            if (_isDraggable)
-            {
-                if (hitCollider != null && hitCollider.CompareTag("Customer"))
-                {
-                    CustomerBehavior customer = hitCollider.transform.parent.GetComponent<CustomerBehavior>();
-                    if (!customer.IsAccepted()) return;
-                    customer.CheckServedSkewer(this);
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    _rectTransform.DOAnchorPos(_originalPosition, 0.5F).SetEase(Ease.OutCubic);
-                }
-            }
         }
 
         public void SetSkewerFocused(bool isFocused)

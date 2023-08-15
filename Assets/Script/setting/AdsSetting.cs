@@ -1,4 +1,3 @@
-using System;
 using GoogleMobileAds.Api;
 using UnityEngine;
 
@@ -6,22 +5,18 @@ namespace Script.setting
 {
     public class AdsSetting : MonoBehaviour
     {
-        private RewardedAd _rewardedAd;
         public string adUnitId;
         public bool isTest;
+        private RewardedAd _rewardedAd;
 
         public void Start()
         {
             // Quiz_Manager = GameObject.FindObjectOfType<Quiz_Manager>();
             // PlayScene_Manager = GameObject.FindObjectOfType<PlayScene_Manager>();
             if (isTest)
-            {
                 adUnitId = "ca-app-pub-3940256099942544/1033173712";
-            }
             else
-            {
                 adUnitId = "";
-            }
 
             // 모바일 광고 SDK를 초기화함.
             MobileAds.Initialize(initStatus => { });
@@ -57,6 +52,7 @@ namespace Script.setting
                         Debug.LogError("Rewarded ad failed to load an ad with error : " + error);
                         return;
                     }
+
                     Debug.Log("Rewarded ad loaded with response : " + ad.GetResponseInfo());
                     _rewardedAd = ad;
                 });
@@ -68,23 +64,19 @@ namespace Script.setting
                 "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
 
             if (_rewardedAd != null && _rewardedAd.CanShowAd())
-            {
-                _rewardedAd.Show((Reward reward) =>
+                _rewardedAd.Show(reward =>
                 {
                     //보상 획득하기
-                    Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
+                    Debug.Log(string.Format(rewardMsg, reward.Type, reward.Amount));
                 });
-            }
             else
-            {
                 LoadRewardedAd();
-            }
         }
 
         private void RegisterReloadHandler(RewardedAd ad) //광고 재로드
         {
             // Raised when the ad closed full screen content.
-            ad.OnAdFullScreenContentClosed += (null);
+            ad.OnAdFullScreenContentClosed += null;
             {
                 Debug.Log("Rewarded Ad full screen content closed.");
 
@@ -93,7 +85,7 @@ namespace Script.setting
             }
             ;
             // Raised when the ad failed to open full screen content.
-            ad.OnAdFullScreenContentFailed += (error) =>
+            ad.OnAdFullScreenContentFailed += error =>
             {
                 Debug.LogError("Rewarded ad failed to open full screen content with error : " + error);
                 LoadRewardedAd();

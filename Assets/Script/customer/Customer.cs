@@ -8,6 +8,15 @@ namespace Script.customer
     [Serializable]
     public abstract class Customer : ScriptableObject
     {
+        public enum Emotion
+        {
+            Idle,
+            Happy,
+            Sad,
+            Angry,
+            Poked
+        }
+
         public enum QuoteLine
         {
             Enter,
@@ -21,15 +30,6 @@ namespace Script.customer
             Poked
         }
 
-        public enum Emotion
-        {
-            Idle,
-            Happy,
-            Sad,
-            Angry,
-            Poked
-        }
-
         public string id;
         public bool hasSpecialEvent;
         public int patience;
@@ -37,8 +37,7 @@ namespace Script.customer
         public List<Sprite> sprites;
         public bool isSlime;
 
-        [Header("Info")]
-        public Ingredient ingredient;
+        [Header("Info")] public Ingredient ingredient;
 
         protected Customer(
             string id,

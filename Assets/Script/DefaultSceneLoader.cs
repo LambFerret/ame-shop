@@ -1,23 +1,24 @@
 #if UNITY_EDITOR
-    using UnityEditor;
-    using UnityEditor.SceneManagement;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+
 namespace Script
 {
     [InitializeOnLoadAttribute]
     public static class DefaultSceneLoader
     {
-        static DefaultSceneLoader(){
+        static DefaultSceneLoader()
+        {
             EditorApplication.playModeStateChanged += LoadDefaultScene;
         }
 
-        static void LoadDefaultScene(PlayModeStateChange state){
-            if (state == PlayModeStateChange.ExitingEditMode) {
-                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo ();
-            }
+        private static void LoadDefaultScene(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.ExitingEditMode)
+                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
 
-            if (state == PlayModeStateChange.EnteredPlayMode) {
-                EditorSceneManager.LoadScene (0);
-            }
+            if (state == PlayModeStateChange.EnteredPlayMode) SceneManager.LoadScene(0);
         }
     }
 }

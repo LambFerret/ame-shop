@@ -1,16 +1,16 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
 namespace Script.skewer
 {
-    using UnityEngine;
-    using UnityEngine.UI;
-    using UnityEngine.EventSystems;
-
     public class ButtonPressHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
+        private const float TimeToComplete = 1.5f;
         public Slider progressBar;
         public BoilerBehavior boiler;
         private bool _isButtonPressed;
         private float _pressTime;
-        private const float TimeToComplete = 1.5f;
 
         private void Update()
         {
@@ -19,14 +19,12 @@ namespace Script.skewer
                 progressBar.value = 0;
                 return;
             }
+
             if (_isButtonPressed)
             {
                 _pressTime += Time.deltaTime;
                 progressBar.value = _pressTime / TimeToComplete;
-                if (_pressTime >= TimeToComplete)
-                {
-                    Complete();
-                }
+                if (_pressTime >= TimeToComplete) Complete();
             }
         }
 

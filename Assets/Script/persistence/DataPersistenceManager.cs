@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Script.persistence.data;
@@ -9,15 +8,15 @@ namespace Script.persistence
 {
     public class DataPersistenceManager : MonoBehaviour
     {
-        public static DataPersistenceManager Instance { get; private set; }
         [SerializeField] private bool initializeDataIfNull;
 
         [Header("File Storage Config")] public string fileName;
         public bool useEncryption;
+        private FileDataHandler _dataHandler;
+        private List<IDataPersistence> _dataPersistenceObjects;
 
         private GameData _gameData;
-        private List<IDataPersistence> _dataPersistenceObjects;
-        private FileDataHandler _dataHandler;
+        public static DataPersistenceManager Instance { get; private set; }
 
         private void Awake()
         {
@@ -69,10 +68,7 @@ namespace Script.persistence
             _gameData = _dataHandler.Load();
 
             // start a new game if the data is null and we're configured to initialize data for debugging purposes
-            if (_gameData == null && initializeDataIfNull)
-            {
-                NewGame();
-            }
+            if (_gameData == null && initializeDataIfNull) NewGame();
 
             // if no data can be loaded, don't continue
             if (_gameData == null)
@@ -82,9 +78,7 @@ namespace Script.persistence
             }
 
             foreach (IDataPersistence dataPersistenceObj in _dataPersistenceObjects)
-            {
                 dataPersistenceObj.LoadData(_gameData);
-            }
         }
 
         public void SaveGame()
@@ -97,9 +91,7 @@ namespace Script.persistence
             }
 
             foreach (IDataPersistence dataPersistenceObj in _dataPersistenceObjects)
-            {
                 dataPersistenceObj.SaveData(_gameData);
-            }
 
             Debug.Log("SAVE CALLED");
             _dataHandler.Save(_gameData);

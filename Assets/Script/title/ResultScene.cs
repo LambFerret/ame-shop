@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
 using DG.Tweening;
 using Script.persistence;
 using Script.persistence.data;
 using Script.setting;
-using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Script.title
@@ -19,48 +17,48 @@ namespace Script.title
         public int gasCostMultiplier;
         public int sugarCostMultiplier;
 
-        private TextMeshProUGUI _totalMoneyEarnedText;
-        private TextMeshProUGUI _rentText;
-        private TextMeshProUGUI _taxText;
-        private TextMeshProUGUI _ingredientText;
-        private TextMeshProUGUI _gasText;
-        private TextMeshProUGUI _electricityText;
-        private TextMeshProUGUI _sugarText;
-        private TextMeshProUGUI _netMoneyEarnedText;
-        private TextMeshProUGUI _savingMoneyText;
+        public GameObject togglePlaceHolder;
+        private int _dataMoney;
 
         private int _day;
-
-        private int _totalMoneyEarned;
-        private int _rent;
-        private int _tax;
-        private int _ingredient;
-        private int _gas;
         private int _electricity;
-        private int _sugar;
+        private TextMeshProUGUI _electricityText;
+        private int _gas;
+        private TextMeshProUGUI _gasText;
+        private int _ingredient;
+        private TextMeshProUGUI _ingredientText;
+        private List<Toggle> _itemToggles;
+        private TextMeshProUGUI _netMoneyEarnedText;
         private int _netProfit;
-
-        private Sequence _sequence;
-        private int _dataMoney;
+        private int _rent;
+        private TextMeshProUGUI _rentText;
+        private TextMeshProUGUI _savingMoneyText;
         private int _savings;
 
-        public GameObject togglePlaceHolder;
-        private List<Toggle> _itemToggles;
+        private Sequence _sequence;
+        private int _sugar;
+        private TextMeshProUGUI _sugarText;
+        private int _tax;
+        private TextMeshProUGUI _taxText;
+
+        private int _totalMoneyEarned;
+
+        private TextMeshProUGUI _totalMoneyEarnedText;
 
         private void Awake()
         {
-            _totalMoneyEarnedText = GameObject.Find("TotalMoneyEarned").transform.Find("value").GetComponent<TextMeshProUGUI>();
+            _totalMoneyEarnedText = GameObject.Find("TotalMoneyEarned").transform.Find("value")
+                .GetComponent<TextMeshProUGUI>();
             _rentText = GameObject.Find("Rent").transform.Find("value").GetComponent<TextMeshProUGUI>();
             _taxText = GameObject.Find("Tax").transform.Find("value").GetComponent<TextMeshProUGUI>();
             _ingredientText = GameObject.Find("Ingredient").transform.Find("value").GetComponent<TextMeshProUGUI>();
             _gasText = GameObject.Find("Gas").transform.Find("value").GetComponent<TextMeshProUGUI>();
             _electricityText = GameObject.Find("Electricity").transform.Find("value").GetComponent<TextMeshProUGUI>();
             _sugarText = GameObject.Find("Sugar").transform.Find("value").GetComponent<TextMeshProUGUI>();
-            _netMoneyEarnedText = GameObject.Find("NetMoneyEarned").transform.Find("value").GetComponent<TextMeshProUGUI>();
+            _netMoneyEarnedText = GameObject.Find("NetMoneyEarned").transform.Find("value")
+                .GetComponent<TextMeshProUGUI>();
             _savingMoneyText = GameObject.Find("SavingMoney").transform.Find("value").GetComponent<TextMeshProUGUI>();
             GameObject.Find("IngredientDetails").SetActive(false);
-
-
         }
 
         private void Start()
@@ -69,50 +67,20 @@ namespace Script.title
 
             for (int i = 0; i < IngredientManager.Instance.Ingredients.Count; i++)
             {
-                var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/ShopItemButton"), togglePlaceHolder.transform);
+                var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/ShopItemButton"),
+                    togglePlaceHolder.transform);
                 Toggle toggle = ingredient.GetComponent<Toggle>();
                 ShopItemButton itemButton = ingredient.GetComponent<ShopItemButton>();
                 itemButton.SetIngredient(IngredientManager.Instance.Ingredients[i]);
                 toggle.onValueChanged.AddListener(arg0 =>
                 {
                     if (arg0)
-                    {
                         Buy(itemButton.cost);
-                    }
                     else
-                    {
                         Buy(-itemButton.cost);
-                    }
                 });
                 _itemToggles.Add(toggle);
             }
-        }
-
-        public void Confirm()
-        {
-            if (_savings < 0)
-            {
-                // i can't buy
-                return;
-            }
-
-            foreach (Toggle itemToggle in _itemToggles)
-            {
-                if (itemToggle.isOn)
-                {
-                    var item = itemToggle.GetComponent<ShopItemButton>();
-                    Buy(item.cost);
-                    item.Confirm();
-                }
-            }
-
-            _dataMoney = _savings;
-            LoadingScreen.Instance.LoadScene("NewsScene");
-        }
-
-        private void Buy(int cost)
-        {
-            _savings -= cost;
         }
 
         private void Update()
@@ -128,18 +96,6 @@ namespace Script.title
             _savingMoneyText.text = _savings.ToString();
         }
 
-        private void Calculate()
-        {
-            _ingredient = _gas * gasCostMultiplier +
-                          _electricity * electricityCostMultiplier +
-                          _sugar * sugarCostMultiplier;
-            _rent = rentCost;
-            _tax = taxCost * (_day / 10);
-            _netProfit = _totalMoneyEarned - _rent - _tax - _ingredient;
-            _netProfit = 3000;
-            _savings = _dataMoney + _netProfit;
-        }
-
         public void LoadData(GameData data)
         {
             _day = data.playerLevel;
@@ -153,6 +109,41 @@ namespace Script.title
         public void SaveData(GameData data)
         {
             data.money = _dataMoney;
+        }
+
+        public void Confirm()
+        {
+            if (_savings < 0)
+                // i can't buy
+                return;
+
+            foreach (Toggle itemToggle in _itemToggles)
+                if (itemToggle.isOn)
+                {
+                    var item = itemToggle.GetComponent<ShopItemButton>();
+                    Buy(item.cost);
+                    item.Confirm();
+                }
+
+            _dataMoney = _savings;
+            LoadingScreen.Instance.LoadScene("NewsScene");
+        }
+
+        private void Buy(int cost)
+        {
+            _savings -= cost;
+        }
+
+        private void Calculate()
+        {
+            _ingredient = _gas * gasCostMultiplier +
+                          _electricity * electricityCostMultiplier +
+                          _sugar * sugarCostMultiplier;
+            _rent = rentCost;
+            _tax = taxCost * (_day / 10);
+            _netProfit = _totalMoneyEarned - _rent - _tax - _ingredient;
+            _netProfit = 3000;
+            _savings = _dataMoney + _netProfit;
         }
     }
 }

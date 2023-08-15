@@ -1,4 +1,3 @@
-using System;
 using Script.events;
 using Script.ingredient;
 using Script.persistence;
@@ -12,22 +11,22 @@ namespace Script.title
 {
     public class ShopItemButton : MonoBehaviour, IDataPersistence
     {
-        private Ingredient _ingredient;
         public int cost;
         public int value;
 
-        [Header("Image")]
-        [SerializeField] private Color onColor = Color.green;
+        [Header("Image")] [SerializeField] private Color onColor = Color.green;
+
         [SerializeField] private Color offColor = Color.red;
-        private Toggle _toggle;
         private Image _image;
+        private Ingredient _ingredient;
         private TextMeshProUGUI _text;
+        private Toggle _toggle;
 
         private void Awake()
         {
             _toggle = GetComponent<Toggle>();
             _image = transform.Find("image").GetComponent<Image>();
-           _text = transform.Find("stock").GetComponent<TextMeshProUGUI>();
+            _text = transform.Find("stock").GetComponent<TextMeshProUGUI>();
         }
 
         private void Start()
@@ -37,6 +36,21 @@ namespace Script.title
             GameEventManager.Instance.OnIngredientChanged += OnIngredientChanged;
         }
 
+        private void OnDestroy()
+        {
+            GameEventManager.Instance.OnIngredientChanged -= OnIngredientChanged;
+        }
+
+        public void LoadData(GameData data)
+        {
+            value = data.ingredients[IngredientManager.Instance.GetIngredientIndex(_ingredient)];
+        }
+
+        public void SaveData(GameData data)
+        {
+            data.ingredients[IngredientManager.Instance.GetIngredientIndex(_ingredient)] = value;
+        }
+
         public void SetIngredient(Ingredient ingredient)
         {
             _ingredient = ingredient;
@@ -44,12 +58,6 @@ namespace Script.title
             cost = _ingredient.costWhenResultShop;
             transform.Find("cost").GetComponent<TextMeshProUGUI>().text = cost.ToString();
             transform.Find("each").GetComponent<TextMeshProUGUI>().text = "X " + _ingredient.piecePerEach;
-
-        }
-
-        private void OnDestroy()
-        {
-            GameEventManager.Instance.OnIngredientChanged -= OnIngredientChanged;
         }
 
         private void OnToggleValueChanged(bool isOn)
@@ -69,16 +77,6 @@ namespace Script.title
         public void Confirm()
         {
             value += _ingredient.piecePerEach;
-        }
-
-        public void LoadData(GameData data)
-        {
-            value = data.ingredients[IngredientManager.Instance.GetIngredientIndex(_ingredient)];
-        }
-
-        public void SaveData(GameData data)
-        {
-            data.ingredients[IngredientManager.Instance.GetIngredientIndex(_ingredient)] = value;
         }
     }
 }

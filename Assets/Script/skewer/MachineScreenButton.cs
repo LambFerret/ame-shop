@@ -1,6 +1,6 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
 namespace Script.skewer
 {
@@ -8,7 +8,9 @@ namespace Script.skewer
     {
         public enum WhereAmI
         {
-            First, Second, Third
+            First,
+            Second,
+            Third
         }
 
         public Scrollbar scrollbar;
@@ -23,15 +25,10 @@ namespace Script.skewer
         {
             float value = scrollbar.value;
             if (value is < 0.25F and >= 0)
-            {
                 currentPosition = WhereAmI.First;
-            } else if (value is > 0.25F and < 0.75F)
-            {
+            else if (value is > 0.25F and < 0.75F)
                 currentPosition = WhereAmI.Second;
-            } else if (value is >= 0.75F and <= 1)
-            {
-                currentPosition = WhereAmI.Third;
-            }
+            else if (value is >= 0.75F and <= 1) currentPosition = WhereAmI.Third;
         }
 
 
@@ -60,6 +57,5 @@ namespace Script.skewer
                     break;
             }
         }
-
     }
 }

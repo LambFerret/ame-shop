@@ -1,6 +1,5 @@
 using System.Collections;
 using DG.Tweening;
-using Script.setting;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -110,10 +109,7 @@ namespace Script.skewer
             while (true)
             {
                 yield return new WaitForSeconds(1F);
-                if (minute > 0)
-                {
-                    FlipNumber(--minute);
-                }
+                if (minute > 0) FlipNumber(--minute);
 
                 if (minute == 0)
                 {

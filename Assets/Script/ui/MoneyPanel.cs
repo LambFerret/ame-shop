@@ -10,6 +10,7 @@ namespace Script.ui
     {
         public TextMeshProUGUI text;
         private int _money;
+
         private void Awake()
         {
             text = transform.Find("text").GetComponent<TextMeshProUGUI>();
@@ -20,19 +21,14 @@ namespace Script.ui
             GameEventManager.Instance.OnMoneyChanged += OnMoneyChanged;
         }
 
-        private void OnDestroy()
-        {
-            GameEventManager.Instance.OnMoneyChanged -= OnMoneyChanged;
-        }
-
         private void Update()
         {
             text.text = _money.ToString();
         }
 
-        private void OnMoneyChanged(int value)
+        private void OnDestroy()
         {
-            _money += value;
+            GameEventManager.Instance.OnMoneyChanged -= OnMoneyChanged;
         }
 
         public void LoadData(GameData data)
@@ -45,6 +41,9 @@ namespace Script.ui
             data.money = _money;
         }
 
-
+        private void OnMoneyChanged(int value)
+        {
+            _money += value;
+        }
     }
 }

@@ -11,34 +11,12 @@ using Script.title;
 using Script.ui;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Script.stage
 {
     public class StageController : MonoBehaviour, IDataPersistence
     {
-        public GameObject machineScene;
-        public CustomerManager customerManager;
-        public StageStartButton stageStartButton;
-        public StageStartButton tutorialButton;
-
-        public Timer timer;
-        public GameObject[] waitCustomerObjectList = new GameObject[3];
-        public Customer[] customerList = new Customer[3];
-        public GameObject customerAlarm;
-
-        [Header("Customer Interval")] public float baseInterval = 15f;
-        public float minInterval = 10f;
-
-        public bool[] _waitLineOccupied = new bool[3];
-        private bool _isSceneLoading;
-        private bool _isTutorialDone;
-        public bool isCustomerTutorialOngoing;
-        private bool _isSlimeTutorialOngoing;
-        private int _day;
-        public float playerPopularity;
-
-        public TutorialStep currentStepIfTutorial;
-
         public enum TutorialStep
         {
             // 해야하는것 위주
@@ -54,7 +32,30 @@ namespace Script.stage
             GiveResult
         }
 
+        public GameObject machineScene;
+        public CustomerManager customerManager;
+        public StageStartButton stageStartButton;
+        public StageStartButton tutorialButton;
+
+        public Timer timer;
+        public GameObject[] waitCustomerObjectList = new GameObject[3];
+        public Customer[] customerList = new Customer[3];
+        public GameObject customerAlarm;
+
+        [Header("Customer Interval")] public float baseInterval = 15f;
+        public float minInterval = 10f;
+
+        public bool[] _waitLineOccupied = new bool[3];
+        public bool isCustomerTutorialOngoing;
+        public float playerPopularity;
+
+        public TutorialStep currentStepIfTutorial;
+
         [Header("Tutorial Objects")] public Mover weaponTutorialObject;
+        private int _day;
+        private bool _isSceneLoading;
+        private bool _isSlimeTutorialOngoing;
+        private bool _isTutorialDone;
 
         private void Start()
         {
@@ -66,7 +67,6 @@ namespace Script.stage
         private void Update()
         {
             if (!_isSceneLoading && timer.isEnded)
-            {
                 if (GetAvailableLines().Count == 0)
                 {
                     timer.isStarted = false;
@@ -74,12 +74,21 @@ namespace Script.stage
                     LoadingScreen.Instance.LoadScene("ResultScene");
                     _isSceneLoading = true;
                 }
-            }
 
             for (int i = 0; i < waitCustomerObjectList.Length; i++)
-            {
                 _waitLineOccupied[i] = waitCustomerObjectList[i].activeSelf;
-            }
+        }
+
+        public void LoadData(GameData data)
+        {
+            _isTutorialDone = data.isTutorialDone;
+            _day = data.playerLevel;
+            playerPopularity = data.popularity;
+        }
+
+        public void SaveData(GameData data)
+        {
+            data.isTutorialDone = _isTutorialDone;
         }
 
         private IEnumerator AddCustomer()
@@ -94,11 +103,11 @@ namespace Script.stage
 
                 // Customer 객체 랜덤 생성
                 var pickedCustomer = customerManager.GetCustomerByDifficulty(CustomerManager.Difficulty.Easy);
-                AddCustomer(pickedCustomer, availableLines[UnityEngine.Random.Range(0, availableLines.Count)]);
+                AddCustomer(pickedCustomer, availableLines[Random.Range(0, availableLines.Count)]);
 
                 int waitTimeMultiple = availableLines.Count == _waitLineOccupied.Length ? 2 : 1;
                 //(10~15초)*{5000/(5000+평판)}
-                yield return new WaitForSeconds(UnityEngine.Random.Range(minInterval, baseInterval) *
+                yield return new WaitForSeconds(Random.Range(minInterval, baseInterval) *
                     (5000 / (5000 + playerPopularity)) / waitTimeMultiple);
             }
         }
@@ -111,17 +120,14 @@ namespace Script.stage
             var availableLines = GetAvailableLines();
             if (availableLines.Count == 0) throw new Exception("No available line In Tutorial?!");
 
-            int availableLine = availableLines[UnityEngine.Random.Range(0, availableLines.Count)];
+            int availableLine = availableLines[Random.Range(0, availableLines.Count)];
 
             // Customer 객체 랜덤 생성
             var pickedCustomer = customerManager.GetByName("Boy");
             AddCustomer(pickedCustomer, availableLine);
 
             isCustomerTutorialOngoing = true;
-            while (_waitLineOccupied.Any(occupied => occupied))
-            {
-                yield return null;
-            }
+            while (_waitLineOccupied.Any(occupied => occupied)) yield return null;
 
             isCustomerTutorialOngoing = false;
 
@@ -130,15 +136,12 @@ namespace Script.stage
             _isSlimeTutorialOngoing = true;
 
             availableLines = GetAvailableLines();
-            int slimeLine = availableLines[UnityEngine.Random.Range(0, availableLines.Count)];
+            int slimeLine = availableLines[Random.Range(0, availableLines.Count)];
             var pickedCustomerSlime = customerManager.GetByName("BoySlime");
             AddCustomer(pickedCustomerSlime, slimeLine);
             var obj = waitCustomerObjectList[slimeLine];
             weaponTutorialObject.Activate(obj.transform.position);
-            while (_waitLineOccupied.Any(occupied => occupied))
-            {
-                yield return null;
-            }
+            while (_waitLineOccupied.Any(occupied => occupied)) yield return null;
 
             weaponTutorialObject.gameObject.SetActive(false);
 
@@ -151,12 +154,8 @@ namespace Script.stage
             List<int> availableIndices = new List<int>();
 
             for (int i = 0; i < _waitLineOccupied.Length; i++)
-            {
                 if (!_waitLineOccupied[i])
-                {
                     availableIndices.Add(i);
-                }
-            }
 
             return availableIndices;
         }
@@ -204,18 +203,6 @@ namespace Script.stage
             DOTween.To(() => sb.value, x => sb.value = x, step * 0.5f, 1f).SetEase(Ease.OutBack);
         }
 
-        public void LoadData(GameData data)
-        {
-            _isTutorialDone = data.isTutorialDone;
-            _day = data.playerLevel;
-            playerPopularity = data.popularity;
-        }
-
-        public void SaveData(GameData data)
-        {
-            data.isTutorialDone = _isTutorialDone;
-        }
-
         public void OpenStore(int day)
         {
             if (timer.isStarted) return;
@@ -225,13 +212,9 @@ namespace Script.stage
             stageStartButton.gameObject.SetActive(false);
             tutorialButton.gameObject.SetActive(false);
             if (day == 1)
-            {
                 StartCoroutine(TutorialStart());
-            }
             else
-            {
                 StartCoroutine(AddCustomer());
-            }
         }
     }
 }

@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
 using Script.events;
-using Script.ingredient;
 using Script.persistence;
 using Script.persistence.data;
-using Script.player;
 using Script.setting;
 using Script.skewer;
 using Script.stage;
@@ -23,7 +20,6 @@ namespace Script.customer
 {
     public class CustomerBehavior : MonoBehaviour, IDataPersistence
     {
-        private readonly Dictionary<Customer.QuoteLine, List<string>> _quoteLines = new();
         private const float AnimationDuration = 2f;
         private const float IdleAnimationScale = 1.03f;
 
@@ -33,23 +29,24 @@ namespace Script.customer
         public Image imageHolder;
 
         [Header("Info")] public Customer customer;
-        private GameObject _customer;
+
+        public int value;
+        private readonly Dictionary<Customer.QuoteLine, List<string>> _quoteLines = new();
         private GameObject _bill;
 
         private GameObject _buttonGroup;
         private GameObject _conversation;
+        private Sequence _conversationSequence;
         private TextMeshProUGUI _conversationText;
-        private bool _isStart;
+        private GameObject _customer;
+
+        private GameData _data;
         private bool _isAccept;
+        private bool _isStart;
         private TextMeshProUGUI _moneyText;
 
         private Image _texture;
         private Image _timerImage;
-
-        private GameData _data;
-
-        public int value;
-        private Sequence _conversationSequence;
 
         private void Awake()
         {
@@ -86,6 +83,17 @@ namespace Script.customer
             }
 
             if (_timerImage.fillAmount <= 0) Serve(Customer.QuoteLine.TimeOut, 0);
+        }
+
+
+        public void LoadData(GameData data)
+        {
+            // value = data.ingredients[IngredientManager.GetIngredientIndex(_ingredient)customer.slimeIngredient];
+        }
+
+        public void SaveData(GameData data)
+        {
+            // data.ingredients[] = value;
         }
 
         public void SetScript(Customer script)
@@ -215,17 +223,11 @@ namespace Script.customer
             int money;
 
             if (currentFeeling == Customer.QuoteLine.BadNotMyChoice)
-            {
                 money = 500;
-            }
             else if (currentFeeling == Customer.QuoteLine.Good && satisfaction >= 90)
-            {
                 money = (int)(skewer.GetSkewerPrice() * 1.5F);
-            }
             else
-            {
                 money = (int)(skewer.GetSkewerPrice() * 1.1F);
-            }
 
             Serve(currentFeeling, satisfaction, money);
         }
@@ -259,15 +261,11 @@ namespace Script.customer
                     ChangeEmotion(Customer.Emotion.Poked);
 
                     if (!customer.isSlime)
-                    {
                         popularity = -6;
-                    }
                     else
-                    {
                         // TODO random range of slime ingredient
                         GameEventManager.Instance.IngredientChanged(
                             IngredientManager.Instance.GetRandomIngredient(), Random.Range(1, 3));
-                    }
 
                     endImmediately = true;
                     break;
@@ -351,17 +349,6 @@ namespace Script.customer
                 });
         }
 
-
-        public void LoadData(GameData data)
-        {
-            // value = data.ingredients[IngredientManager.GetIngredientIndex(_ingredient)customer.slimeIngredient];
-        }
-
-        public void SaveData(GameData data)
-        {
-            // data.ingredients[] = value;
-        }
-
         public bool IsAccepted()
         {
             return _isAccept;
@@ -384,7 +371,7 @@ namespace Script.customer
 
             foreach (var line in Enum.GetValues(typeof(Customer.QuoteLine)))
             {
-                string customerName = customer.id.Replace("Slime","") + " " + line;
+                string customerName = customer.id.Replace("Slime", "") + " " + line;
                 var lineStr = stringTable[customerName].GetLocalizedString();
                 _quoteLines[(Customer.QuoteLine)line] = new List<string>(lineStr.Split('\n'));
             }
@@ -392,10 +379,7 @@ namespace Script.customer
 
             var lines = _quoteLines[quoteLine];
             var randomLine = lines[Random.Range(0, lines.Count)];
-            if (customer.isSlime)
-            {
-                randomLine += " ..." + stringTable["Slime End"].GetLocalizedString();
-            }
+            if (customer.isSlime) randomLine += " ..." + stringTable["Slime End"].GetLocalizedString();
 
             _conversationText.text = randomLine.Replace("{o}", customer.ingredient.ingredientId);
         }

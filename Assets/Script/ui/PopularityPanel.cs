@@ -1,8 +1,6 @@
-using System;
 using Script.events;
 using Script.persistence;
 using Script.persistence.data;
-using Script.player;
 using TMPro;
 using UnityEngine;
 
@@ -24,19 +22,14 @@ namespace Script.ui
             GameEventManager.Instance.OnPopularityChanged += OnPopularityChanged;
         }
 
-        private void OnDestroy()
-        {
-            GameEventManager.Instance.OnPopularityChanged -= OnPopularityChanged;
-        }
-
         private void Update()
         {
             text.text = _popularity.ToString("F1");
         }
 
-        private void OnPopularityChanged(float value)
+        private void OnDestroy()
         {
-            _popularity += value;
+            GameEventManager.Instance.OnPopularityChanged -= OnPopularityChanged;
         }
 
         public void LoadData(GameData data)
@@ -47,6 +40,11 @@ namespace Script.ui
         public void SaveData(GameData data)
         {
             data.popularity = _popularity;
+        }
+
+        private void OnPopularityChanged(float value)
+        {
+            _popularity += value;
         }
     }
 }

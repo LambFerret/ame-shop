@@ -1,4 +1,3 @@
-using System;
 using Script.customer;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,6 +7,7 @@ namespace Script.skewer
     public class WeaponHandler : MonoBehaviour, IPointerDownHandler
     {
         public SkewerController skewerController;
+
         private void Awake()
         {
             skewerController = FindObjectOfType<SkewerController>();

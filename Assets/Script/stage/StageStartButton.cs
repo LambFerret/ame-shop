@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,13 +17,9 @@ namespace Script.stage
         public void SwitchAnimation(bool glowOn)
         {
             if (glowOn)
-            {
                 _glowTween.Restart();
-            }
             else
-            {
                 _glowTween.Kill();
-            }
         }
     }
 }

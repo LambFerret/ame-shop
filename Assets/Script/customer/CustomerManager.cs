@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using Script.player;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Script.customer
 {
@@ -31,7 +28,7 @@ namespace Script.customer
 
         public Customer GetCustomerByDifficulty(Difficulty difficulty)
         {
-            return (difficulty) switch
+            return difficulty switch
             {
                 Difficulty.Easy => easyCustomer[Random.Range(0, easyCustomer.Count)],
                 Difficulty.Normal => normalCustomer[Random.Range(0, normalCustomer.Count)],
@@ -44,13 +41,11 @@ namespace Script.customer
         {
             Customer customer = null;
             foreach (var c in _allCustomerList)
-            {
                 if (c.id == customerName)
                 {
                     customer = c;
                     break;
                 }
-            }
 
             return customer;
         }

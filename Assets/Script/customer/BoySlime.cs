@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Script.setting;
 using UnityEngine;
 
 namespace Script.customer

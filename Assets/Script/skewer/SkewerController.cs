@@ -1,19 +1,22 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using Script.ingredient;
 using Script.player;
 using Script.setting;
 using Script.stage;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Script.skewer
 {
     public class SkewerController : MonoBehaviour
     {
+        public enum WhatsOnHand
+        {
+            None,
+            Skewer,
+            Weapon
+        }
+
         public GameManager gameManager;
         public StageController stageController;
 
@@ -23,18 +26,12 @@ namespace Script.skewer
         public GameObject weaponPlaceHolder;
         public GameObject weapon;
 
-        [Header("Test Field")]
-        [SerializeField] public WhatsOnHand whatsOnHand;
+        [Header("Test Field")] [SerializeField]
+        public WhatsOnHand whatsOnHand;
+
         [SerializeField] private SkewerBehavior _currentSkewer;
         [SerializeField] private GameObject _currentSkewerObject;
         [SerializeField] private bool _isWeaponOnHand;
-
-        public enum WhatsOnHand
-        {
-            None,
-            Skewer,
-            Weapon
-        }
 
         private void Awake()
         {
@@ -44,17 +41,11 @@ namespace Script.skewer
         private void Update()
         {
             if (_currentSkewer is not null)
-            {
                 whatsOnHand = WhatsOnHand.Skewer;
-            }
             else if (_currentSkewer is null && _isWeaponOnHand)
-            {
                 whatsOnHand = WhatsOnHand.Weapon;
-            }
             else
-            {
                 whatsOnHand = WhatsOnHand.None;
-            }
 
             if (whatsOnHand == WhatsOnHand.Weapon)
             {
@@ -130,10 +121,7 @@ namespace Script.skewer
         private bool IsSkewerLengthMax(int size)
         {
             int currentSize = 0;
-            foreach (var element in _currentSkewer.GetIngredients())
-            {
-                currentSize += element.size;
-            }
+            foreach (var element in _currentSkewer.GetIngredients()) currentSize += element.size;
 
             return currentSize + size > _currentSkewer.maxLength;
         }

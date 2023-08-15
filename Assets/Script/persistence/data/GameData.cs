@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Script.ingredient;
-using Script.setting;
 
 namespace Script.persistence.data
 {
@@ -43,7 +41,7 @@ namespace Script.persistence.data
                 20, //GreenGrape
                 3, //Apple
                 10, //BigGrape
-                10, //Coconut
+                10 //Coconut
             };
         }
     }

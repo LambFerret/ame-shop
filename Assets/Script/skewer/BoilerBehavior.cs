@@ -10,7 +10,6 @@ namespace Script.skewer
 {
     public class BoilerBehavior : MonoBehaviour, IDataPersistence
     {
-        private SkewerController _hand;
         [Header("info")] public int concentration;
         public int sugarUsage;
         public int gasUsage;
@@ -30,8 +29,9 @@ namespace Script.skewer
 
         [Header("GameObjects")] public TextMeshProUGUI temperatureBar;
         public TextMeshProUGUI concentrationBar;
-        private float _time;
+        private SkewerController _hand;
         private Image _image;
+        private float _time;
 
         private void Awake()
         {
@@ -58,10 +58,7 @@ namespace Script.skewer
             else
             {
                 float cons = 0;
-                if (water != 0)
-                {
-                    cons = sugar / (float)(sugar + water);
-                }
+                if (water != 0) cons = sugar / (float)(sugar + water);
 
                 concentration = (int)Math.Floor(cons * 100);
                 concentrationBar.text = concentration + "%";
@@ -77,6 +74,16 @@ namespace Script.skewer
             }
         }
 
+        public void LoadData(GameData data)
+        {
+        }
+
+        public void SaveData(GameData data)
+        {
+            data.dayGasUsage = gasUsage;
+            data.daySugarUsage = sugarUsage;
+        }
+
         private void MinusPerTime()
         {
             water -= minusWaterByTime;
@@ -86,20 +93,14 @@ namespace Script.skewer
         public void AddWater()
         {
             water += addLiquidPerClick;
-            if (water + sugar > maximumLiquidCapacity)
-            {
-                water = maximumLiquidCapacity - sugar;
-            }
+            if (water + sugar > maximumLiquidCapacity) water = maximumLiquidCapacity - sugar;
         }
 
         public void AddSugar()
         {
             sugarUsage++;
             sugar += addLiquidPerClick;
-            if (water + sugar > maximumLiquidCapacity)
-            {
-                sugar = maximumLiquidCapacity - water;
-            }
+            if (water + sugar > maximumLiquidCapacity) sugar = maximumLiquidCapacity - water;
         }
 
         public void AddFuel()
@@ -120,16 +121,6 @@ namespace Script.skewer
             sugar -= minusSugarPerOnce;
             temperature -= minusTemperaturePerOnce;
             _hand.AddTemperature(concentration: concentration, temperature: temperature);
-        }
-
-        public void LoadData(GameData data)
-        {
-        }
-
-        public void SaveData(GameData data)
-        {
-            data.dayGasUsage = gasUsage;
-            data.daySugarUsage = sugarUsage;
         }
     }
 }

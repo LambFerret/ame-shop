@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using Script.customer;
 using Script.setting;
-using Script.skewer;
-using Script.stage;
 using Script.title;
 using UnityEngine;
 
@@ -18,6 +15,7 @@ namespace Script.player
         public GameObject gamePausedPanel;
 
         public GameObject warningMessagePrefab;
+
         private void Awake()
         {
             if (Instance == null)
@@ -50,17 +48,12 @@ namespace Script.player
                     Time.timeScale = 0;
                 }
             }
+
             if (Input.GetKeyDown(KeyCode.Q))
-            {
                 LoadingScreen.Instance.LoadScene("CashierScene");
-            } else if (Input.GetKeyDown(KeyCode.W))
-            {
+            else if (Input.GetKeyDown(KeyCode.W))
                 LoadingScreen.Instance.LoadScene("ResultScene");
-            }
-            else if (Input.GetKeyDown(KeyCode.E))
-            {
-                LoadingScreen.Instance.LoadScene("NewsScene");
-            }
+            else if (Input.GetKeyDown(KeyCode.E)) LoadingScreen.Instance.LoadScene("NewsScene");
         }
     }
 }

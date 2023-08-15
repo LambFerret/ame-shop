@@ -1,6 +1,4 @@
-using System;
 using DG.Tweening;
-using Script.player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,9 +7,9 @@ namespace Script.customer
 {
     public class BillBehavior : MonoBehaviour
     {
+        private Image _image;
 
         private TextMeshProUGUI _text;
-        private Image _image;
 
         private void Awake()
         {

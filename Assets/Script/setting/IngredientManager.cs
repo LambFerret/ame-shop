@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using Script.ingredient;
 using Script.player;
-using Script.skewer;
 using UnityEngine;
 
 namespace Script.setting
 {
     public class IngredientManager : MonoBehaviour
     {
-
         public enum SecondIngredient
         {
             NormalSugar,
@@ -23,17 +21,15 @@ namespace Script.setting
         }
 
         public GameManager gameManager;
+        public List<Ingredient> Ingredients;
         public static IngredientManager Instance { get; private set; }
+
         private void Awake()
         {
-            if (Instance != null)
-            {
-                Destroy(this);
-            }
+            if (Instance != null) Destroy(this);
 
             Instance = this;
         }
-        public List<Ingredient> Ingredients;
 
         public Ingredient GetRandomIngredient()
         {
