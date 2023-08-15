@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
-namespace Script
+namespace Script.editor
 {
     [InitializeOnLoadAttribute]
     public static class DefaultSceneLoader

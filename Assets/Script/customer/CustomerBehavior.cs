@@ -80,9 +80,8 @@ namespace Script.customer
             {
                 var decrementValue = Time.deltaTime / customer.patience;
                 SetTimer(_timerImage.fillAmount - decrementValue);
+                if (_timerImage.fillAmount <= 0) Serve(Customer.QuoteLine.TimeOut, 0);
             }
-
-            if (_timerImage.fillAmount <= 0) Serve(Customer.QuoteLine.TimeOut, 0);
         }
 
 
@@ -247,7 +246,7 @@ namespace Script.customer
             switch (feeling)
             {
                 case Customer.QuoteLine.Refused:
-                    popularity = -3;
+                    popularity = -2;
                     endImmediately = true;
                     ChangeEmotion(Customer.Emotion.Sad);
                     break;
@@ -261,7 +260,7 @@ namespace Script.customer
                     ChangeEmotion(Customer.Emotion.Poked);
 
                     if (!customer.isSlime)
-                        popularity = -6;
+                        popularity = -5;
                     else
                         // TODO random range of slime ingredient
                         GameEventManager.Instance.IngredientChanged(

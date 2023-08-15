@@ -262,6 +262,17 @@ namespace Script.skewer
             return dominantGroup?.Ingredient;
         }
 
+        public int GetSize()
+        {
+            int i = 0;
+            foreach (var ing in _Ingredients)
+            {
+                i += ing.size;
+            }
+
+            return i;
+        }
+
         private void DebugReadIngredients()
         {
             string listString = string.Join(" - ", _Ingredients.Select(i => i.ingredientId));

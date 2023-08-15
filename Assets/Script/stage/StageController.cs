@@ -61,7 +61,7 @@ namespace Script.stage
         {
             customerManager = GameObject.Find("CustomerManager").GetComponent<CustomerManager>();
             weaponTutorialObject.gameObject.SetActive(false);
-            machineScene.SetActive(false);
+            machineScene.transform.DOMove(new Vector3(Screen.width, 0, 0), 0);
         }
 
         private void Update()
@@ -184,14 +184,10 @@ namespace Script.stage
             {
                 var sb = machineScene.transform.Find("Scrollbar").GetComponent<Scrollbar>();
                 DOTween.To(() => sb.value, x => sb.value = x, 0, 1f).SetEase(Ease.InCirc);
-                machineScene.transform.DOMove(new Vector3(Screen.width, 0, 0), 1f).SetEase(Ease.Linear).OnComplete(() =>
-                {
-                    machineScene.SetActive(false);
-                });
+                machineScene.transform.DOMove(new Vector3(Screen.width, 0, 0), 1f).SetEase(Ease.Linear);
             }
             else
             {
-                machineScene.SetActive(true);
                 machineScene.transform.DOMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutBounce);
             }
         }

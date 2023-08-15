@@ -118,8 +118,8 @@ namespace Script.skewer
         {
             _image.DOKill();
             _image.DOFade(0, 0.5F).SetLoops(2 * 2, LoopType.Yoyo).SetEase(Ease.InOutSine);
-            sugar -= minusSugarPerOnce;
-            temperature -= minusTemperaturePerOnce;
+            sugar -= minusSugarPerOnce * _hand.GetCurrentSize();
+            temperature -= minusTemperaturePerOnce * _hand.GetCurrentSize();
             _hand.AddTemperature(concentration: concentration, temperature: temperature);
         }
     }

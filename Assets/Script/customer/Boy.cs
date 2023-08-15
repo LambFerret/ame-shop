@@ -8,7 +8,7 @@ namespace Script.customer
         public Boy() : base(
             "Boy",
             false,
-            120
+            90
         )
         {
         }

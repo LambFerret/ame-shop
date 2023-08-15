@@ -153,6 +153,11 @@ namespace Script.skewer
             SetHand(null);
         }
 
+        public int GetCurrentSize()
+        {
+            return _currentSkewer.GetSize();
+        }
+
         public void AddTemperature(int temperature, int concentration)
         {
             _currentSkewer.AddTemperature(temperature, concentration);

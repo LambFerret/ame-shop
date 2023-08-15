@@ -121,7 +121,8 @@ namespace Script.skewer
 
         private void FlipNumber(int value)
         {
-            var duration = 0.2f; // Set duration of your animation.
+            const float duration = 0.2f; // Set duration of your animation.
+
             _minuteRectTransform.DOScale(new Vector3(1, 0, 1), duration / 2).OnComplete(() =>
             {
                 minuteText.text = value.ToString("0");
