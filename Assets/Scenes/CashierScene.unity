@@ -373,6 +373,7 @@ MonoBehaviour:
   ingredientManager: {fileID: 1657681652}
   gamePausedPanel: {fileID: 1300052831}
   warningMessagePrefab: {fileID: 1235888847039890938, guid: fcb677a1e02a748bf87dda131b96e5c8, type: 3}
+  isDebug: 1
 --- !u!1 &96079302
 GameObject:
   m_ObjectHideFlags: 0
@@ -5328,10 +5329,10 @@ MonoBehaviour:
   addLiquidPerClick: 15
   temperature: 110
   maximumLiquidCapacity: 200
-  minusWaterByTime: 5
+  minusWaterByTime: 20
   minusSugarPerOnce: 10
   minusTemperatureByTime: 10
-  minusTemperaturePerOnce: 3
+  minusTemperaturePerOnce: 10
   time: 30
   temperatureBar: {fileID: 771502302}
   concentrationBar: {fileID: 190302131}
@@ -12214,6 +12215,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 279825a9850ea43f6bbd862915aca70e, type: 2}
   normalCustomer: []
   hardCustomer: []
+  easySlimeCustomer: []
+  normalSlimeCustomer: []
+  hardSlimeCustomer: []
 --- !u!4 &1529500438
 Transform:
   m_ObjectHideFlags: 0
@@ -13962,14 +13966,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 95568501}
-  Ingredients:
-  - {fileID: 11400000, guid: 000c11bff2858490dba706ab979b5c3c, type: 2}
-  - {fileID: 11400000, guid: 395367427482f4ecdbb14c3f49a1fb7c, type: 2}
-  - {fileID: 11400000, guid: 0f63ae62bea9d487cb6d5dcf2e05a385, type: 2}
-  - {fileID: 11400000, guid: b63e5b4c3664d43deba4d86214d33e6b, type: 2}
-  - {fileID: 11400000, guid: 753d1e354701e4a908e82dcbd792d148, type: 2}
-  - {fileID: 11400000, guid: 0776ae187485b4ad89f865a5533e3b36, type: 2}
-  - {fileID: 11400000, guid: 9f363ad82e3c041469d371b4bc2a48d7, type: 2}
+  ingredients: []
 --- !u!1 &1662674257
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ namespace Script.skewer
 
         private void Start()
         {
-            foreach (Ingredient i in IngredientManager.Instance.Ingredients)
+            foreach (Ingredient i in IngredientManager.Instance.ingredients)
             {
                 GameObject itemButton = Instantiate(
                     Resources.Load<GameObject>("Prefabs/MachineItemButton/" + i.ingredientId),

@@ -48,6 +48,9 @@ namespace Script.customer
         private Image _texture;
         private Image _timerImage;
 
+        private float _dayPopularityGain;
+        private float _dayPopularityLoss;
+
         private void Awake()
         {
             _conversation = transform.Find("Conversation").gameObject;
@@ -87,12 +90,14 @@ namespace Script.customer
 
         public void LoadData(GameData data)
         {
-            // value = data.ingredients[IngredientManager.GetIngredientIndex(_ingredient)customer.slimeIngredient];
+            _dayPopularityGain = data.dayPopularityGain;
+            _dayPopularityLoss = data.dayPopularityLoss;
         }
 
         public void SaveData(GameData data)
         {
-            // data.ingredients[] = value;
+            data.dayPopularityGain = _dayPopularityGain;
+            data.dayPopularityLoss = _dayPopularityLoss;
         }
 
         public void SetScript(Customer script)
@@ -300,6 +305,8 @@ namespace Script.customer
                 default:
                     return;
             }
+            if (popularity > 0) _dayPopularityGain += popularity;
+            else _dayPopularityLoss += popularity;
 
             GameEventManager.Instance.PopularityChanged(popularity);
             if (!endImmediately)

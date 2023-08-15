@@ -11,10 +11,10 @@ namespace Script.player
 
         public CustomerManager customerManager;
         public IngredientManager ingredientManager;
-
         public GameObject gamePausedPanel;
-
         public GameObject warningMessagePrefab;
+
+        public bool isDebug;
 
         private void Awake()
         {
@@ -31,6 +31,15 @@ namespace Script.player
             customerManager = transform.Find("CustomerManager").GetComponent<CustomerManager>();
             ingredientManager = transform.Find("IngredientManager").GetComponent<IngredientManager>();
             ingredientManager.gameManager = this;
+
+            if (isDebug)
+            {
+                Debug.Log(
+                    "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+                Debug.Log("Debug mode is on.");
+                Debug.Log(
+                    "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+            }
         }
 
         private void Update()
@@ -49,11 +58,24 @@ namespace Script.player
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Q))
+
+            if (!isDebug) return;
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                LoadingScreen.Instance.LoadScene("NewsScene");
+            }
+            else if (Input.GetKeyDown(KeyCode.I))
+            {
                 LoadingScreen.Instance.LoadScene("CashierScene");
-            else if (Input.GetKeyDown(KeyCode.W))
+            }
+            else if (Input.GetKeyDown(KeyCode.O))
+            {
                 LoadingScreen.Instance.LoadScene("ResultScene");
-            else if (Input.GetKeyDown(KeyCode.E)) LoadingScreen.Instance.LoadScene("NewsScene");
+            }
+            else if (Input.GetKeyDown(KeyCode.P))
+            {
+                LoadingScreen.Instance.LoadScene("TitleScene");
+            }
         }
     }
 }

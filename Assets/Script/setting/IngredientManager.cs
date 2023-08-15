@@ -21,7 +21,7 @@ namespace Script.setting
         }
 
         public GameManager gameManager;
-        public List<Ingredient> Ingredients;
+        public List<Ingredient> ingredients;
         public static IngredientManager Instance { get; private set; }
 
         private void Awake()
@@ -33,12 +33,12 @@ namespace Script.setting
 
         public Ingredient GetRandomIngredient()
         {
-            return Ingredients[Random.Range(0, Ingredients.Count)];
+            return ingredients[Random.Range(0, ingredients.Count)];
         }
 
         public int GetIngredientIndex(Ingredient type)
         {
-            return Ingredients.IndexOf(type);
+            return ingredients.IndexOf(type);
         }
     }
 }

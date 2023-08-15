@@ -17,6 +17,8 @@ namespace Script.persistence.data
         public int dayElectricityUsage;
         public int dayGasUsage;
         public int daySugarUsage;
+        public float dayPopularityLoss;
+        public float dayPopularityGain;
 
         public List<int> ingredients;
 

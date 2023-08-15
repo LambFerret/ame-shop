@@ -1,52 +1,74 @@
+using System;
+using System.Collections.Generic;
 using GoogleMobileAds.Api;
+using Script.events;
 using UnityEngine;
 
 namespace Script.setting
 {
     public class AdsSetting : MonoBehaviour
     {
-        public string adUnitId;
         public bool isTest;
-        private RewardedAd _rewardedAd;
+        private Dictionary<AdType, RewardedAd> _rewardedAds;
+
+        public string interstitialAdId; // 전면 광고
+        public string rewardIdPopularity; // 평판 보상형 광고
+        public string rewardIdMoney; // 돈 보상형 광고
+
+        public enum AdType
+        {
+            Interstitial,
+            Popularity,
+            Money
+        }
 
         public void Start()
         {
-            // Quiz_Manager = GameObject.FindObjectOfType<Quiz_Manager>();
-            // PlayScene_Manager = GameObject.FindObjectOfType<PlayScene_Manager>();
+            _rewardedAds = new Dictionary<AdType, RewardedAd>();
             if (isTest)
-                adUnitId = "ca-app-pub-3940256099942544/1033173712";
+            {
+                interstitialAdId = "ca-app-pub-3940256099942544/1033173712";
+                rewardIdPopularity = "ca-app-pub-3940256099942544/5354046379";
+                rewardIdMoney = "ca-app-pub-3940256099942544/5354046379";
+            }
             else
-                adUnitId = "";
+            {
+                interstitialAdId = "";
+                rewardIdPopularity = "";
+                rewardIdMoney = "";
+                // interstitialAdId = "ca-app-pub-2695254421179115/4481823101";
+                // rewardIdPopularity = "ca-app-pub-2695254421179115/3892442381";
+                // rewardIdMoney = "ca-app-pub-2695254421179115/1920621830";
+            }
 
             // 모바일 광고 SDK를 초기화함.
             MobileAds.Initialize(initStatus => { });
 
-            //adUnitId 설정
-#if UNITY_ANDROID
-            adUnitId = "ca-app-pub-3115045377477281/4539879882";
-#endif
-            LoadRewardedAd();
+            LoadAll();
         }
 
-        public void LoadRewardedAd() //광고 로드 하기
+        private void LoadAll()
         {
-            // Clean up the old ad before loading a new one.
-            if (_rewardedAd != null)
+            Debug.Log("LOADING ALL ADS");
+            foreach (AdType type in Enum.GetValues(typeof(AdType)))
             {
-                _rewardedAd.Destroy();
-                _rewardedAd = null;
+                LoadRewardedAd(type);
             }
+        }
 
+        private void LoadRewardedAd(AdType type) //광고 로드 하기
+        {
             Debug.Log("Loading the rewarded ad.");
 
             // create our request used to load the ad.
             var adRequest = new AdRequest.Builder().Build();
+            // Get the correct adUnitId based on AdType
+            string adUnitId = GetAdUnitId(type);
 
             // send the request to load the ad.
             RewardedAd.Load(adUnitId, adRequest,
                 (ad, error) =>
                 {
-                    // if error is not null, the load request failed.
                     if (error != null || ad == null)
                     {
                         Debug.LogError("Rewarded ad failed to load an ad with error : " + error);
@@ -54,41 +76,86 @@ namespace Script.setting
                     }
 
                     Debug.Log("Rewarded ad loaded with response : " + ad.GetResponseInfo());
-                    _rewardedAd = ad;
+
+                    _rewardedAds[type] = ad;
+                    RegisterReloadHandler(ad, type);
                 });
         }
 
-        public void ShowAd() //광고 보기
+        private string GetAdUnitId(AdType type)
         {
-            const string rewardMsg =
-                "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
-
-            if (_rewardedAd != null && _rewardedAd.CanShowAd())
-                _rewardedAd.Show(reward =>
-                {
-                    //보상 획득하기
-                    Debug.Log(string.Format(rewardMsg, reward.Type, reward.Amount));
-                });
-            else
-                LoadRewardedAd();
-        }
-
-        private void RegisterReloadHandler(RewardedAd ad) //광고 재로드
-        {
-            // Raised when the ad closed full screen content.
-            ad.OnAdFullScreenContentClosed += null;
+            return type switch
             {
-                Debug.Log("Rewarded Ad full screen content closed.");
+                AdType.Interstitial => interstitialAdId,
+                AdType.Popularity => rewardIdPopularity,
+                AdType.Money => rewardIdMoney,
+                _ => null
+            };
+        }
 
-                // Reload the ad so that we can show another as soon as possible.
-                LoadRewardedAd();
+        private void ShowAd(AdType type, float? value = null)
+        {
+            if (!_rewardedAds.ContainsKey(type) || !_rewardedAds[type].CanShowAd())
+            {
+                Debug.LogWarning("Ad of type " + type + " is not loaded yet. Trying to load...");
+                LoadRewardedAd(type);
+                return;
             }
-            ;
-            // Raised when the ad failed to open full screen content.
+
+            const string rewardMsg = "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
+
+            _rewardedAds[type].Show(reward =>
+            {
+                Debug.Log(string.Format(rewardMsg, reward.Type, reward.Amount));
+                if (type == AdType.Popularity)
+                {
+                    IncreasePopularity(value.GetValueOrDefault());
+                }
+                else if (type == AdType.Money)
+                {
+                    IncreaseMoney(value.GetValueOrDefault());
+                }
+            });
+        }
+
+        public void ShowInterstitial()
+        {
+            ShowAd(AdType.Interstitial);
+        }
+
+        public void ShowPopularity(float value)
+        {
+            ShowAd(AdType.Popularity, value);
+        }
+
+        public void ShowMoney(int value)
+        {
+            ShowAd(AdType.Money, (float)value);
+        }
+
+        private static void IncreasePopularity(float value)
+        {
+            GameEventManager.Instance.PopularityChanged(value);
+        }
+
+        private static void IncreaseMoney(float value)
+        {
+            GameEventManager.Instance.MoneyChanged((int)value);
+        }
+
+        private void RegisterReloadHandler(RewardedAd ad, AdType type)
+        {
+            ad.OnAdFullScreenContentClosed += () =>
+            {
+                Debug.Log("Rewarded Ad of type " + type + " full screen content closed.");
+                LoadRewardedAd(type);
+            };
+
             ad.OnAdFullScreenContentFailed += error =>
             {
-                Debug.LogError("Rewarded ad failed to open full screen content with error : " + error);
-                LoadRewardedAd();
+                Debug.LogError("Rewarded ad of type " + type + " failed to open full screen content with error : " +
+                               error);
+                LoadRewardedAd(type);
             };
         }
     }

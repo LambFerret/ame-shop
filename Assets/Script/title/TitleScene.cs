@@ -25,15 +25,6 @@ namespace Script.title
             StartCoroutine(TitleCoroutine());
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Q))
-                LoadingScreen.Instance.LoadScene("CashierScene");
-            else if (Input.GetKeyDown(KeyCode.W))
-                LoadingScreen.Instance.LoadScene("ResultScene");
-            else if (Input.GetKeyDown(KeyCode.E)) LoadingScreen.Instance.LoadScene("NewsScene");
-        }
-
         public void GameStart()
         {
             LoadingScreen.Instance.LoadScene("NewsScene");
