@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -13,6 +14,11 @@ namespace Script.title
         public TextMeshProUGUI startText;
         public GameObject buttonGroup;
 
+        private void Awake()
+        {
+            title.rectTransform.DOAnchorPosX(-title.rectTransform.rect.width, 0);
+            buttonGroup.transform.DOLocalMoveY(-buttonGroup.transform.localPosition.y, 0);
+        }
 
         private void Start()
         {
@@ -44,7 +50,8 @@ namespace Script.title
         private IEnumerator TitleCoroutine()
         {
             title.gameObject.SetActive(true);
-            title.rectTransform.DOAnchorPosX(-1280, 2).SetEase(Ease.OutCubic);
+            title.rectTransform.DOAnchorPosX(0, 2).SetEase(Ease.OutCubic);
+
             yield return new WaitForSeconds(1);
             buttonGroup.gameObject.SetActive(true);
             buttonGroup.transform.DOLocalMoveY(570, 2).SetEase(Ease.OutCubic);

@@ -1,17 +1,12 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Script.title
 {
     public class NewsScene : MonoBehaviour
     {
-        public Image blackScreen;
         public TextMeshProUGUI clickToContinue;
         public GameObject gameStartButton;
         public Animator gameStartIdle;
@@ -24,8 +19,6 @@ namespace Script.title
 
         private IEnumerator SequenceCoroutine()
         {
-            yield return blackScreen.DOFade(0, 1).WaitForCompletion();
-
             clickToContinue.gameObject.SetActive(true);
             StartCoroutine(BlinkingCoroutine());
 
@@ -39,7 +32,6 @@ namespace Script.title
             StartCoroutine(BlinkingCoroutine());
 
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
-            yield return blackScreen.DOFade(1, 1).WaitForCompletion();
             LoadingScreen.Instance.LoadScene("CashierScene");
         }
 

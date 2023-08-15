@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: Ame-shop
+  companyName: TeamBaumkuchen
+  productName: ame-shop
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -137,7 +137,7 @@ PlayerSettings:
   bundleVersion: 1.0.2
   preloadedAssets:
   - {fileID: 11400000, guid: 3362ae5a356d24196bdbba46b493549c, type: 2}
-  - {fileID: -1414329673403134175, guid: 0b19983691425452ebd9cd348889ab21, type: 2}
+  - {fileID: -5776199416893831201, guid: 0b19983691425452ebd9cd348889ab21, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -154,7 +154,7 @@ PlayerSettings:
   targetPixelDensity: 30
   resolutionScalingMode: 0
   resetResolutionOnWindowResize: 0
-  androidSupportedAspectRatio: 0
+  androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 4.44
   applicationIdentifier:
     Android: com.DefaultCompany.com.unity.template.mobile2D
@@ -168,7 +168,7 @@ PlayerSettings:
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 22
+  AndroidMinSdkVersion: 24
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
   aotOptions: 

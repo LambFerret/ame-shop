@@ -19,7 +19,7 @@ namespace Script.title
         private void Awake()
         {
             _blackScreenImage = transform.Find("BlackScreen").GetComponent<Image>();
-            _icon = transform.Find("Icon").gameObject;
+            _icon = transform.Find("BlackScreen").Find("Icon").gameObject;
             if (Instance != null && Instance != this)
             {
                 Destroy(gameObject);
