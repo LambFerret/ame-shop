@@ -16,7 +16,6 @@ namespace Script.title
         private void Awake()
         {
             title.rectTransform.DOAnchorPosX(-title.rectTransform.rect.width, 0);
-            buttonGroup.transform.DOLocalMoveY(-buttonGroup.transform.localPosition.y, 0);
         }
 
         private void Start()
