@@ -305,7 +305,6 @@ namespace Script.customer
                 default:
                     return;
             }
-
             if (popularity > 0) _dayPopularityGain += popularity;
             else _dayPopularityLoss += popularity;
 
@@ -386,14 +385,7 @@ namespace Script.customer
 
             var lines = _quoteLines[quoteLine];
             var randomLine = lines[Random.Range(0, lines.Count)];
-            if (customer.isSlime)
-            {
-                randomLine += " ..." + stringTable["Slime End"].GetLocalizedString();
-                if (randomLine.Contains("!")) randomLine += "!";
-            }
-
-            Debug.Log(customer.id + " says that give me " + customer.ingredient.ingredientId + " ingredient");
-            Debug.Log(randomLine);
+            if (customer.isSlime) randomLine += " ..." + stringTable["Slime End"].GetLocalizedString();
 
             _conversationText.text = randomLine.Replace("{o}", customer.ingredient.ingredientId);
         }

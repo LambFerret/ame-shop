@@ -60,9 +60,12 @@ namespace Script.setting
         {
             Debug.Log("Loading the rewarded ad.");
 
-            AdRequest adRequest = new AdRequest();
+            // create our request used to load the ad.
+            var adRequest = new AdRequest.Builder().Build();
+            // Get the correct adUnitId based on AdType
             string adUnitId = GetAdUnitId(type);
 
+            // send the request to load the ad.
             RewardedAd.Load(adUnitId, adRequest,
                 (ad, error) =>
                 {
