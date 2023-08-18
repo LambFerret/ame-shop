@@ -1122,7 +1122,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1573671260}
-        m_TargetAssemblyTypeName: Script.title.ResultScene, Assembly-CSharp
+        m_TargetAssemblyTypeName: title.ResultScene, Assembly-CSharp
         m_MethodName: Confirm
         m_Mode: 1
         m_Arguments:
@@ -1933,7 +1933,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1573671260}
-        m_TargetAssemblyTypeName: Script.title.ResultScene, Assembly-CSharp
+        m_TargetAssemblyTypeName: title.ResultScene, Assembly-CSharp
         m_MethodName: MoreMoneyByAds
         m_Mode: 1
         m_Arguments:
@@ -4255,7 +4255,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1573671260}
-        m_TargetAssemblyTypeName: Script.title.ResultScene, Assembly-CSharp
+        m_TargetAssemblyTypeName: title.ResultScene, Assembly-CSharp
         m_MethodName: LessPopularityByAds
         m_Mode: 1
         m_Arguments:

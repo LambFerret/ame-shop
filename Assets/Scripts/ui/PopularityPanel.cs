@@ -1,0 +1,50 @@
+using manager;
+using player;
+using player.data;
+using TMPro;
+using UnityEngine;
+
+namespace ui
+{
+    public class PopularityPanel : MonoBehaviour, IDataPersistence
+    {
+        public TextMeshProUGUI text;
+
+        private float _popularity;
+
+        private void Awake()
+        {
+            text = transform.Find("text").GetComponent<TextMeshProUGUI>();
+        }
+
+        private void Start()
+        {
+            GameEventManager.Instance.OnPopularityChanged += OnPopularityChanged;
+        }
+
+        private void Update()
+        {
+            text.text = _popularity.ToString("F1");
+        }
+
+        private void OnDestroy()
+        {
+            GameEventManager.Instance.OnPopularityChanged -= OnPopularityChanged;
+        }
+
+        public void LoadData(GameData data)
+        {
+            _popularity = data.popularity;
+        }
+
+        public void SaveData(GameData data)
+        {
+            data.popularity = _popularity;
+        }
+
+        private void OnPopularityChanged(float value)
+        {
+            _popularity += value;
+        }
+    }
+}

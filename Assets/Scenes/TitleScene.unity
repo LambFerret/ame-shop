@@ -1704,7 +1704,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1085310702}
-        m_TargetAssemblyTypeName: Script.title.TitleScene, Assembly-CSharp
+        m_TargetAssemblyTypeName: title.TitleScene, Assembly-CSharp
         m_MethodName: GameStart
         m_Mode: 1
         m_Arguments:

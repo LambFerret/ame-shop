@@ -850,7 +850,7 @@
   version-locked and non-version-locked packages are specified.
 * Fixed non-deterministic Android package version selection to select
   the highest version of a specified package rather than the last
-  package specification passed to the Gradle resolution script.
+  package specification passed to the Gradle resolution 
 
 # Version 1.2.74 - Jun 19, 2018
 ## New Features

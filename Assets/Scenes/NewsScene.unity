@@ -1142,9 +1142,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7d698bee764d45899a099745e7bc593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  newsList: []
+  newsTitle: {fileID: 276089714}
+  newsContent: {fileID: 1488670493}
+  newsImage: {fileID: 1920777461}
   clickToContinue: {fileID: 361773658}
   gameStartButton: {fileID: 2016200954}
   gameStartIdle: {fileID: 0}
+  day: 0
 --- !u!1 &1920777459
 GameObject:
   m_ObjectHideFlags: 0

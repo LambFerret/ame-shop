@@ -423,7 +423,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 771273386429325911}
-        m_TargetAssemblyTypeName: Script.setting.Setting, Assembly-CSharp
+        m_TargetAssemblyTypeName: setting.Setting, Assembly-CSharp
         m_MethodName: SaveAndConfirm
         m_Mode: 1
         m_Arguments:
@@ -2377,7 +2377,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 771273386429325911}
-        m_TargetAssemblyTypeName: Script.setting.Setting, Assembly-CSharp
+        m_TargetAssemblyTypeName: setting.Setting, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
         m_Arguments:
@@ -3050,7 +3050,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 771273386429325911}
-        m_TargetAssemblyTypeName: Script.setting.Setting, Assembly-CSharp
+        m_TargetAssemblyTypeName: setting.Setting, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
         m_Arguments:
