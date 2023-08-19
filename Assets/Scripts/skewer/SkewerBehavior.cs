@@ -19,8 +19,7 @@ namespace skewer
         private int _currentConcentration;
         private int _currentDryTime;
 
-        [Header("Coat Candy")]
-        public GameObject cottonCandy;
+        [Header("Coat Candy")] public GameObject cottonCandy;
         public Image cottonCandyImage;
         public GameObject originalCandy;
 
@@ -51,47 +50,6 @@ namespace skewer
             originalCandy = transform.Find("Candy").gameObject;
         }
 
-        public void CottonThis()
-        {
-            Image[] skewerImages = originalCandy.GetComponentsInChildren<Image>();
-
-            // Combine textures
-            Texture2D combinedTexture = CombineTextures(skewerImages);
-
-            // Set the combined texture to cottonCandyImage
-            cottonCandyImage.sprite = Sprite.Create(combinedTexture, new Rect(0, 0, combinedTexture.width, combinedTexture.height), new Vector2(0.5f, 0.5f));
-
-            cottonCandy.SetActive(true);
-            originalCandy.gameObject.SetActive(false);
-        }
-
-        private Texture2D CombineTextures(Image[] images)
-        {
-            int totalWidth = 0;
-            int maxHeight = 0;
-
-            // Calculate the total width and max height
-            foreach (var img in images)
-            {
-                totalWidth += img.sprite.texture.width;
-                if (img.sprite.texture.height > maxHeight)
-                    maxHeight = img.sprite.texture.height;
-            }
-
-            Texture2D combinedTexture = new Texture2D(totalWidth, maxHeight, TextureFormat.RGBA32, false);
-
-            int currentXOffset = 0;
-            foreach (var img in images)
-            {
-                Texture2D tex = img.sprite.texture;
-                combinedTexture.SetPixels(currentXOffset, 0, tex.width, tex.height, tex.GetPixels());
-                currentXOffset += tex.width;
-            }
-
-            combinedTexture.Apply();
-
-            return combinedTexture;
-        }
 
         // Behavior that the skewer is focused or not
         private void Update()

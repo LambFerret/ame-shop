@@ -121,7 +121,6 @@ namespace skewer
             sugar -= minusSugarPerOnce * _hand.GetCurrentSize();
             temperature -= minusTemperaturePerOnce;
             _hand.AddTemperature(concentration: concentration, temperature: temperature);
-            _hand.CottonThis();
         }
     }
 }

@@ -18,7 +18,6 @@ namespace skewer
 
         private void Awake()
         {
-            // _text = transform.Find("butt").Find("text").GetComponent<TextMeshProUGUI>();
             _button = transform.Find("Button").GetComponent<Button>();
             _text = _button.GetComponentInChildren<TextMeshProUGUI>();
         }

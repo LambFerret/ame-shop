@@ -14,6 +14,7 @@ namespace skewer
         {
             None,
             Skewer,
+            Topping,
             Weapon
         }
 
@@ -160,12 +161,6 @@ namespace skewer
         {
             currentSkewer.AddTemperature(temperature, concentration);
         }
-
-        public void CottonThis( )
-        {
-            if (currentSkewer is not null) currentSkewer.CottonThis();
-        }
-
 
         public void Blend()
         {
