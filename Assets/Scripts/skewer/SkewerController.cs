@@ -1,6 +1,7 @@
 using DG.Tweening;
 using ingredient;
 using manager;
+using setting;
 using stage;
 using TMPro;
 using UnityEngine;
@@ -170,6 +171,7 @@ namespace skewer
 
         public void PackUp()
         {
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.PackageRing);
             currentSkewer.SwitchToPackUp();
             currentSkewerObject.transform.SetParent(pickUpDesk.transform);
             stageController.SwitchCashierMachine(true);
@@ -179,6 +181,7 @@ namespace skewer
 
         public void Destroy()
         {
+            if (whatsOnHand != WhatsOnHand.Skewer) return;
             Destroy(currentSkewerObject);
             SetHand(null);
             GoToStep(Step.First);

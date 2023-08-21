@@ -65,26 +65,24 @@ namespace skewer
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    // EventSystem에서 현재의 PointerEventData 생성
                     PointerEventData pointerData = new PointerEventData(EventSystem.current);
                     pointerData.position = Input.mousePosition;
 
-                    // Raycasting 결과를 저장할 리스트 생성
                     List<RaycastResult> results = new List<RaycastResult>();
 
-                    // GraphicRaycaster로 Raycasting 수행
                     EventSystem.current.RaycastAll(pointerData, results);
 
                     foreach (RaycastResult result in results)
                     {
-                        if (result.gameObject.name.Equals("Candy"))
+                        if (result.gameObject.name.Equals("Candy") &&
+                            result.gameObject.transform.parent.parent.name is "ChoppingBoard")
                         {
                             var c = Instantiate(_toppingPrefab, _toppingPrefab.transform.position,
                                 _toppingPrefab.transform.rotation, result.gameObject.transform);
 
                             c.transform.localScale = new Vector3(1, 1, 1);
 
-                            break; // 조건을 만족하는 첫 번째 대상만 처리하고 반복 종료
+                            break;
                         }
                     }
                 }

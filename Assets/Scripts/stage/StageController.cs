@@ -7,6 +7,7 @@ using customer;
 using DG.Tweening;
 using player;
 using player.data;
+using setting;
 using title;
 using ui;
 using UnityEngine;
@@ -71,12 +72,19 @@ namespace stage
                 {
                     timer.isStarted = false;
                     timer.isEnded = false;
-                    LoadingScreen.Instance.LoadScene("ResultScene");
                     _isSceneLoading = true;
+                    StartCoroutine(ToResult());
                 }
 
             for (int i = 0; i < waitCustomerObjectList.Length; i++)
                 _waitLineOccupied[i] = waitCustomerObjectList[i].activeSelf;
+        }
+
+        private IEnumerator ToResult()
+        {
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.CloseStore);
+            yield return new WaitForSeconds(1);
+            LoadingScreen.Instance.LoadScene("ResultScene");
         }
 
         public void LoadData(GameData data)
@@ -107,6 +115,8 @@ namespace stage
 
                 int waitTimeMultiple = availableLines.Count == _waitLineOccupied.Length ? 2 : 1;
                 //(10~15초)*{5000/(5000+평판)}
+                SoundManager.Instance.PlaySFX(SoundManager.SFX.Entrance);
+
                 yield return new WaitForSeconds(Random.Range(minInterval, baseInterval) *
                     (5000 / (5000 + playerPopularity)) / waitTimeMultiple);
             }
@@ -180,6 +190,7 @@ namespace stage
 
         public void SwitchCashierMachine(bool isCashierScene)
         {
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.ChangeCashier);
             if (isCashierScene)
             {
                 var sb = machineScene.transform.Find("Scrollbar").GetComponent<Scrollbar>();
@@ -202,6 +213,8 @@ namespace stage
         public void OpenStore(int day)
         {
             if (timer.isStarted) return;
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.DoorBell);
+
             timer.isStarted = true;
             stageStartButton.SwitchAnimation(false);
             tutorialButton.SwitchAnimation(false);

@@ -1,4 +1,5 @@
 using System;
+using setting;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,8 @@ namespace ui
         private float _time;
         private Image _timerImage;
         private TextMeshProUGUI _timerText;
+        private bool _dayEndAlert;
+        private bool _eveningMusicIsOn;
 
         private void Awake()
         {
@@ -36,6 +39,8 @@ namespace ui
             _time = 0;
             int rotationDegrees = (12 - adjustedStartHour) * 30;
             _timerImage.rectTransform.Rotate(0, 0, rotationDegrees);
+            _dayEndAlert = false;
+            _eveningMusicIsOn = false;
         }
 
         private void Update()
@@ -53,6 +58,19 @@ namespace ui
             float totalDegrees = (adjEndTime - adjStartTime) * 360f / 12f;
             float elapsedDegrees = _time / (3600f * (adjEndTime - adjStartTime)) * totalDegrees;
             _timerImage.fillAmount = elapsedDegrees / 360f;
+
+            if (hour == adjEndTime - 1 && minute == 0 && !_dayEndAlert)
+            {
+                SoundManager.Instance.PlaySFX(SoundManager.SFX.TimeIsRunningOut);
+                _dayEndAlert = true;  // Ensures the sound is played only once
+            }
+
+            if (hour == 5 && minute == 0 && !_eveningMusicIsOn)
+            {
+                SoundManager.Instance.PlayMusic("CashierNight");
+                _eveningMusicIsOn = true;  // Ensures the music is played only once
+            }
+
 
             if (hour >= adjEndTime) isEnded = true;
         }

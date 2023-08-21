@@ -6,6 +6,7 @@ using DG.Tweening;
 using manager;
 using player;
 using player.data;
+using setting;
 using skewer;
 using stage;
 using TMPro;
@@ -178,12 +179,15 @@ namespace customer
         {
             _bill = Instantiate(billPrefab, billPlaceHolder.transform);
             _bill.GetComponent<BillBehavior>().MakeBill(customer, _conversationText.text);
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.BillIn);
         }
 
         private void ClearBill()
         {
             if (_bill is null) return;
             Destroy(_bill);
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.BillOut);
+
         }
 
         public void CheckServedSkewer(SkewerBehavior skewer)
@@ -312,6 +316,7 @@ namespace customer
             if (!endImmediately)
             {
                 _moneyText.text = money.ToString();
+                SoundManager.Instance.PlaySFX(SoundManager.SFX.Money);
                 GameEventManager.Instance.MoneyChanged(money);
                 MoneyAnimation();
             }

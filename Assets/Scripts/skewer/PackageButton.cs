@@ -3,6 +3,7 @@ using ingredient;
 using manager;
 using player;
 using player.data;
+using setting;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -67,7 +68,8 @@ namespace skewer
 
                         if (RectTransformUtility.RectangleContainsScreenPoint(headRect, pointerData.position))
                         {
-                            Debug.Log("ON HEAD!!!");
+                            SoundManager.Instance.PlaySFX(SoundManager.SFX.Package1);
+
                             _isOnHead = true;
                         }
                         else if (_isOnHead &&

@@ -2,6 +2,7 @@ using System;
 using DG.Tweening;
 using player;
 using player.data;
+using setting;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,26 +47,13 @@ namespace skewer
             temperature = 110;
             sugar = 20;
             water = 30;
-            concentration = sugar * 100 / (sugar + water);
+            UpdateConcentration();
         }
 
         private void Update()
         {
-            if (water == 0 && sugar == 0)
-            {
-                concentrationBar.text = "0%";
-            }
-            else
-            {
-                float cons = 0;
-                if (water != 0) cons = sugar / (float)(sugar + water);
-
-                concentration = (int)Math.Floor(cons * 100);
-                concentrationBar.text = concentration + "%";
-            }
-
+            concentrationBar.text = concentration + "%";
             temperatureBar.text = temperature + "°C";
-
             _time += Time.deltaTime;
             if (_time >= time)
             {
@@ -86,27 +74,77 @@ namespace skewer
 
         private void MinusPerTime()
         {
-            water -= minusWaterByTime;
-            temperature -= minusTemperatureByTime;
+            PutWater(-minusWaterByTime);
+            PutTemperature(-minusTemperatureByTime);
         }
 
         public void AddWater()
         {
-            water += addLiquidPerClick;
-            if (water + sugar > maximumLiquidCapacity) water = maximumLiquidCapacity - sugar;
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.Water);
+            PutWater(addLiquidPerClick);
         }
 
         public void AddSugar()
         {
-            sugarUsage++;
-            sugar += addLiquidPerClick;
-            if (water + sugar > maximumLiquidCapacity) sugar = maximumLiquidCapacity - water;
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.Sugar);
+            PutSugar(addLiquidPerClick);
         }
 
         public void AddFuel()
         {
-            temperature += addFuelTemperature;
-            gasUsage++;
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.Fuel);
+            PutTemperature(addFuelTemperature);
+        }
+
+        private void PutWater(int value)
+        {
+            water += value;
+
+            if (water < 0)
+                water = 0;
+            else if (water > maximumLiquidCapacity)
+                water = maximumLiquidCapacity;
+
+            if (water + sugar > maximumLiquidCapacity)
+                sugar = maximumLiquidCapacity - water;
+
+            UpdateConcentration();
+        }
+
+        private void PutSugar(int value)
+        {
+            sugarUsage += value;
+            sugar += value;
+
+            if (sugar < 0)
+                sugar = 0;
+            else if (sugar > maximumLiquidCapacity)
+                sugar = maximumLiquidCapacity;
+
+            if (sugar + water > maximumLiquidCapacity)
+                water = maximumLiquidCapacity - sugar;
+
+            UpdateConcentration();
+        }
+
+
+        private void UpdateConcentration()
+        {
+            if (water == 0 && sugar == 0) concentration = 0;
+            else
+            {
+                float cons = sugar / (float)(sugar + water);
+                concentration = (int)Math.Floor(cons * 100);
+            }
+        }
+
+
+        private void PutTemperature(int value)
+        {
+            temperature += value;
+            gasUsage += value;
+            if (temperature > 300) temperature = 300;
+            if (temperature < 20) temperature = 20;
         }
 
         public bool CheckHandIsSkewer()
@@ -116,10 +154,11 @@ namespace skewer
 
         public void Complete()
         {
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.Pool);
             _image.DOKill();
             _image.DOFade(0, 0.5F).SetLoops(2 * 2, LoopType.Yoyo).SetEase(Ease.InOutSine);
-            sugar -= minusSugarPerOnce * _hand.GetCurrentSize();
-            temperature -= minusTemperaturePerOnce;
+            PutSugar(-(minusSugarPerOnce * _hand.GetCurrentSize()));
+            PutTemperature(-minusTemperaturePerOnce);
             _hand.AddTemperature(concentration: concentration, temperature: temperature);
         }
     }

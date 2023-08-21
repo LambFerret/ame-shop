@@ -24,7 +24,8 @@ namespace player.data
 
 
         public int language;
-        public float volume;
+        public float musicVolume;
+        public float sfxVolume;
 
         public bool isTutorialDone;
 
