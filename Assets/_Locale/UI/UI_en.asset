@@ -17,7 +17,75 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: de40662675892454f91000044cb6f063, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 5731895995260928
+    m_Localized: LANGUAGE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10454375406231552
+    m_Localized: BGM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10454468842741760
+    m_Localized: EFFECT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10454535305682944
+    m_Localized: SAVE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10455332940668928
+    m_Localized: CANCEL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10455989554765824
+    m_Localized: Tap To Start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10459872490414080
+    m_Localized: Tap To Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10461239523139584
+    m_Localized: Pitaya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10461843666493440
+    m_Localized: White Grape
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10462303337046016
+    m_Localized: Orange
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10462500083458048
+    m_Localized: Pineapple
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10462612671160320
+    m_Localized: Strawberry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10462796016771072
+    m_Localized: Cherry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5731825283489792
+    m_Localized: Sorry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5731794354692096
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10471363616694272
+    m_Localized: Temp.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10471439411961856
+    m_Localized: Conc.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

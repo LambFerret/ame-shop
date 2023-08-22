@@ -24,7 +24,63 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5731895995260928
-    m_Key: New Entry
+    m_Key: UI-Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10454375406231552
+    m_Key: UI-BGM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10454468842741760
+    m_Key: UI-SFX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10454535305682944
+    m_Key: UI-Save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10455332940668928
+    m_Key: UI-Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10455989554765824
+    m_Key: UI-GameStart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10459872490414080
+    m_Key: UI-GameContinue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10461239523139584
+    m_Key: UI-DragonFruit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10461843666493440
+    m_Key: UI-GreenGrape
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10462303337046016
+    m_Key: UI-Mikan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10462500083458048
+    m_Key: UI-Pineapple
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10462612671160320
+    m_Key: UI-Strawberry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10462796016771072
+    m_Key: UI-Cherry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10471363616694272
+    m_Key: UI-Temperature
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10471439411961856
+    m_Key: UI-Concentration
     m_Metadata:
       m_Items: []
   m_Metadata:

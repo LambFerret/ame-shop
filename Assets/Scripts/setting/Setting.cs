@@ -1,4 +1,5 @@
 using System.Collections;
+using manager;
 using player;
 using player.data;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace setting
         public Button resetGameButton;
 
         private bool _isChanging;
+        private GameManager _gameManager;
 
         private void Awake()
         {
@@ -117,6 +119,11 @@ namespace setting
         {
             gameObject.SetActive(true);
             SoundManager.Instance.PlaySFX(SoundManager.SFX.UIClick);
+            GameManager m = FindObjectOfType<GameManager>();
+            if (m != null)
+            {
+                m.gameState = GameManager.GameState.Paused;
+            }
         }
 
         public void SaveAndConfirm()
@@ -130,6 +137,11 @@ namespace setting
         {
             SoundManager.Instance.PlaySFX(SoundManager.SFX.PanelClose);
             gameObject.SetActive(false);
+            GameManager m = FindObjectOfType<GameManager>();
+            if (m != null)
+            {
+                m.gameState = GameManager.GameState.Playing;
+            }
         }
     }
 }

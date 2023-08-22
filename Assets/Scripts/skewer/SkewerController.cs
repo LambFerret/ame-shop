@@ -32,7 +32,6 @@ namespace skewer
         public SkewerBehavior currentSkewer;
         public GameObject currentSkewerObject;
 
-        public GameManager gameManager;
 
         private void Awake()
         {
@@ -41,6 +40,7 @@ namespace skewer
 
         private void Update()
         {
+            if (GameManager.Instance.gameState != GameManager.GameState.Playing) return;
             switch (whatsOnHand)
             {
                 case WhatsOnHand.None:
@@ -51,6 +51,7 @@ namespace skewer
                     weapon.transform.localPosition = localPoint;
                     break;
                 case WhatsOnHand.Skewer:
+                    currentSkewer.MouseFollow();
                     break;
             }
         }
@@ -84,8 +85,8 @@ namespace skewer
 
         public void CreateNewSkewer(int size)
         {
-            SetWeaponOnHand(false);
             if (currentSkewerObject != null) return;
+            // SetWeaponOnHand(false);
             var skewer = Instantiate(skewerPrefab, skewerPlaceHolder.transform);
             skewer.GetComponent<SkewerBehavior>().SetSize(size);
             SetHand(skewer);
@@ -112,7 +113,7 @@ namespace skewer
 
         private void MakeWarningMessage(string text)
         {
-            var warningMessage = Instantiate(gameManager.warningMessagePrefab, skewerPlaceHolder.transform);
+            var warningMessage = Instantiate(GameManager.Instance.warningMessagePrefab, skewerPlaceHolder.transform);
             warningMessage.GetComponent<TextMeshProUGUI>().text = text;
             warningMessage.transform.DOBlendableMoveBy(new Vector3(0, 200, 0), 1)
                 .OnComplete(() => Destroy(warningMessage));
@@ -189,9 +190,9 @@ namespace skewer
 
         private void SetHand(GameObject skewerGameObject)
         {
-            if (skewerGameObject == null)
+            if (skewerGameObject is null)
             {
-                if (currentSkewer != null) currentSkewer.SetSkewerFocused(false);
+                if (currentSkewer is not null) currentSkewer.SetSkewerFocused(false);
                 currentSkewerObject = null;
                 currentSkewer = null;
                 whatsOnHand = WhatsOnHand.None;

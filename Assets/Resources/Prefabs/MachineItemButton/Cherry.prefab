@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 5285530992913085165}
   - component: {fileID: 2837589473770315888}
   - component: {fileID: 2088469369454347067}
+  - component: {fileID: 1103565872654365585}
   m_Layer: 0
   m_Name: text
   m_TagString: Untagged
@@ -257,6 +258,46 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1103565872654365585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7916619602232490928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:de40662675892454f91000044cb6f063
+    m_TableEntryReference:
+      m_KeyId: 10462796016771072
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2088469369454347067}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &8310534316364880041
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,7 +309,7 @@ GameObject:
   - component: {fileID: 5218821974946767664}
   - component: {fileID: 1138264723743734849}
   m_Layer: 0
-  m_Name: Charry
+  m_Name: Cherry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -307,5 +348,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace81ac0aef342699ca4507ff4a3993d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 2088469369454347067}
   amount: 0

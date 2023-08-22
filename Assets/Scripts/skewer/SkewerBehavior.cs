@@ -50,9 +50,7 @@ namespace skewer
             originalCandy = transform.Find("Candy").gameObject;
         }
 
-
-        // Behavior that the skewer is focused or not
-        private void Update()
+        public void MouseFollow()
         {
             if (_isSkewerFocused)
             {

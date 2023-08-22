@@ -1,3 +1,4 @@
+using System;
 using title;
 using UnityEngine;
 
@@ -11,6 +12,14 @@ namespace manager
         public GameObject warningMessagePrefab;
 
         public bool isDebug;
+        public GameState gameState;
+
+        public enum GameState
+        {
+            Playing,
+            Paused,
+            GameOver
+        }
 
         private void Awake()
         {
@@ -34,17 +43,24 @@ namespace manager
             }
         }
 
+        private void Start()
+        {
+            gameState = GameState.Playing;
+        }
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 if (Time.timeScale == 0)
                 {
+                    gameState = GameState.Playing;
                     gamePausedPanel.SetActive(false);
                     Time.timeScale = 1;
                 }
                 else
                 {
+                    gameState = GameState.Paused;
                     gamePausedPanel.SetActive(true);
                     Time.timeScale = 0;
                 }
