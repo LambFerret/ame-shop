@@ -5694,7 +5694,8 @@ MonoBehaviour:
   temperature: 110
   maximumLiquidCapacity: 200
   minusWaterByTime: 20
-  minusSugarPerOnce: 10
+  minusSugarPerOnce: 2
+  minusWaterPerOnce: 1
   minusTemperatureByTime: 10
   minusTemperaturePerOnce: 10
   time: 30
