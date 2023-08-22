@@ -71,7 +71,7 @@ namespace skewer
                     whatsOnHand = WhatsOnHand.Weapon;
                     break;
                 case WhatsOnHand.Skewer:
-                    MakeWarningMessage("Cannot hold weapon with skewer");
+                    GameManager.Instance.MakeWarningMessage(GameManager.WarningState.FullHand);
                     return;
                 case WhatsOnHand.Weapon:
                     return;
@@ -96,13 +96,13 @@ namespace skewer
         {
             if (currentSkewerObject == null)
             {
-                MakeWarningMessage("No skewer in hand");
+                GameManager.Instance.MakeWarningMessage(GameManager.WarningState.NoSkewerInHand);
                 return false;
             }
 
             if (IsSkewerLengthMax(type.size))
             {
-                MakeWarningMessage("Not enough space in skewer");
+                GameManager.Instance.MakeWarningMessage(GameManager.WarningState.NoSpaceInSkewer);
                 return false;
             }
 
@@ -111,13 +111,7 @@ namespace skewer
             return true;
         }
 
-        private void MakeWarningMessage(string text)
-        {
-            var warningMessage = Instantiate(GameManager.Instance.warningMessagePrefab, skewerPlaceHolder.transform);
-            warningMessage.GetComponent<TextMeshProUGUI>().text = text;
-            warningMessage.transform.DOBlendableMoveBy(new Vector3(0, 200, 0), 1)
-                .OnComplete(() => Destroy(warningMessage));
-        }
+
 
         private bool IsSkewerLengthMax(int size)
         {

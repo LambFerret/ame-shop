@@ -86,6 +86,18 @@ MonoBehaviour:
     m_Localized: Conc.
     m_Metadata:
       m_Items: []
+  - m_Id: 10516082208006144
+    m_Localized: The hand is full!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10516089191522304
+    m_Localized: No skewer in hand!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10516090479173632
+    m_Localized: There's no space in skewer!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

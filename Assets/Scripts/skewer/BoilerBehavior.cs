@@ -24,6 +24,7 @@ namespace skewer
 
         [Header("Minus")] public int minusWaterByTime;
         public int minusSugarPerOnce;
+        public int minusWaterPerOnce;
         public int minusTemperatureByTime;
         public int minusTemperaturePerOnce;
         public float time;
@@ -158,6 +159,7 @@ namespace skewer
             _image.DOKill();
             _image.DOFade(0, 0.5F).SetLoops(2 * 2, LoopType.Yoyo).SetEase(Ease.InOutSine);
             PutSugar(-(minusSugarPerOnce * _hand.GetCurrentSize()));
+            PutWater(-(minusWaterPerOnce * _hand.GetCurrentSize()));
             PutTemperature(-minusTemperaturePerOnce);
             _hand.AddTemperature(concentration: concentration, temperature: temperature);
         }

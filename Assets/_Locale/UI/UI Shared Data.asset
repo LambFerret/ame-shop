@@ -83,6 +83,18 @@ MonoBehaviour:
     m_Key: UI-Concentration
     m_Metadata:
       m_Items: []
+  - m_Id: 10516082208006144
+    m_Key: FullHand
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10516089191522304
+    m_Key: NoSkewerInHand
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10516090479173632
+    m_Key: NoSpaceInSkewer
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

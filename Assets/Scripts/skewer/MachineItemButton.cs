@@ -13,23 +13,30 @@ namespace skewer
         public int amount;
 
         private Button _button;
-        private Ingredient _ingredient;
+        public Ingredient ingredient;
         private TextMeshProUGUI _text;
 
         private void Awake()
         {
             _button = transform.Find("Button").GetComponent<Button>();
-            _text = _button.GetComponentInChildren<TextMeshProUGUI>();
+            _text = GetComponent<TextMeshProUGUI>();
         }
 
         private void Start()
         {
             GameEventManager.Instance.OnIngredientChanged += OnIngredientChanged;
+            _button.onClick.AddListener(OnClick);
+        }
+
+        private void OnClick()
+        {
+            var skewer = FindObjectOfType<SkewerController>();
+            if (skewer.AddIngredientToSkewerInHand(ingredient)) amount--;
         }
 
         private void Update()
         {
-            _text.text = _ingredient.ingredientId + amount;
+            _text.text = amount + "";
             _button.interactable = amount > 0;
         }
 
@@ -40,22 +47,22 @@ namespace skewer
 
         public void LoadData(GameData data)
         {
-            amount = data.ingredients[IngredientManager.Instance.GetIngredientIndex(_ingredient)];
+            amount = data.ingredients[IngredientManager.Instance.GetIngredientIndex(ingredient)];
         }
 
         public void SaveData(GameData data)
         {
-            data.ingredients[IngredientManager.Instance.GetIngredientIndex(_ingredient)] = amount;
+            data.ingredients[IngredientManager.Instance.GetIngredientIndex(ingredient)] = amount;
         }
 
         public void SetIngredient(Ingredient ingredient)
         {
-            _ingredient = ingredient;
+            this.ingredient = ingredient;
         }
 
         private void OnIngredientChanged(Ingredient f, int value)
         {
-            if (f == _ingredient) amount += value;
+            if (f == ingredient) amount += value;
         }
     }
 }

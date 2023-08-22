@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using DG.Tweening;
 using title;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 namespace manager
 {
@@ -10,6 +14,7 @@ namespace manager
 
         public GameObject gamePausedPanel;
         public GameObject warningMessagePrefab;
+        public GameObject warningMessagePanel;
 
         public bool isDebug;
         public GameState gameState;
@@ -19,6 +24,11 @@ namespace manager
             Playing,
             Paused,
             GameOver
+        }
+
+        public enum WarningState
+        {
+             FullHand, NoSkewerInHand, NoSpaceInSkewer
         }
 
         private void Awake()
@@ -46,6 +56,27 @@ namespace manager
         private void Start()
         {
             gameState = GameState.Playing;
+
+        }
+
+        private void MakeWarningMessage(string text)
+        {
+            var warningMessage = Instantiate(warningMessagePrefab, warningMessagePanel.transform);
+            warningMessage.GetComponent<TextMeshProUGUI>().text = text;
+            warningMessage.transform.DOBlendableMoveBy(new Vector3(0, 200, 0), 1)
+                .OnComplete(() => Destroy(warningMessage));
+        }
+
+        public void MakeWarningMessage(WarningState state)
+        {
+            var locale = LocalizationSettings.SelectedLocale;
+            var stringTableOp = LocalizationSettings.StringDatabase.GetTableAsync("UI", locale);
+            stringTableOp.Completed += op =>
+            {
+                var stringTable = op.Result;
+                var text = stringTable.GetEntry(state.ToString()).GetLocalizedString();
+                MakeWarningMessage(text);
+            };
         }
 
         private void Update()
@@ -65,7 +96,6 @@ namespace manager
                     Time.timeScale = 0;
                 }
             }
-
 
             if (!isDebug) return;
             if (Input.GetKeyDown(KeyCode.U))
