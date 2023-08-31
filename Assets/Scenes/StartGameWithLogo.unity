@@ -548,6 +548,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6e922eda267754cc89830e42dc23de0f, type: 3}
   - {fileID: 8300000, guid: b3cd490b5ba114e4b99251e537afbf3c, type: 3}
   - {fileID: 8300000, guid: 8545a27f1822c49b38639e7cf8a1fb10, type: 3}
+  - {fileID: 8300000, guid: 97994281e7d0f4ddc83c411ee0360a96, type: 3}
   - {fileID: 8300000, guid: 236fd94f2c4174d679f371ea9838c4dd, type: 3}
   - {fileID: 8300000, guid: a2918d2cd55404d4a862daadea1fd59a, type: 3}
   - {fileID: 8300000, guid: 57930576e733344f09a5a6da8355e3ce, type: 3}
@@ -561,6 +562,18 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 1301e017f712741f2b96121f978f3602, type: 3}
   - {fileID: 8300000, guid: bd8d64394745a4a42be8a5e8adaf3e35, type: 3}
   - {fileID: 8300000, guid: db0f81b8e1ba34d8fa6f7a89d83b9956, type: 3}
+  - {fileID: 8300000, guid: dd06cddc5cfab4a78b396b4bc6e03816, type: 3}
+  - {fileID: 8300000, guid: 3f53c331dd53f4e179259ac4b86ed764, type: 3}
+  - {fileID: 8300000, guid: 15d463091f2004b39bb1b137db8ea4fe, type: 3}
+  - {fileID: 8300000, guid: 1ba76ecc2d77243a7b769f453ddd2975, type: 3}
+  fruit:
+  - {fileID: 8300000, guid: ef1083eb59b73444ca1fb8049940aadf, type: 3}
+  - {fileID: 8300000, guid: cd1e767791e324d76b8d9ff1185b3019, type: 3}
+  - {fileID: 8300000, guid: d7f4d9702c0be428d9c258c8110c3599, type: 3}
+  - {fileID: 8300000, guid: d71f8a67cf65c437a922d977e6dde696, type: 3}
+  - {fileID: 8300000, guid: 24db42aca2f1e414cb0da3a611e2c3eb, type: 3}
+  bgmVolume: 1
+  sfxVolume: 1
 --- !u!1 &1885139695
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,6 +19,7 @@ namespace setting
             Fuel,
             Money,
             Package1,
+            Package2,
             PackageRing,
             Pool,
             Sugar,
@@ -26,12 +27,13 @@ namespace setting
             UIClick,
             Water,
             PanelClose,
+            Fruit
         }
 
         public static SoundManager Instance;
 
-        public AudioClip[] bgm, sfx;
-        private AudioSource _bgmSource, _sfxSource;
+        public AudioClip[] bgm, sfx, fruit;
+        private AudioSource _bgmSource, _sfxSource, _fruitSource;
 
         public float bgmVolume = 1.0f;
         public float sfxVolume = 1.0f;
@@ -54,6 +56,7 @@ namespace setting
             _bgmSource = gameObject.AddComponent<AudioSource>();
             _bgmSource.loop = true;
             _sfxSource = gameObject.AddComponent<AudioSource>();
+            _fruitSource = gameObject.AddComponent<AudioSource>();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -105,6 +108,11 @@ namespace setting
                     break;
                 }
             }
+        }
+
+        public void FruitSound()
+        {
+            _fruitSource.PlayOneShot(fruit[UnityEngine.Random.Range(0, fruit.Length)], sfxVolume);
         }
 
         public void MusicVolume(float volume)

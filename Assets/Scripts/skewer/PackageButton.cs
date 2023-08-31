@@ -97,7 +97,9 @@ namespace skewer
 
         private void Packing()
         {
-            SoundManager.Instance.PlaySFX(SoundManager.SFX.Package1);
+            SoundManager.Instance.PlaySFX(Random.Range(0, 2) == 0
+                ? SoundManager.SFX.Package1
+                : SoundManager.SFX.Package2);
             currentBoard.GiveSkewerToController();
             skewer.PackUp();
         }

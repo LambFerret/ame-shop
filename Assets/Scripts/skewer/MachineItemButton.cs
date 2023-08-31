@@ -2,6 +2,7 @@ using ingredient;
 using manager;
 using player;
 using player.data;
+using setting;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,7 +32,11 @@ namespace skewer
         private void OnClick()
         {
             var skewer = FindObjectOfType<SkewerController>();
-            if (skewer.AddIngredientToSkewerInHand(ingredient)) amount--;
+            if (skewer.AddIngredientToSkewerInHand(ingredient))
+            {
+                SoundManager.Instance.FruitSound();
+                amount--;
+            }
         }
 
         private void Update()
