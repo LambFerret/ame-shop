@@ -8695,6 +8695,7 @@ MonoBehaviour:
   skewer: {fileID: 721914799}
   prefab: {fileID: 709499191770144409, guid: 1c806683d3b02459dbb7c0b0d2c76876, type: 3}
   currentBoard: {fileID: 1042699012}
+  scrollbar: {fileID: 911218908}
 --- !u!1 &969114104
 GameObject:
   m_ObjectHideFlags: 0

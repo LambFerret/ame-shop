@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using ingredient;
 using manager;
 using player;
@@ -19,6 +20,7 @@ namespace skewer
 
         private Button _button;
         private GameObject _toppingPrefab;
+        private RectTransform _toppingPosition;
         private TextMeshProUGUI _text;
 
         private bool _isOnMouse;
@@ -28,10 +30,11 @@ namespace skewer
             _button = transform.GetComponent<Button>();
             _text = _button.GetComponentInChildren<TextMeshProUGUI>();
             _toppingPrefab = Instantiate(topping.prefab, transform);
+            _toppingPosition = _toppingPrefab.GetComponent<RectTransform>();
             _button.onClick.AddListener(OnClickTopping);
         }
 
-        /* On Topping CHanged?
+        /* On Topping Changed?
         private void Start()
         {
             GameEventManager.Instance.OnIngredientChanged += OnIngredientChanged;
@@ -51,6 +54,7 @@ namespace skewer
             }
             else if (skewer.whatsOnHand == SkewerController.WhatsOnHand.Topping)
             {
+                _toppingPrefab.transform.localPosition = Vector3.zero;
                 _isOnMouse = false;
                 skewer.whatsOnHand = SkewerController.WhatsOnHand.None;
             }
@@ -71,17 +75,29 @@ namespace skewer
                     List<RaycastResult> results = new List<RaycastResult>();
 
                     EventSystem.current.RaycastAll(pointerData, results);
+                    bool conti = false;
+                    foreach (RaycastResult result in results)
+                    {
+                        if (result.gameObject.transform.parent.parent.name is "ChoppingBoard")
+                        {
+                            conti = true;
+                        }
+                    }
+
+                    if (!conti)
+                    {
+                        OnClickTopping();
+                        return;
+                    }
 
                     foreach (RaycastResult result in results)
                     {
-                        if (result.gameObject.name.Equals("Candy") &&
-                            result.gameObject.transform.parent.parent.name is "ChoppingBoard")
+                        if (result.gameObject.name.Equals("Candy"))
                         {
                             var c = Instantiate(_toppingPrefab, _toppingPrefab.transform.position,
                                 _toppingPrefab.transform.rotation, result.gameObject.transform);
 
                             c.transform.localScale = new Vector3(1, 1, 1);
-
                             break;
                         }
                     }

@@ -16,6 +16,7 @@ namespace skewer
         public SkewerController skewer;
         public GameObject prefab;
         public BoardBehavior currentBoard;
+        public ScrollRect scrollbar;
 
         private Button _button;
         private GameObject _toppingPrefab;
@@ -40,6 +41,7 @@ namespace skewer
             }
             else if (skewer.whatsOnHand == SkewerController.WhatsOnHand.Topping)
             {
+                _toppingPrefab.transform.localPosition = Vector3.zero;
                 _isOnMouse = false;
                 skewer.whatsOnHand = SkewerController.WhatsOnHand.None;
             }
@@ -48,6 +50,8 @@ namespace skewer
 
         private void Update()
         {
+            scrollbar.horizontal = !_isOnMouse;
+
             if (_isOnMouse)
             {
                 FollowMouse();
@@ -68,8 +72,6 @@ namespace skewer
 
                         if (RectTransformUtility.RectangleContainsScreenPoint(headRect, pointerData.position))
                         {
-                            SoundManager.Instance.PlaySFX(SoundManager.SFX.Package1);
-
                             _isOnHead = true;
                         }
                         else if (_isOnHead &&
@@ -95,6 +97,7 @@ namespace skewer
 
         private void Packing()
         {
+            SoundManager.Instance.PlaySFX(SoundManager.SFX.Package1);
             currentBoard.GiveSkewerToController();
             skewer.PackUp();
         }
