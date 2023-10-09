@@ -29,6 +29,7 @@ namespace skewer
 
         [Header("Test Field")] [SerializeField]
         public WhatsOnHand whatsOnHand;
+
         public SkewerBehavior currentSkewer;
         public GameObject currentSkewerObject;
 
@@ -112,7 +113,6 @@ namespace skewer
         }
 
 
-
         private bool IsSkewerLengthMax(int size)
         {
             int currentSize = 0;
@@ -169,6 +169,7 @@ namespace skewer
             SoundManager.Instance.PlaySFX(SoundManager.SFX.PackageRing);
             currentSkewer.SwitchToPackUp();
             currentSkewerObject.transform.SetParent(pickUpDesk.transform);
+            currentSkewerObject.transform.position = new Vector3(0, 0, 0);
             stageController.SwitchCashierMachine(true);
             SetHand(null);
             GoToStep(Step.Close);
