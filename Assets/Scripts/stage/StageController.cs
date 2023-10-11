@@ -62,7 +62,10 @@ namespace stage
         {
             customerManager = GameObject.Find("CustomerManager").GetComponent<CustomerManager>();
             weaponTutorialObject.gameObject.SetActive(false);
-            machineScene.transform.DOMove(new Vector3(Screen.width, 0, 0), 0);
+            var rectHeight = machineScene.GetComponent<RectTransform>().rect.height;
+            var rectWidth = machineScene.GetComponent<RectTransform>().rect.width;
+            // move into right outside of screen
+            machineScene.GetComponent<RectTransform>().anchoredPosition = new Vector2(rectWidth, 0);
         }
 
         private void Update()
@@ -191,15 +194,20 @@ namespace stage
         public void SwitchCashierMachine(bool isCashierScene)
         {
             SoundManager.Instance.PlaySFX(SoundManager.SFX.ChangeCashier);
+            Debug.Log("clicked " + isCashierScene);
+            var machineRect = machineScene.GetComponent<RectTransform>();
+            var rectWidth = machineRect.rect.width;
+            float duration =  1f;
             if (isCashierScene)
             {
                 var sb = machineScene.transform.Find("Scrollbar").GetComponent<Scrollbar>();
-                DOTween.To(() => sb.value, x => sb.value = x, 0, 1f).SetEase(Ease.InCirc);
-                machineScene.transform.DOMove(new Vector3(Screen.width, 0, 0), 1f).SetEase(Ease.Linear);
+                DOTween.To(() => sb.value, x => sb.value = x, 0, duration).SetEase(Ease.InCirc);
+                // go right outside. rect position goes width, 0 , 0
+                machineRect.DOAnchorPosX(rectWidth, duration).SetEase(Ease.InCirc);
             }
             else
             {
-                machineScene.transform.DOMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutBounce);
+                machineRect.DOAnchorPosX(0, duration).SetEase(Ease.InCirc);
             }
         }
 

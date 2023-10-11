@@ -24,11 +24,13 @@ namespace skewer
         private void Update()
         {
             float value = scrollbar.value;
-            if (value is < 0.25F and >= 0)
-                currentPosition = WhereAmI.First;
-            else if (value is > 0.25F and < 0.75F)
-                currentPosition = WhereAmI.Second;
-            else if (value is >= 0.75F and <= 1) currentPosition = WhereAmI.Third;
+            currentPosition = value switch
+            {
+                < 0.25F and >= 0 => WhereAmI.First,
+                > 0.25F and < 0.75F => WhereAmI.Second,
+                >= 0.75F and <= 1 => WhereAmI.Third,
+                _ => currentPosition
+            };
         }
 
 

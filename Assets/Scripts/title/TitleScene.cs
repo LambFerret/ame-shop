@@ -15,8 +15,18 @@ namespace title
 
         private void Awake()
         {
-            title.rectTransform.DOAnchorPosX(-title.rectTransform.rect.width, 0);
+            float canvasWidth = title.canvas.pixelRect.width;
+            float titleWidth = title.rectTransform.rect.width;
+
+            // Set the starting position
+            float startX = -0.5f * canvasWidth - 0.5f * titleWidth;
+            title.rectTransform.anchoredPosition = new Vector2(startX, title.rectTransform.anchoredPosition.y);
+
+            // Do the movement (This has been moved from the coroutine to Awake for demonstration)
+            float endX = -0.5f * canvasWidth + 0.5f * titleWidth;
+            title.rectTransform.DOAnchorPosX(endX, 2).SetEase(Ease.OutCubic);
         }
+
 
         private void Start()
         {
