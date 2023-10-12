@@ -75,16 +75,16 @@ namespace skewer
                     List<RaycastResult> results = new List<RaycastResult>();
 
                     EventSystem.current.RaycastAll(pointerData, results);
-                    bool conti = false;
+                    bool continueFlag = false;
                     foreach (RaycastResult result in results)
                     {
                         if (result.gameObject.transform.parent.parent.name is "ChoppingBoard")
                         {
-                            conti = true;
+                            continueFlag = true;
                         }
                     }
 
-                    if (!conti)
+                    if (!continueFlag)
                     {
                         OnClickTopping();
                         return;

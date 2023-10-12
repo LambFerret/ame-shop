@@ -12,10 +12,12 @@ namespace skewer
     public class SkewerBehavior : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("Constant Value")] public int maxLength;
+        public float currentLength;
         public int perfectTemperatureFrom;
         public int perfectTemperatureTo;
         public int concentrationTolerance;
-        public bool IsAlreadyBlended;
+        public bool isAlreadyBlended;
+        public float lengthRatio;
         private int _currentConcentration;
         private int _currentDryTime;
 
@@ -25,7 +27,7 @@ namespace skewer
 
         private int _currentTemperature;
 
-        private List<Ingredient> _Ingredients;
+        private List<Ingredient> _ingredients;
 
         private bool _isDraggable;
 
@@ -44,10 +46,11 @@ namespace skewer
         private void Start()
         {
             _rectTransform = GetComponent<RectTransform>();
-            _Ingredients = new List<Ingredient>();
+            _ingredients = new List<Ingredient>();
             cottonCandy = transform.Find("CottonCandy").gameObject;
             cottonCandyImage = cottonCandy.GetComponent<Image>();
             originalCandy = transform.Find("Candy").gameObject;
+            lengthRatio = _rectTransform.sizeDelta.y / maxLength;
         }
 
         public void MouseFollow()
@@ -56,7 +59,7 @@ namespace skewer
             {
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(_rectTransform.parent as RectTransform,
                     Input.mousePosition, null, out Vector2 localPoint);
-                _rectTransform.localPosition = localPoint;
+                _rectTransform.anchoredPosition = localPoint;
             }
         }
 
@@ -67,12 +70,7 @@ namespace skewer
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!_isDraggable)
-            {
-                Debug.Log("you can");
-                return;
-            }
-
+            if (!_isDraggable) return;
             var scale = new Vector2(2560f / Screen.width, 1440f / Screen.height);
             _rectTransform.anchoredPosition += new Vector2(eventData.delta.x * scale.x, eventData.delta.y * scale.y);
         }
@@ -137,13 +135,13 @@ namespace skewer
             int averageMoisture = 0;
             int totalSize = 0;
 
-            foreach (var ingredient in _Ingredients)
+            foreach (var ingredient in _ingredients)
             {
                 averageMoisture += ingredient.perfectConcentration;
                 totalSize += ingredient.size;
             }
 
-            _perfectConcentration = averageMoisture / _Ingredients.Count;
+            _perfectConcentration = averageMoisture / _ingredients.Count;
             _perfectDryTime = totalSize;
 
             Debug.Log(" what is perfect dry time : " + _perfectDryTime + " perfect concentration : " +
@@ -198,7 +196,6 @@ namespace skewer
          * }
          *
          * _Ingredients.Clear();
-         * // TODO
          * _secondIngredients.Clear();
          * _thirdIngredients.Clear();
          * _dryTime = 0;
@@ -211,7 +208,7 @@ namespace skewer
         // Setting base Ingredients
         public void AddIngredient(Ingredient ingredient)
         {
-            _Ingredients.Add(ingredient);
+            _ingredients.Add(ingredient);
             SkewIngredients(ingredient);
 
             CalculatePerfect();
@@ -220,35 +217,48 @@ namespace skewer
 
         private void SkewIngredients(Ingredient ingredient)
         {
-            const float offset = 2.0f;
+            currentLength += ingredient.size * lengthRatio;
+            var candy = transform.Find("Candy");
+            var prefab = Instantiate(ingredient.prefab, candy);
 
-            var t = transform.Find("Candy");
-            var childCount = t.childCount;
-            var prefab = Instantiate(ingredient.prefab, t);
-            prefab.transform.localPosition = new Vector3(childCount * offset, childCount * offset, 0);
+            RectTransform rectTransform = prefab.GetComponent<RectTransform>();
+            var sizeDelta = rectTransform.sizeDelta;
+            float originalWidth = sizeDelta.x;
+            float originalHeight = sizeDelta.y;
+
+            float aspectRatio = originalWidth / originalHeight;
+
+            float newHeightInPixels = ingredient.size * lengthRatio;
+            float newWidthInPixels = newHeightInPixels * aspectRatio;
+
+            sizeDelta = new Vector2(newWidthInPixels, newHeightInPixels);
+            rectTransform.sizeDelta = sizeDelta;
+
+            prefab.transform.localPosition = new Vector3(0, currentLength, 0);
+            prefab.transform.rotation = candy.transform.rotation;
         }
 
         public List<Ingredient> GetIngredients()
         {
             DebugReadIngredients();
-            return _Ingredients;
+            return _ingredients;
         }
 
         public int GetSkewerPrice()
         {
-            var ingredient = GetDominantIngredient(_Ingredients);
-            return ingredient.pricePerOne * _Ingredients.Count(i => i.ingredientId == ingredient.ingredientId);
+            var ingredient = GetDominantIngredient(_ingredients);
+            return ingredient.pricePerOne * _ingredients.Count(i => i.ingredientId == ingredient.ingredientId);
         }
 
         public bool IsDominantIngredient(Ingredient ingredient)
         {
-            var a = GetDominantIngredient(_Ingredients)?.ingredientId;
+            var a = GetDominantIngredient(_ingredients)?.ingredientId;
             var b = ingredient.ingredientId;
             Debug.Log("what is dominant of this skewer? : " + a + " and ordered " + b);
             return a == b;
         }
 
-        public static Ingredient GetDominantIngredient(IEnumerable<Ingredient> ingredients)
+        private static Ingredient GetDominantIngredient(IEnumerable<Ingredient> ingredients)
         {
             // Group the ingredients by their name and calculate the total size for each group
             var ingredientGroups = ingredients.GroupBy(i => i.ingredientId)
@@ -272,20 +282,20 @@ namespace skewer
         public int GetSize()
         {
             int i = 0;
-            foreach (var ing in _Ingredients) i += ing.size;
+            foreach (var ing in _ingredients) i += ing.size;
 
             return i;
         }
 
         private void DebugReadIngredients()
         {
-            string listString = string.Join(" - ", _Ingredients.Select(i => i.ingredientId));
+            string listString = string.Join(" - ", _ingredients.Select(i => i.ingredientId));
             Debug.Log($"[{listString}]");
         }
 
         public string GetIngredientText()
         {
-            return string.Join(" - ", _Ingredients.Select(i => i.ingredientId));
+            return string.Join(" - ", _ingredients.Select(i => i.ingredientId));
         }
 
         // // TODO setting third ingredient

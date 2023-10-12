@@ -20,7 +20,6 @@ namespace skewer
         public int minute;
 
         [Header("Game Objects")] public Button putButton;
-        public Button getButton;
         public TextMeshProUGUI text;
         public GameObject blockingScreen;
         public SkewerController skewerController;
@@ -33,14 +32,25 @@ namespace skewer
         {
             currentState = BoilerState.Nothing;
             _minuteRectTransform = minuteText.GetComponent<RectTransform>();
-            putButton.onClick.AddListener(ReceiveSkewerFromController);
-            getButton.onClick.AddListener(GiveSkewerToController);
+            putButton.onClick.AddListener(HandleSkewer);
         }
 
         private void Update()
         {
             if (_currentSkewer is null) return;
             text.text = _currentSkewer.GetIngredientText();
+        }
+
+        private void HandleSkewer()
+        {
+            if (currentState == BoilerState.Nothing)
+            {
+                ReceiveSkewerFromController();
+            }
+            else if (currentState == BoilerState.Done)
+            {
+                GiveSkewerToController();
+            }
         }
 
         private void ReceiveSkewerFromController()
@@ -51,6 +61,7 @@ namespace skewer
             _currentSkewerGameObject = skewerGameObject;
             _currentSkewer = skewerGameObject.GetComponent<SkewerBehavior>();
             _currentSkewerGameObject.transform.SetParent(transform);
+            _currentSkewerGameObject.transform.SetSiblingIndex(0);
             currentState = BoilerState.BeforeStart;
         }
 

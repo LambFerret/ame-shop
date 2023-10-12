@@ -1,0 +1,421 @@
+fileFormatVersion: 2
+guid: f21f769e8a039436f842d30ad270c7e0
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: b2a9591990af98743ba3ff7cf1000886, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 1
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    isReadable: 0
+    streamingMipmaps: 1
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMasterTextureLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  spriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
+  mosaicSpriteImportData: []
+  rigSpriteImportData:
+  - name: waterpot
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 2279
+      width: 324
+      height: 469
+    spriteID: ea19e7b3573e14411a7c5a27f10d5be6
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 4, y: 2279}
+    spritePosition: {x: 814, y: 307}
+  - name: sugarpot
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 336
+      y: 2279
+      width: 348
+      height: 255
+    spriteID: fc33d5e2593314dfbb9b5109628648a6
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 336, y: 2279}
+    spritePosition: {x: 804, y: 555}
+  - name: pot
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 1092
+      width: 730
+      height: 592
+    spriteID: 3733a386f0f6e42869b7ea0898572758
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 4, y: 1092}
+    spritePosition: {x: 38, y: 320}
+  - name: stove
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 742
+      y: 1092
+      width: 752
+      height: 493
+    spriteID: 1f4f8bdedb0444bc4a4f8aa9e7dc7b13
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 742, y: 1092}
+    spritePosition: {x: 26, y: 235}
+  - name: postit
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 1502
+      y: 1092
+      width: 217
+      height: 131
+    spriteID: 4c7a4c3d2e62b48aa86f889c6558cf35
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 1502, y: 1092}
+    spritePosition: {x: 17, y: 6}
+  - name: Slime
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 1692
+      width: 702
+      height: 579
+    spriteID: a03066a178eae422aa82d8f5f088bcc4
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 4, y: 1692}
+    spritePosition: {x: 1194, y: 395}
+  - name: ui1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 1727
+      y: 1092
+      width: 215
+      height: 85
+    spriteID: 636553cb15584404fbed491e22da1a01
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 1727, y: 1092}
+    spritePosition: {x: 1180, y: 307}
+  - name: ui
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 742
+      y: 1593
+      width: 566
+      height: 110
+    spriteID: bc8d5f941862b4a3986bd7dee99f8db3
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 742, y: 1593}
+    spritePosition: {x: 116, y: 940}
+  - name: manufacturing stand
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 1920
+      height: 1080
+    spriteID: 2077270e9ee2f4a49b394e50ec3e7047
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 0, y: 0}
+  characterData:
+    bones: []
+    parts: []
+    dimension: {x: 0, y: 0}
+    characterGroups: []
+    boneReadOnly: 0
+  sharedRigSpriteImportData: []
+  sharedRigCharacterData:
+    bones: []
+    parts: []
+    dimension: {x: 0, y: 0}
+    characterGroups: []
+    boneReadOnly: 0
+  platformSettings: []
+  mosaicLayers: 1
+  characterMode: 1
+  documentPivot: {x: 0, y: 0}
+  documentAlignment: 7
+  importHiddenLayers: 0
+  layerMappingOption: 2
+  generatePhysicsShape: 0
+  paperDollMode: 0
+  keepDupilcateSpriteName: 1
+  skeletonAssetReferenceID: 
+  spriteCategoryList:
+    categories: []
+  spritePackingTag: 
+  resliceFromLayer: 0
+  mosaicPSDLayers: []
+  rigPSDLayers:
+  - name: waterpot
+    spriteName: waterpot
+    isGroup: 0
+    parentIndex: -1
+    spriteID: ea19e7b3573e14411a7c5a27f10d5be6
+    layerID: 0
+    mosaicPosition: {x: 4, y: 2279}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: sugarpot
+    spriteName: sugarpot
+    isGroup: 0
+    parentIndex: -1
+    spriteID: fc33d5e2593314dfbb9b5109628648a6
+    layerID: 930408213
+    mosaicPosition: {x: 336, y: 2279}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: pot
+    spriteName: pot
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 3733a386f0f6e42869b7ea0898572758
+    layerID: 1502598835
+    mosaicPosition: {x: 4, y: 1092}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: stove
+    spriteName: stove
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 1f4f8bdedb0444bc4a4f8aa9e7dc7b13
+    layerID: 533126591
+    mosaicPosition: {x: 742, y: 1092}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: postit
+    spriteName: postit
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 4c7a4c3d2e62b48aa86f889c6558cf35
+    layerID: -1138936095
+    mosaicPosition: {x: 1502, y: 1092}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Slime
+    spriteName: Slime
+    isGroup: 0
+    parentIndex: -1
+    spriteID: a03066a178eae422aa82d8f5f088bcc4
+    layerID: -1355655442
+    mosaicPosition: {x: 4, y: 1692}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: ui1
+    spriteName: ui1
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 636553cb15584404fbed491e22da1a01
+    layerID: 339799389
+    mosaicPosition: {x: 1727, y: 1092}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: ui
+    spriteName: ui
+    isGroup: 0
+    parentIndex: -1
+    spriteID: bc8d5f941862b4a3986bd7dee99f8db3
+    layerID: 334115660
+    mosaicPosition: {x: 742, y: 1593}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: manufacturing stand
+    spriteName: manufacturing stand
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 2077270e9ee2f4a49b394e50ec3e7047
+    layerID: -1597394696
+    mosaicPosition: {x: 4, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  sharedRigPSDLayers: []
+  pSDLayerImportSetting: []
+  generateGOHierarchy: 0
+  textureAssetName: 
+  prefabAssetName: 
+  spriteLibAssetName: 
+  skeletonAssetName: 
+  secondarySpriteTextures: []
