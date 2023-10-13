@@ -194,7 +194,6 @@ namespace stage
         public void SwitchCashierMachine(bool isCashierScene)
         {
             SoundManager.Instance.PlaySFX(SoundManager.SFX.ChangeCashier);
-            Debug.Log("clicked " + isCashierScene);
             var machineRect = machineScene.GetComponent<RectTransform>();
             var rectWidth = machineRect.rect.width;
             float duration =  1f;

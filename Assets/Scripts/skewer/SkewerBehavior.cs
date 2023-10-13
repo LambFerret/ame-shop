@@ -18,6 +18,7 @@ namespace skewer
         public int concentrationTolerance;
         public bool isAlreadyBlended;
         public float lengthRatio;
+        public float skewerOffset = 80;
         private int _currentConcentration;
         private int _currentDryTime;
 
@@ -212,30 +213,20 @@ namespace skewer
             SkewIngredients(ingredient);
 
             CalculatePerfect();
-            DebugReadIngredients();
+            // DebugReadIngredients();
         }
 
         private void SkewIngredients(Ingredient ingredient)
         {
-            currentLength += ingredient.size * lengthRatio;
-            var candy = transform.Find("Candy");
-            var prefab = Instantiate(ingredient.prefab, candy);
-
-            RectTransform rectTransform = prefab.GetComponent<RectTransform>();
+            var fruit = Instantiate(ingredient.prefab, originalCandy.transform);
+            RectTransform rectTransform = fruit.GetComponent<RectTransform>();
+            var normalizedWidth = ingredient.size * lengthRatio;
             var sizeDelta = rectTransform.sizeDelta;
-            float originalWidth = sizeDelta.x;
-            float originalHeight = sizeDelta.y;
-
-            float aspectRatio = originalWidth / originalHeight;
-
-            float newHeightInPixels = ingredient.size * lengthRatio;
-            float newWidthInPixels = newHeightInPixels * aspectRatio;
-
-            sizeDelta = new Vector2(newWidthInPixels, newHeightInPixels);
+            float newWidthInPixels = normalizedWidth * (sizeDelta.x / sizeDelta.y);
+            sizeDelta = new Vector2(newWidthInPixels, normalizedWidth);
             rectTransform.sizeDelta = sizeDelta;
-
-            prefab.transform.localPosition = new Vector3(0, currentLength, 0);
-            prefab.transform.rotation = candy.transform.rotation;
+            rectTransform.anchoredPosition = new Vector3(0, currentLength - skewerOffset, 0);
+            currentLength += normalizedWidth;
         }
 
         public List<Ingredient> GetIngredients()

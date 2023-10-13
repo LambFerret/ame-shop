@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 013f9cc1aebd4b2684c41dfb4fa4b5bd, type: 3}
-  m_Name: Guy
+  m_Name: Grandpa
   m_EditorClassIdentifier: 
-  id: Guy
+  id: Grandpa
   hasSpecialEvent: 0
-  patience: 120
+  patience: 180
   emotions: 0000000001000000020000000300000004000000
   sprites:
-  - {fileID: 21300000, guid: 16e7a11d1c37a498c9ffdfbb08846301, type: 3}
-  - {fileID: 21300000, guid: 369a929f017414e52961fe1ad8c0dc0d, type: 3}
-  - {fileID: 21300000, guid: 0763e6ac9543f4469bcdc0ddb90eab7f, type: 3}
+  - {fileID: 21300000, guid: 372e7b39fc8f34549ac25d8757965a2c, type: 3}
+  - {fileID: 21300000, guid: 8325d4ef0a6eb3d43952aff8a06d9f45, type: 3}
+  - {fileID: 21300000, guid: c887ed2a931c29040bc544cd8c546e9f, type: 3}
   - {fileID: 21300000, guid: ace3b69f718c44e39adc3ece9a687492, type: 3}
-  - {fileID: 21300000, guid: 4d77a4777e02f4479968159f1a70cb22, type: 3}
+  - {fileID: 21300000, guid: 13e7e6fe43a8aa049bcd610bbc1f5ff8, type: 3}
   isSlime: 0
   ingredient: {fileID: 0}

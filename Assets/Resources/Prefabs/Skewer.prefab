@@ -26,8 +26,8 @@ RectTransform:
   m_GameObject: {fileID: 709499191770144409}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 9120643624686030747}
   - {fileID: 4774787450041618479}
@@ -59,6 +59,7 @@ MonoBehaviour:
   concentrationTolerance: 10
   isAlreadyBlended: 0
   lengthRatio: 0
+  skewerOffset: 80
   cottonCandy: {fileID: 0}
   cottonCandyImage: {fileID: 0}
   originalCandy: {fileID: 0}
@@ -121,14 +122,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.754717, g: 0.69172126, b: 0.11035956, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5f35b12f0ca4f430293531960f3bd0c6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 14c11a53270d3f643a34eb58f35f003e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -174,9 +175,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000015258789, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.49999994, y: 0.15342486}
+  m_AnchoredPosition: {x: 0, y: 0.0000038146973}
+  m_SizeDelta: {x: 0.0000076293936, y: 0.00000024449037}
+  m_Pivot: {x: 0.5, y: 0.1337012}
 --- !u!1 &7588850796842353447
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,9 +265,9 @@ GameObject:
   - component: {fileID: 246334736374754801}
   - component: {fileID: 6796284576551320357}
   - component: {fileID: 6985457822946120468}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tail
-  m_TagString: Untagged
+  m_TagString: CandyTail
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -288,8 +289,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.7084656, y: -42.641}
-  m_SizeDelta: {x: 17.276, y: 114.72}
+  m_AnchoredPosition: {x: 0.0009613, y: -92.64}
+  m_SizeDelta: {x: 222.77, y: 114.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6796284576551320357
 CanvasRenderer:
@@ -312,15 +313,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0, g: 0.030314207, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -340,9 +341,9 @@ GameObject:
   - component: {fileID: 4398692156650296238}
   - component: {fileID: 9074000374883381495}
   - component: {fileID: 1248373035123176942}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: CandyHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -364,8 +365,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.4171, y: 83}
-  m_SizeDelta: {x: 18.6932, y: 32.5936}
+  m_AnchoredPosition: {x: 0.000024319, y: 74.33}
+  m_SizeDelta: {x: 222.7697, y: 148.66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9074000374883381495
 CanvasRenderer:
@@ -388,15 +389,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 0, b: 0.08445263, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

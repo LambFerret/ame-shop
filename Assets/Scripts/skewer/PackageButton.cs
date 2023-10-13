@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ingredient;
 using manager;
@@ -8,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace skewer
 {
@@ -33,17 +35,18 @@ namespace skewer
             _button.onClick.AddListener(OnClickTopping);
         }
 
-        public void OnClickTopping()
+        private void OnClickTopping()
         {
-            if (skewer.whatsOnHand == SkewerController.WhatsOnHand.None)
+            switch (skewer.whatsOnHand)
             {
-                _isOnMouse = true;
-            }
-            else if (skewer.whatsOnHand == SkewerController.WhatsOnHand.Topping)
-            {
-                _toppingPrefab.transform.localPosition = Vector3.zero;
-                _isOnMouse = false;
-                skewer.whatsOnHand = SkewerController.WhatsOnHand.None;
+                case SkewerController.WhatsOnHand.None:
+                    _isOnMouse = true;
+                    break;
+                case SkewerController.WhatsOnHand.Topping:
+                    _toppingPrefab.transform.localPosition = Vector3.zero;
+                    _isOnMouse = false;
+                    skewer.whatsOnHand = SkewerController.WhatsOnHand.None;
+                    break;
             }
         }
 
@@ -56,32 +59,25 @@ namespace skewer
             {
                 FollowMouse();
 
-                PointerEventData pointerData = new PointerEventData(EventSystem.current);
-                pointerData.position = Input.mousePosition;
+                PointerEventData pointerData = new PointerEventData(EventSystem.current)
+                {
+                    position = Input.mousePosition
+                };
 
                 List<RaycastResult> results = new List<RaycastResult>();
                 EventSystem.current.RaycastAll(pointerData, results);
 
                 foreach (RaycastResult result in results)
                 {
-                    if (result.gameObject.name.Equals("Candy"))
+                    if (result.gameObject.CompareTag("CandyHead"))
                     {
-                        GameObject bone = result.gameObject;
-                        RectTransform headRect = bone.transform.Find("Head").GetComponent<RectTransform>();
-                        RectTransform tailRect = bone.transform.Find("Tail").GetComponent<RectTransform>();
-
-                        if (RectTransformUtility.RectangleContainsScreenPoint(headRect, pointerData.position))
-                        {
-                            _isOnHead = true;
-                        }
-                        else if (_isOnHead &&
-                                 RectTransformUtility.RectangleContainsScreenPoint(tailRect, pointerData.position))
-                        {
-                            Debug.Log("AND ON TAIL!!!");
-                            Packing();
-                            _isOnMouse = false;
-                            _isOnHead = false; // 상태 초기화
-                        }
+                        _isOnHead = true;
+                    }
+                    else if (_isOnHead && result.gameObject.CompareTag("CandyTail"))
+                    {
+                        Packing();
+                        _isOnMouse = false;
+                        _isOnHead = false; // 상태 초기화
                     }
                 }
             }
@@ -90,7 +86,8 @@ namespace skewer
         private void FollowMouse()
         {
             skewer.whatsOnHand = SkewerController.WhatsOnHand.Topping;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(_toppingPrefab.transform.parent as RectTransform,
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                _toppingPrefab.transform.parent as RectTransform,
                 Input.mousePosition, null, out Vector2 localPoint);
             _toppingPrefab.transform.localPosition = localPoint;
         }

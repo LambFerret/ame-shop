@@ -7868,7 +7868,6 @@ MonoBehaviour:
   currentState: 0
   minute: 0
   putButton: {fileID: 853848265}
-  text: {fileID: 0}
   blockingScreen: {fileID: 1486906181}
   skewerController: {fileID: 721914799}
   minuteText: {fileID: 2117465915}
@@ -8224,7 +8223,6 @@ MonoBehaviour:
   currentState: 0
   minute: 0
   putButton: {fileID: 2103654690}
-  text: {fileID: 0}
   blockingScreen: {fileID: 1637369878}
   skewerController: {fileID: 721914799}
   minuteText: {fileID: 788979110}
@@ -10954,15 +10952,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a898f0c03f6fc4ca683f7cd27aba65ad, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -12501,7 +12499,6 @@ MonoBehaviour:
   currentState: 0
   minute: 0
   putButton: {fileID: 351408523}
-  text: {fileID: 0}
   blockingScreen: {fileID: 230419885}
   skewerController: {fileID: 721914799}
   minuteText: {fileID: 1603090535}
@@ -18615,14 +18612,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.012281928, g: 0.8679245, b: 0.13641557, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 60ba338a264644805adca6822edcb3fc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9e4e64ce101fb8349b31b184700f2ece, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
