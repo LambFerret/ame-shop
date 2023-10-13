@@ -12,34 +12,30 @@ namespace skewer
     public class SkewerBehavior : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("Constant Value")] public int maxLength;
-        public float currentLength;
+        public float skewerOffsetLength = 5;
         public int perfectTemperatureFrom;
         public int perfectTemperatureTo;
         public int concentrationTolerance;
         public bool isAlreadyBlended;
+        public float currentLength;
         public float lengthRatio;
-        public float skewerOffset = 80;
-        private int _currentConcentration;
-        private int _currentDryTime;
 
         [Header("Coat Candy")] public GameObject cottonCandy;
         public Image cottonCandyImage;
         public GameObject originalCandy;
 
+        private int _currentConcentration;
+        private int _currentDryTime;
         private int _currentTemperature;
-
         private List<Ingredient> _ingredients;
-
         private bool _isDraggable;
-
         private bool _isFirstThirdSecond;
         private bool _isSkewerFocused;
         private Vector3 _originalPosition;
-
         private int _perfectConcentration;
-
         private int _perfectDryTime;
         private RectTransform _rectTransform;
+        private RectTransform _candyRectTransform;
 
         // private List<IngredientManager.ThirdIngredient> _thirdIngredients;
         // public BlendedCandy BlendedCandy;
@@ -52,6 +48,8 @@ namespace skewer
             cottonCandyImage = cottonCandy.GetComponent<Image>();
             originalCandy = transform.Find("Candy").gameObject;
             lengthRatio = _rectTransform.sizeDelta.y / maxLength;
+            _candyRectTransform = originalCandy.GetComponent<RectTransform>();
+            _candyRectTransform.pivot = new Vector2(0.5f, skewerOffsetLength / maxLength);
         }
 
         public void MouseFollow()
@@ -219,13 +217,21 @@ namespace skewer
         private void SkewIngredients(Ingredient ingredient)
         {
             var fruit = Instantiate(ingredient.prefab, originalCandy.transform);
-            RectTransform rectTransform = fruit.GetComponent<RectTransform>();
+            RectTransform fruitRectTransform = fruit.GetComponent<RectTransform>();
             var normalizedWidth = ingredient.size * lengthRatio;
-            var sizeDelta = rectTransform.sizeDelta;
+            var sizeDelta = fruitRectTransform.sizeDelta;
             float newWidthInPixels = normalizedWidth * (sizeDelta.x / sizeDelta.y);
             sizeDelta = new Vector2(newWidthInPixels, normalizedWidth);
-            rectTransform.sizeDelta = sizeDelta;
-            rectTransform.anchoredPosition = new Vector3(0, currentLength - skewerOffset, 0);
+            fruitRectTransform.sizeDelta = sizeDelta;
+
+            RectTransform candyRect = originalCandy.GetComponent<RectTransform>();
+
+            Debug.Log(" current length : " + currentLength.ToString(" 0.00") + " candy rect : " + candyRect.anchoredPosition.y.ToString(" 0.00") +
+                      " normalized width of fruit : " + normalizedWidth.ToString(" 0.00") + " rect transform : " + fruitRectTransform.anchoredPosition);
+            Debug.Log(" and maybe offset too : " + fruitRectTransform.offsetMin + " and " + fruitRectTransform.offsetMax);
+            Debug.Log(" and maybe offset 333 : " + skewerOffsetLength);
+            Debug.Log("offset mult : " + lengthRatio + " and " + (skewerOffsetLength * lengthRatio).ToString(" 0.00"));
+            fruitRectTransform.localPosition = new Vector3(0, currentLength, 0);
             currentLength += normalizedWidth;
         }
 

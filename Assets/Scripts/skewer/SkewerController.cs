@@ -118,7 +118,7 @@ namespace skewer
             int currentSize = 0;
             foreach (var element in currentSkewer.GetIngredients()) currentSize += element.size;
 
-            return currentSize + size > currentSkewer.maxLength;
+            return currentSize + size > currentSkewer.maxLength - currentSkewer.skewerOffsetLength;
         }
 
         public bool ReceiveSkewerFromBoiler(GameObject skewerGameObject)
