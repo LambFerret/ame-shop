@@ -23,6 +23,19 @@ namespace customer
         private const float AnimationDuration = 2f;
         private const float IdleAnimationScale = 1.03f;
 
+        [Header("Settings")] public float baseWaitTime = 10f;
+        public float basicSatisfaction;
+        public float satisfactionLossWhenIngredientMistake;
+        public float satisfactionLossWhenConcentrationIsHigh;
+        public float satisfactionLossWhenConcentrationIsLow;
+        public float satisfactionLossWhenNeedMoreDry;
+        public float satisfactionLossWhenWaitTooLong;
+        public float initialPopularity;
+        public float popularityLossWhenFail;
+        public float popularityGainWhenSuccess;
+        public float popularityLossWhenRefuse;
+        public float popularityLossWhenPoke;
+
         [Header("Game Objects")] public StageController stageController;
         public GameObject billPrefab;
         public GameObject billPlaceHolder;
@@ -30,7 +43,6 @@ namespace customer
 
         [Header("Info")] public Customer customer;
 
-        public int value;
         private readonly Dictionary<Customer.QuoteLine, List<string>> _quoteLines = new();
         private GameObject _bill;
 
@@ -92,6 +104,19 @@ namespace customer
         {
             _dayPopularityGain = data.dayPopularityGain;
             _dayPopularityLoss = data.dayPopularityLoss;
+
+            // debug
+            basicSatisfaction = data.basicSatisfaction;
+            satisfactionLossWhenIngredientMistake = data.satisfactionLossWhenIngredientMistake;
+            satisfactionLossWhenConcentrationIsHigh = data.satisfactionLossWhenConcentrationIsHigh;
+            satisfactionLossWhenConcentrationIsLow = data.satisfactionLossWhenConcentrationIsLow;
+            satisfactionLossWhenNeedMoreDry = data.satisfactionLossWhenNeedMoreDry;
+            satisfactionLossWhenWaitTooLong = data.satisfactionLossWhenWaitTooLong;
+            initialPopularity = data.initialPopularity;
+            popularityLossWhenFail = data.popularityLossWhenFail;
+            popularityGainWhenSuccess = data.popularityGainWhenSuccess;
+            popularityLossWhenRefuse = data.popularityLossWhenRefuse;
+            popularityLossWhenPoke = data.popularityLossWhenPoke;
         }
 
         public void SaveData(GameData data)
@@ -187,12 +212,11 @@ namespace customer
             if (_bill is null) return;
             Destroy(_bill);
             SoundManager.Instance.PlaySFX(SoundManager.SFX.BillOut);
-
         }
 
         public void CheckServedSkewer(SkewerBehavior skewer)
         {
-            int satisfaction = 100;
+            int satisfaction = (int)basicSatisfaction;
             Customer.QuoteLine currentFeeling = Customer.QuoteLine.Good;
 
             // 기다린 시간 계산
@@ -200,41 +224,40 @@ namespace customer
 
             // 농도가 안맞을 경우
             int concentration = skewer.CheckConcentration();
-            if (concentration < 0)
+            switch (concentration)
             {
-                satisfaction -= concentration * 2;
-                currentFeeling = Customer.QuoteLine.BadMildTaste;
-            }
-            else if (concentration > 0)
-            {
-                satisfaction -= concentration;
-                currentFeeling = Customer.QuoteLine.BadTooSweet;
+                case < 0:
+                    satisfaction -= concentration * (int)satisfactionLossWhenConcentrationIsLow;
+                    currentFeeling = Customer.QuoteLine.BadMildTaste;
+                    break;
+                case > 0:
+                    satisfaction -= concentration * (int)satisfactionLossWhenConcentrationIsHigh;
+                    currentFeeling = Customer.QuoteLine.BadTooSweet;
+                    break;
             }
 
             // 덜굳음
             if (skewer.IsNotEnoughDry() || !skewer.CheckTemperature())
             {
-                satisfaction -= 30;
+                satisfaction -= (int)satisfactionLossWhenNeedMoreDry;
                 currentFeeling = Customer.QuoteLine.BadTooWatery;
             }
 
             // 재료가 안맞을 경우
             if (!skewer.IsDominantIngredient(customer.ingredient))
             {
-                satisfaction -= 50;
+                satisfaction -= (int)satisfactionLossWhenIngredientMistake;
                 currentFeeling = Customer.QuoteLine.BadNotMyChoice;
             }
 
             if (satisfaction < 0) satisfaction = 0;
 
-            int money;
-
-            if (currentFeeling == Customer.QuoteLine.BadNotMyChoice)
-                money = 500;
-            else if (currentFeeling == Customer.QuoteLine.Good && satisfaction >= 90)
-                money = (int)(skewer.GetSkewerPrice() * 1.5F);
-            else
-                money = (int)(skewer.GetSkewerPrice() * 1.1F);
+            int money = currentFeeling switch
+            {
+                Customer.QuoteLine.BadNotMyChoice => 500,
+                Customer.QuoteLine.Good when satisfaction >= 90 => (int)(skewer.GetSkewerPrice() * 1.5F),
+                _ => (int)(skewer.GetSkewerPrice() * 1.1F)
+            };
 
             Serve(currentFeeling, satisfaction, money);
         }
@@ -254,12 +277,12 @@ namespace customer
             switch (feeling)
             {
                 case Customer.QuoteLine.Refused:
-                    popularity = -2;
+                    popularity = -(int)popularityLossWhenRefuse;
                     endImmediately = true;
                     ChangeEmotion(Customer.Emotion.Sad);
                     break;
                 case Customer.QuoteLine.TimeOut:
-                    popularity = -6;
+                    popularity =  -(int)popularityLossWhenFail;
                     endImmediately = true;
                     ChangeEmotion(Customer.Emotion.Angry);
 
@@ -268,7 +291,7 @@ namespace customer
                     ChangeEmotion(Customer.Emotion.Poked);
 
                     if (!customer.isSlime)
-                        popularity = -5;
+                        popularity = -(int)popularityLossWhenPoke;
                     else
                         // TODO random range of slime ingredient
                         GameEventManager.Instance.IngredientChanged(
@@ -326,7 +349,7 @@ namespace customer
 
         private IEnumerator EndCustomer()
         {
-            if (!gameObject.TryGetComponent(out Canvas canvasComponentBefore))
+            if (!gameObject.TryGetComponent(out Canvas _))
             {
                 var canvas = gameObject.AddComponent<Canvas>();
                 canvas.overrideSorting = true;

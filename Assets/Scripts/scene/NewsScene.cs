@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace title
+namespace scene
 {
     public class NewsScene : MonoBehaviour, IDataPersistence
     {
@@ -19,15 +19,20 @@ namespace title
         public TextMeshProUGUI newsContent;
         public Image newsImage;
 
-        [Header("Game Object")] public TextMeshProUGUI clickToContinue;
+        [Header("Game Object")]
+        public Button clickToContinue;
 
         public GameObject gameStartButton;
         public Animator gameStartIdle;
 
         [Header("Info")] public int day;
 
+        private TextMeshProUGUI _clickToContinueText;
+        private bool _isClickToContinue;
+
         private void Start()
         {
+            _clickToContinueText = clickToContinue.GetComponentInChildren<TextMeshProUGUI>();
             gameStartIdle = gameStartButton.GetComponent<Animator>();
             SetNewsText();
             StartCoroutine(SequenceCoroutine());
@@ -72,20 +77,26 @@ namespace title
             gameStartIdle.Play("blog");
             yield return new WaitForSeconds(1);
 
-            clickToContinue.gameObject.SetActive(true);
             StartCoroutine(BlinkingCoroutine());
-
-            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
-            LoadingScreen.Instance.LoadScene("CashierScene");
         }
 
         private IEnumerator BlinkingCoroutine()
         {
+            _isClickToContinue = true;
+            clickToContinue.gameObject.SetActive(true);
+            clickToContinue.onClick.AddListener(ClickToContinueClicked);
+
             while (true)
             {
-                clickToContinue.DOFade(0.5f, 0.5f).SetLoops(2, LoopType.Yoyo);
+                _clickToContinueText.DOFade(0.5f, 0.5f).SetLoops(2, LoopType.Yoyo);
                 yield return new WaitForSeconds(1);
             }
+        }
+
+        private void ClickToContinueClicked()
+        {
+            if (!_isClickToContinue) return;
+            LoadingScreen.Instance.LoadScene("CashierScene");
         }
     }
 }

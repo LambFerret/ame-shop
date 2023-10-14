@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace title
+namespace scene
 {
     public class LogoScene : MonoBehaviour
     {

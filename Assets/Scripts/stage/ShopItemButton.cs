@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace title
+namespace stage
 {
     public class ShopItemButton : MonoBehaviour, IDataPersistence
     {

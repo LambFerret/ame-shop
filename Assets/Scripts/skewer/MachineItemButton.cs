@@ -53,6 +53,8 @@ namespace skewer
         public void LoadData(GameData data)
         {
             amount = data.ingredients[IngredientManager.Instance.GetIngredientIndex(ingredient)];
+            Debug.Log( "value : " + amount);
+            Debug.Log(data.ingredients);
         }
 
         public void SaveData(GameData data)

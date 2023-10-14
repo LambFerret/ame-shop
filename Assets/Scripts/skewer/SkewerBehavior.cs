@@ -3,13 +3,15 @@ using System.Linq;
 using customer;
 using DG.Tweening;
 using ingredient;
+using player;
+using player.data;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace skewer
 {
-    public class SkewerBehavior : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class SkewerBehavior : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDataPersistence
     {
         [Header("Constant Value")] public int maxLength;
         public float skewerOffsetLength = 5;
@@ -50,6 +52,20 @@ namespace skewer
             lengthRatio = _rectTransform.sizeDelta.y / maxLength;
             _candyRectTransform = originalCandy.GetComponent<RectTransform>();
             _candyRectTransform.pivot = new Vector2(0.5f, skewerOffsetLength / maxLength);
+        }
+
+        public void LoadData(GameData data)
+        {
+            maxLength = (int) data.skewerLength;
+            perfectTemperatureFrom = (int)data.perfectTemperatureStart;
+            perfectTemperatureTo = (int)data.perfectTemperatureEnd;
+            concentrationTolerance = (int)data.perfectConcentrationRange;
+            // _perfectDryTime = data.perfectDryTime;
+        }
+
+        public void SaveData(GameData data)
+        {
+            // nothing
         }
 
         public void MouseFollow()
@@ -226,9 +242,12 @@ namespace skewer
 
             RectTransform candyRect = originalCandy.GetComponent<RectTransform>();
 
-            Debug.Log(" current length : " + currentLength.ToString(" 0.00") + " candy rect : " + candyRect.anchoredPosition.y.ToString(" 0.00") +
-                      " normalized width of fruit : " + normalizedWidth.ToString(" 0.00") + " rect transform : " + fruitRectTransform.anchoredPosition);
-            Debug.Log(" and maybe offset too : " + fruitRectTransform.offsetMin + " and " + fruitRectTransform.offsetMax);
+            Debug.Log(" current length : " + currentLength.ToString(" 0.00") + " candy rect : " +
+                      candyRect.anchoredPosition.y.ToString(" 0.00") +
+                      " normalized width of fruit : " + normalizedWidth.ToString(" 0.00") + " rect transform : " +
+                      fruitRectTransform.anchoredPosition);
+            Debug.Log(
+                " and maybe offset too : " + fruitRectTransform.offsetMin + " and " + fruitRectTransform.offsetMax);
             Debug.Log(" and maybe offset 333 : " + skewerOffsetLength);
             Debug.Log("offset mult : " + lengthRatio + " and " + (skewerOffsetLength * lengthRatio).ToString(" 0.00"));
             fruitRectTransform.localPosition = new Vector3(0, currentLength, 0);

@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace title
+namespace scene
 {
     public class TitleScene : MonoBehaviour
     {

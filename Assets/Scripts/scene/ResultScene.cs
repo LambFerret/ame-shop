@@ -1,22 +1,24 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using ingredient;
 using manager;
 using player;
 using player.data;
 using setting;
+using stage;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace title
+namespace scene
 {
     public class ResultScene : MonoBehaviour, IDataPersistence
     {
-        [Header("Constant")] public int rentCost;
-        public int taxCost;
-        public int electricityCostMultiplier;
-        public int gasCostMultiplier;
-        public int sugarCostMultiplier;
+        [Header("Constant")] public int rentPrice;
+        public int tax;
+        public int electricityPrice;
+        public int gasPrice;
+        public int sugarPrice;
 
         public GameObject togglePlaceHolder;
         public AdsSetting ads;
@@ -73,13 +75,13 @@ namespace title
             Debug.Log("-=-=-=-=-=-=-=-=ID-=-=-=-=-=-=");
             Debug.Log(ads.interstitialAdId);
 
-            for (int i = 0; i < IngredientManager.Instance.ingredients.Count; i++)
+            foreach (var t in IngredientManager.Instance.ingredients)
             {
                 var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/ShopItemButton"),
                     togglePlaceHolder.transform);
                 Toggle toggle = ingredient.GetComponent<Toggle>();
                 ShopItemButton itemButton = ingredient.GetComponent<ShopItemButton>();
-                itemButton.SetIngredient(IngredientManager.Instance.ingredients[i]);
+                itemButton.SetIngredient(t);
                 toggle.onValueChanged.AddListener(arg0 =>
                 {
                     if (arg0)
@@ -114,6 +116,13 @@ namespace title
             _dataMoney = data.money;
             _dayPopularityGain = data.dayPopularityGain;
             _dayPopularityLoss = data.dayPopularityLoss;
+
+            // debug
+            sugarPrice = (int)data.sugarPrice;
+            gasPrice = (int)data.gasPrice;
+            rentPrice = (int)data.rentPrice;
+            tax = (int)data.tax;
+            electricityPrice = (int)data.electricityPrice;
         }
 
         public void SaveData(GameData data)
@@ -161,11 +170,11 @@ namespace title
 
         private void Calculate()
         {
-            _ingredient = _gas * gasCostMultiplier +
-                          _electricity * electricityCostMultiplier +
-                          _sugar * sugarCostMultiplier;
-            _rent = rentCost;
-            _tax = taxCost * (_day / 10);
+            _ingredient = _gas * gasPrice +
+                          _electricity * electricityPrice +
+                          _sugar * sugarPrice;
+            _rent = rentPrice;
+            _tax = tax * (_day / 10);
             _netProfit = _totalMoneyEarned - _rent - _tax - _ingredient;
             _savings = _dataMoney + _netProfit;
         }

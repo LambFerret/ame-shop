@@ -1,4 +1,6 @@
 using System;
+using player;
+using player.data;
 using setting;
 using TMPro;
 using UnityEngine;
@@ -6,13 +8,15 @@ using UnityEngine.UI;
 
 namespace ui
 {
-    public class Timer : MonoBehaviour
+    public class Timer : MonoBehaviour, IDataPersistence
     {
         public int startHour = 12;
         public int endHour = 18;
         public int upgradeStartHour = 11;
         public int upgradeEndHour = 20;
-        public int timeMultiplier = 600;
+
+        // New variable
+        public int gameHourLength = 1;
 
         public bool isUpgraded;
 
@@ -46,31 +50,34 @@ namespace ui
         private void Update()
         {
             if (isEnded || isPaused) return;
-            _time += Time.deltaTime * timeMultiplier;
+
+            _time += Time.deltaTime;
             var adjStartTime = isUpgraded ? upgradeStartHour : startHour;
             var adjEndTime = isUpgraded ? upgradeEndHour : endHour;
 
-            var hour = (int)Math.Floor(_time / 3600) + adjStartTime;
-            var minute = (int)Math.Floor(_time % 3600 / 60);
-            minute = (int)Math.Floor(minute / 10.0) * 10;
+            var hour = (int)Math.Floor(_time / gameHourLength) + adjStartTime;
+            var totalSecondsInHour = (int)gameHourLength;
+            var gameSecondsPassedThisHour = (int)(_time % totalSecondsInHour);
+            var minute = gameSecondsPassedThisHour * 60 / totalSecondsInHour;
+            minute = (minute / 10) * 10;
+
             _timerText.text = $"{hour:00}:{minute:00}";
 
             float totalDegrees = (adjEndTime - adjStartTime) * 360f / 12f;
-            float elapsedDegrees = _time / (3600f * (adjEndTime - adjStartTime)) * totalDegrees;
+            float elapsedDegrees = _time / (gameHourLength * (adjEndTime - adjStartTime)) * totalDegrees;
             _timerImage.fillAmount = elapsedDegrees / 360f;
 
             if (hour == adjEndTime - 1 && minute == 0 && !_dayEndAlert)
             {
                 SoundManager.Instance.PlaySFX(SoundManager.SFX.TimeIsRunningOut);
-                _dayEndAlert = true;  // Ensures the sound is played only once
+                _dayEndAlert = true;
             }
 
             if (hour == 5 && minute == 0 && !_eveningMusicIsOn)
             {
                 SoundManager.Instance.PlayMusic("CashierNight");
-                _eveningMusicIsOn = true;  // Ensures the music is played only once
+                _eveningMusicIsOn = true;
             }
-
 
             if (hour >= adjEndTime) isEnded = true;
         }
@@ -78,6 +85,18 @@ namespace ui
         public void Pause(bool pause)
         {
             isPaused = pause;
+        }
+
+        public void LoadData(GameData data)
+        {
+            startHour = (int)data.gameStartTime;
+            endHour = (int)data.gameEndTime;
+            gameHourLength = (int)data.gameHourLength;
+            if (gameHourLength == 0) gameHourLength = 1;
+        }
+
+        public void SaveData(GameData data)
+        {
         }
     }
 }

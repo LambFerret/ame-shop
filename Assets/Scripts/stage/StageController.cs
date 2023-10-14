@@ -8,7 +8,7 @@ using DG.Tweening;
 using player;
 using player.data;
 using setting;
-using title;
+using scene;
 using ui;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,7 +46,7 @@ namespace stage
         [Header("Customer Interval")] public float baseInterval = 15f;
         public float minInterval = 10f;
 
-        public bool[] _waitLineOccupied = new bool[3];
+        public bool[] waitLineOccupied = new bool[3];
         public bool isCustomerTutorialOngoing;
         public float playerPopularity;
 
@@ -62,9 +62,7 @@ namespace stage
         {
             customerManager = GameObject.Find("CustomerManager").GetComponent<CustomerManager>();
             weaponTutorialObject.gameObject.SetActive(false);
-            var rectHeight = machineScene.GetComponent<RectTransform>().rect.height;
             var rectWidth = machineScene.GetComponent<RectTransform>().rect.width;
-            // move into right outside of screen
             machineScene.GetComponent<RectTransform>().anchoredPosition = new Vector2(rectWidth, 0);
         }
 
@@ -80,10 +78,10 @@ namespace stage
                 }
 
             for (int i = 0; i < waitCustomerObjectList.Length; i++)
-                _waitLineOccupied[i] = waitCustomerObjectList[i].activeSelf;
+                waitLineOccupied[i] = waitCustomerObjectList[i].activeSelf;
         }
 
-        private IEnumerator ToResult()
+        private static IEnumerator ToResult()
         {
             SoundManager.Instance.PlaySFX(SoundManager.SFX.CloseStore);
             yield return new WaitForSeconds(1);
@@ -116,7 +114,7 @@ namespace stage
                 var pickedCustomer = customerManager.GetCustomerByDifficulty(CustomerManager.Difficulty.Easy);
                 AddCustomer(pickedCustomer, availableLines[Random.Range(0, availableLines.Count)]);
 
-                int waitTimeMultiple = availableLines.Count == _waitLineOccupied.Length ? 2 : 1;
+                int waitTimeMultiple = availableLines.Count == waitLineOccupied.Length ? 2 : 1;
                 //(10~15초)*{5000/(5000+평판)}
                 SoundManager.Instance.PlaySFX(SoundManager.SFX.Entrance);
 
@@ -140,7 +138,7 @@ namespace stage
             AddCustomer(pickedCustomer, availableLine);
 
             isCustomerTutorialOngoing = true;
-            while (_waitLineOccupied.Any(occupied => occupied)) yield return null;
+            while (waitLineOccupied.Any(occupied => occupied)) yield return null;
 
             isCustomerTutorialOngoing = false;
 
@@ -154,7 +152,7 @@ namespace stage
             AddCustomer(pickedCustomerSlime, slimeLine);
             var obj = waitCustomerObjectList[slimeLine];
             weaponTutorialObject.Activate(obj.transform.position);
-            while (_waitLineOccupied.Any(occupied => occupied)) yield return null;
+            while (waitLineOccupied.Any(occupied => occupied)) yield return null;
 
             weaponTutorialObject.gameObject.SetActive(false);
 
@@ -166,8 +164,8 @@ namespace stage
         {
             List<int> availableIndices = new List<int>();
 
-            for (int i = 0; i < _waitLineOccupied.Length; i++)
-                if (!_waitLineOccupied[i])
+            for (int i = 0; i < waitLineOccupied.Length; i++)
+                if (!waitLineOccupied[i])
                     availableIndices.Add(i);
 
             return availableIndices;
@@ -181,7 +179,7 @@ namespace stage
             var emptySlot = waitCustomerObjectList[availableLine];
 
             // 빈 자리 여부
-            _waitLineOccupied[availableLine] = true;
+            waitLineOccupied[availableLine] = true;
             emptySlot.SetActive(true);
             emptySlot.GetComponent<CustomerBehavior>().SetScript(customer);
 

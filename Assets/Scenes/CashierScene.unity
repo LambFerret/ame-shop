@@ -183,7 +183,7 @@ MonoBehaviour:
   customerAlarm: {fileID: 470737370}
   baseInterval: 15
   minInterval: 10
-  _waitLineOccupied: 000000
+  waitLineOccupied: 000000
   isCustomerTutorialOngoing: 0
   playerPopularity: 0
   currentStepIfTutorial: 0
@@ -12741,7 +12741,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 218.19406, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1384599184
@@ -13120,7 +13120,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 218.19406, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1411571521
@@ -18977,7 +18977,7 @@ MonoBehaviour:
   upgradeStartHour: 11
   upgradeEndHour: 20
   timeMultiplier: 60
-  isUpgraded: 1
+  isUpgraded: 0
   isStarted: 0
   isEnded: 0
   isPaused: 0

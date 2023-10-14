@@ -41,7 +41,7 @@ namespace skewer
 
         private void Update()
         {
-            if (GameManager.Instance.gameState != GameManager.GameState.Playing) return;
+            if (GameManager.instance.gameState != GameManager.GameState.Playing) return;
             switch (whatsOnHand)
             {
                 case WhatsOnHand.None:
@@ -72,7 +72,7 @@ namespace skewer
                     whatsOnHand = WhatsOnHand.Weapon;
                     break;
                 case WhatsOnHand.Skewer:
-                    GameManager.Instance.MakeWarningMessage(GameManager.WarningState.FullHand);
+                    GameManager.instance.MakeWarningMessage(GameManager.WarningState.FullHand);
                     return;
                 case WhatsOnHand.Weapon:
                     return;
@@ -97,13 +97,13 @@ namespace skewer
         {
             if (currentSkewerObject == null)
             {
-                GameManager.Instance.MakeWarningMessage(GameManager.WarningState.NoSkewerInHand);
+                GameManager.instance.MakeWarningMessage(GameManager.WarningState.NoSkewerInHand);
                 return false;
             }
 
             if (IsSkewerLengthMax(type.size))
             {
-                GameManager.Instance.MakeWarningMessage(GameManager.WarningState.NoSpaceInSkewer);
+                GameManager.instance.MakeWarningMessage(GameManager.WarningState.NoSpaceInSkewer);
                 return false;
             }
 

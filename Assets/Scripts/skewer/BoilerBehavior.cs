@@ -17,17 +17,17 @@ namespace skewer
         public int water;
         public int sugar;
 
-        [Header("Options")] public int addFuelTemperature;
-        public int addLiquidPerClick;
+        [Header("Options")] public int fuelAddPerOnce;
+        public int addLiquidPerOnce;
         public int temperature;
-        public int maximumLiquidCapacity;
+        public int boilerCapacity;
 
-        [Header("Minus")] public int minusWaterByTime;
-        public int minusSugarPerOnce;
-        public int minusWaterPerOnce;
-        public int minusTemperatureByTime;
-        public int minusTemperaturePerOnce;
-        public float time;
+        [Header("Minus")] public int waterLossPerTime;
+        public int sugarLossPerCm;
+        public int waterLossPerCm;
+        public int temperatureLossPerTime;
+        public int temperatureLossPerOnce;
+        public float lossTime;
 
         [Header("GameObjects")] public TextMeshProUGUI temperatureBar;
         public TextMeshProUGUI concentrationBar;
@@ -56,7 +56,7 @@ namespace skewer
             concentrationBar.text = concentration + "%";
             temperatureBar.text = temperature + "°C";
             _time += Time.deltaTime;
-            if (_time >= time)
+            if (_time >= lossTime)
             {
                 MinusPerTime();
                 _time = 0;
@@ -65,6 +65,15 @@ namespace skewer
 
         public void LoadData(GameData data)
         {
+            fuelAddPerOnce = (int)data.fuelAddPerOnce;
+            addLiquidPerOnce = (int)data.addLiquidPerOnce;
+            boilerCapacity = (int)data.boilerCapacity;
+            waterLossPerTime = (int)data.waterLossPerTime;
+            sugarLossPerCm = (int)data.sugarLossPerCm;
+            waterLossPerCm = (int)data.waterLossPerCm;
+            temperatureLossPerTime = (int)data.temperatureLossPerTime;
+            temperatureLossPerOnce = (int)data.temperatureLossPerOnce;
+            lossTime = data.lossTime;
         }
 
         public void SaveData(GameData data)
@@ -75,26 +84,26 @@ namespace skewer
 
         private void MinusPerTime()
         {
-            PutWater(-minusWaterByTime);
-            PutTemperature(-minusTemperatureByTime);
+            PutWater(-waterLossPerTime);
+            PutTemperature(-temperatureLossPerTime);
         }
 
         public void AddWater()
         {
             SoundManager.Instance.PlaySFX(SoundManager.SFX.Water);
-            PutWater(addLiquidPerClick);
+            PutWater(addLiquidPerOnce);
         }
 
         public void AddSugar()
         {
             SoundManager.Instance.PlaySFX(SoundManager.SFX.Sugar);
-            PutSugar(addLiquidPerClick);
+            PutSugar(addLiquidPerOnce);
         }
 
         public void AddFuel()
         {
             SoundManager.Instance.PlaySFX(SoundManager.SFX.Fuel);
-            PutTemperature(addFuelTemperature);
+            PutTemperature(fuelAddPerOnce);
         }
 
         private void PutWater(int value)
@@ -103,11 +112,11 @@ namespace skewer
 
             if (water < 0)
                 water = 0;
-            else if (water > maximumLiquidCapacity)
-                water = maximumLiquidCapacity;
+            else if (water > boilerCapacity)
+                water = boilerCapacity;
 
-            if (water + sugar > maximumLiquidCapacity)
-                sugar = maximumLiquidCapacity - water;
+            if (water + sugar > boilerCapacity)
+                sugar = boilerCapacity - water;
 
             UpdateConcentration();
         }
@@ -119,11 +128,11 @@ namespace skewer
 
             if (sugar < 0)
                 sugar = 0;
-            else if (sugar > maximumLiquidCapacity)
-                sugar = maximumLiquidCapacity;
+            else if (sugar > boilerCapacity)
+                sugar = boilerCapacity;
 
-            if (sugar + water > maximumLiquidCapacity)
-                water = maximumLiquidCapacity - sugar;
+            if (sugar + water > boilerCapacity)
+                water = boilerCapacity - sugar;
 
             UpdateConcentration();
         }
@@ -158,9 +167,9 @@ namespace skewer
             SoundManager.Instance.PlaySFX(SoundManager.SFX.Pool);
             _image.DOKill();
             _image.DOFade(0, 0.5F).SetLoops(2 * 2, LoopType.Yoyo).SetEase(Ease.InOutSine);
-            PutSugar(-(minusSugarPerOnce * _hand.GetCurrentSize()));
-            PutWater(-(minusWaterPerOnce * _hand.GetCurrentSize()));
-            PutTemperature(-minusTemperaturePerOnce);
+            PutSugar(-(sugarLossPerCm * _hand.GetCurrentSize()));
+            PutWater(-(waterLossPerCm * _hand.GetCurrentSize()));
+            PutTemperature(-temperatureLossPerOnce);
             _hand.AddTemperature(concentration: concentration, temperature: temperature);
         }
     }
