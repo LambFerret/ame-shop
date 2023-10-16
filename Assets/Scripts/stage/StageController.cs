@@ -200,11 +200,11 @@ namespace stage
                 var sb = machineScene.transform.Find("Scrollbar").GetComponent<Scrollbar>();
                 DOTween.To(() => sb.value, x => sb.value = x, 0, duration).SetEase(Ease.InCirc);
                 // go right outside. rect position goes width, 0 , 0
-                machineRect.DOAnchorPosX(rectWidth, duration).SetEase(Ease.InCirc);
+                machineRect.DOAnchorPosX(rectWidth, duration).SetEase(Ease.Linear);
             }
             else
             {
-                machineRect.DOAnchorPosX(0, duration).SetEase(Ease.InCirc);
+                machineRect.DOAnchorPosX(0, duration).SetEase(Ease.OutBounce);
             }
         }
 

@@ -34,6 +34,7 @@ namespace skewer
 
             _currentSkewerGameObject = skewerGameObject;
             _currentSkewer = skewerGameObject.GetComponent<SkewerBehavior>();
+            _currentSkewer.RotateCandy(90);
             _currentSkewerGameObject.transform.SetParent(transform);
             _currentSkewerGameObject.transform.localScale = new Vector3(3, 3, 3);
         }

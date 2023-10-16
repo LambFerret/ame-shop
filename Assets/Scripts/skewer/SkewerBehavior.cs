@@ -56,7 +56,7 @@ namespace skewer
 
         public void LoadData(GameData data)
         {
-            maxLength = (int) data.skewerLength;
+            maxLength = (int)data.skewerLength;
             perfectTemperatureFrom = (int)data.perfectTemperatureStart;
             perfectTemperatureTo = (int)data.perfectTemperatureEnd;
             concentrationTolerance = (int)data.perfectConcentrationRange;
@@ -252,6 +252,12 @@ namespace skewer
             Debug.Log("offset mult : " + lengthRatio + " and " + (skewerOffsetLength * lengthRatio).ToString(" 0.00"));
             fruitRectTransform.localPosition = new Vector3(0, currentLength, 0);
             currentLength += normalizedWidth;
+        }
+
+        public void RotateCandy(int value)
+        {
+            // set z axis as value
+            originalCandy.transform.rotation = Quaternion.Euler(0, 0, value);
         }
 
         public List<Ingredient> GetIngredients()

@@ -1,9 +1,4 @@
-using System;
 using System.Collections.Generic;
-using ingredient;
-using manager;
-using player;
-using player.data;
 using setting;
 using TMPro;
 using UnityEngine;
@@ -20,8 +15,10 @@ namespace skewer
         public BoardBehavior currentBoard;
         public ScrollRect scrollbar;
 
+        public RectTransform myHand;
+
         private Button _button;
-        private GameObject _toppingPrefab;
+        // private GameObject _toppingPrefab;
         private TextMeshProUGUI _text;
         private bool _isOnHead;
 
@@ -31,7 +28,6 @@ namespace skewer
         {
             _button = transform.GetComponent<Button>();
             _text = _button.GetComponentInChildren<TextMeshProUGUI>();
-            _toppingPrefab = Instantiate(prefab, transform);
             _button.onClick.AddListener(OnClickTopping);
         }
 
@@ -40,10 +36,13 @@ namespace skewer
             switch (skewer.whatsOnHand)
             {
                 case SkewerController.WhatsOnHand.None:
+                    var toppingPrefab = Instantiate(prefab, transform);
+                    myHand = toppingPrefab.GetComponent<RectTransform>();
+                    skewer.whatsOnHand = SkewerController.WhatsOnHand.Topping;
                     _isOnMouse = true;
                     break;
                 case SkewerController.WhatsOnHand.Topping:
-                    _toppingPrefab.transform.localPosition = Vector3.zero;
+                    Destroy(myHand);
                     _isOnMouse = false;
                     skewer.whatsOnHand = SkewerController.WhatsOnHand.None;
                     break;
@@ -57,7 +56,7 @@ namespace skewer
 
             if (_isOnMouse)
             {
-                FollowMouse();
+                FollowMouse(myHand);
 
                 PointerEventData pointerData = new PointerEventData(EventSystem.current)
                 {
@@ -83,13 +82,12 @@ namespace skewer
             }
         }
 
-        private void FollowMouse()
+        private void FollowMouse(RectTransform objectRect)
         {
-            skewer.whatsOnHand = SkewerController.WhatsOnHand.Topping;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                _toppingPrefab.transform.parent as RectTransform,
+                objectRect.transform.parent as RectTransform,
                 Input.mousePosition, null, out Vector2 localPoint);
-            _toppingPrefab.transform.localPosition = localPoint;
+            objectRect.anchoredPosition = localPoint;
         }
 
         private void Packing()
